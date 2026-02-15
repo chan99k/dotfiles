@@ -1,21 +1,29 @@
 {
-  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "ENABLE_LSP_TOOL": "1",
     "MAX_THINKING_TOKENS": "16000",
     "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "16384",
     "BASH_MAX_OUTPUT_LENGTH": "1000000",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5-20250929",
     "BASH_DEFAULT_TIMEOUT_MS": "120000",
     "BASH_MAX_TIMEOUT_MS": "600000",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5-20250929",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1"
   },
-  "permissions": {
-    "allow": ["Bash(npm run lint)", "Bash(npm run test:*)", "WebFetch"],
-    "deny": []
+  "enabledPlugins": {
+    "oh-my-claudecode@omc": true,
+    "serena@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true
   },
   "hooks": {
     "PreToolUse": [
@@ -24,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title \"Claude Code - PreToolUse\" -message \"🚨🚨🚨 도구 실행 준비 중: $CLAUDE_TOOL_NAME 🚨🚨🚨\" -sound default"
+            "command": "terminal-notifier -title \"Claude Code - PreToolUse\" -message \"도구 실행 준비 중: $CLAUDE_TOOL_NAME\" -sound default"
           }
         ]
       },
@@ -43,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title \"Claude Code - Stop\" -message \"🚨🚨🚨 Claude 응답이 완료되었습니다 🚨🚨🚨\" -sound default -timeout 30"
+            "command": "terminal-notifier -title \"Claude Code - Stop\" -message \"Claude 응답이 완료되었습니다\" -sound default -timeout 30"
           }
         ]
       }
@@ -58,39 +66,6 @@
         ]
       }
     ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
-    "jdtls@claude-code-lsps": true,
-    "kotlin-lsp@claude-code-lsps": true,
-    "omnisharp@claude-code-lsps": true,
-    "rust-analyzer@claude-code-lsps": true,
-    "vtsls@claude-code-lsps": true,
-    "msbaek-tdd@msbaek-claude-plugins": true,
-    "kotlin-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "atlassian@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "explanatory-output-style@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "greptile@claude-plugins-official": true,
-    "Notion@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
-    "learning-output-style@claude-plugins-official": true,
-    "playground@claude-plugins-official": true
   },
   "spinnerVerbs": {
     "mode": "replace",
@@ -117,8 +92,5 @@
       "연결고리 찾는 중"
     ]
   },
-  "skipDangerousModePermissionPrompt": true,
-  "feedbackSurveyState": {
-    "lastShownTime": 1754086039192
-  }
+  "alwaysThinkingEnabled": true
 }
