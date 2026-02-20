@@ -144,6 +144,7 @@ morning-update() {
     echo "Gemini CLI: $(gemini --version 2>/dev/null || echo 'version check failed')"
 
     echo "\n=== Done ==="
+    echo "Next: claude 실행 후 /daily-work-logger"
 }
 
 # yazi: cd to selected directory on exit
