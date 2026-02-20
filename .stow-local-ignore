@@ -1,0 +1,27 @@
+# Default stow ignores (must be re-declared when using .stow-local-ignore)
+RCS
+.+,v
+CVS
+\.\#.+
+\.cvsignore
+\.svn
+_darcs
+\.hg
+\.git
+\.gitignore
+\.gitmodules
+
+# Repo documentation
+README\.md
+SECURITY\.md
+GITHUB-SECURITY-SETUP\.md
+gihub-security\.md
+docs
+
+# Example/template files
+\..*\.example$
+settings\.json\.full
+
+# Repo tooling
+\.pre-commit-config\.yaml
+\.secrets\.baseline

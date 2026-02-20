@@ -108,3 +108,8 @@ projects:
 - /Users/chan99/IdeaProjects/grep/giftify-be
 - /Users/chan99/IdeaProjects/grep/giftify-frontend
 - /Users/chan99/team201-workspace
+
+# list of paths to ignore across all projects.
+# Same syntax as gitignore, so you can use * and **.
+# These patterns are merged additively with each project's own ignored_paths.
+ignored_paths: []
