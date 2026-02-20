@@ -127,8 +127,23 @@ update-node-lts() {
 # Claude Code update
 update-claude-code() {
     echo "Updating Claude Code..."
-    npm update -g @anthropic-ai/claude-code
+    brew upgrade --cask claude-code
     echo "Claude Code updated to: $(claude --version)"
+}
+
+# Morning system update (all-in-one)
+morning-update() {
+    echo "=== Brew ==="
+    brew update && brew upgrade
+
+    echo "\n=== Node.js LTS ==="
+    update-node-lts
+
+    echo "\n=== Gemini CLI ==="
+    npm update -g @google/gemini-cli
+    echo "Gemini CLI: $(gemini --version 2>/dev/null || echo 'version check failed')"
+
+    echo "\n=== Done ==="
 }
 
 # yazi: cd to selected directory on exit
