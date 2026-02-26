@@ -12,7 +12,7 @@ description: |
 
 | 항목 | 경로 |
 |------|------|
-| vault | `~/DocumentsLocal/msbaek_vault/` |
+| vault | `/Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/` |
 | vault-intelligence | `~/git/vault-intelligence/` |
 
 ## markdown-oxide LSP 활용

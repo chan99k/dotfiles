@@ -14,8 +14,8 @@ Where:
 * scope: Session name or project abbreviation (e.g., SHAGO, KERNEL, INTERVIEW)
 * number: Two-digit incremental number, unique per date and scope (e.g., 01, 02, 03)
 * brief-description: Lowercase, hyphen-separated summary of the content (e.g., insurance-api-design, batch-optimization)
-* directory : docs/workthrough
-Example: `docs/workthrough/251129-SHAGO-01-insurance-api-design.md`
+* directory : /Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/literatures
+Example: `.../literatures/251129-SHAGO-01-insurance-api-design.md`
 
 ---
 
