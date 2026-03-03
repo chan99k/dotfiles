@@ -109,6 +109,7 @@ eval "$(gw shell-init zsh 2>/dev/null)"
 
 # alias zshconfig="nano ~/.zshrc"
 # alias zshreload="source ~/.zshrc"
+alias tmux-clean='~/.tmux/scripts/tmux-clean.sh'
 
 
 # ============================================================

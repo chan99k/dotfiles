@@ -53,7 +53,10 @@
 # ======================
 .gemini/
 .idea/
-Library/
+Library/*
+!Library/LaunchAgents/
+Library/LaunchAgents/*
+!Library/LaunchAgents/com.chan99.*.plist
 ignored/
 
 # ======================
