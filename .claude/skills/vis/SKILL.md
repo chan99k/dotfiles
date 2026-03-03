@@ -117,7 +117,7 @@ vis tag "문서명.md" --tag-force        # 기존 태그 무시하고 재생성
 ```bash
 vis add-related-docs "문서명.md"
 vis add-related-docs "문서명.md" --dry-run           # 미리보기
-vis add-related-docs --batch --pattern "000-SLIPBOX/*.md"   # 배치 처리
+vis add-related-docs --batch --pattern "03-Resources/*.md"   # 배치 처리
 ```
 
 ### 지식 공백 분석 (analyze-gaps)
@@ -194,7 +194,7 @@ vis clean-tags --dry-run        # 미리보기
 vis reindex                       # 기본 재인덱싱
 vis reindex --with-colbert        # ColBERT 포함
 vis reindex --force               # 강제 전체 재인덱싱
-vis reindex --include-folders 000-SLIPBOX 003-RESOURCES   # 특정 폴더만
+vis reindex --include-folders 01-Projects 03-Resources   # 특정 폴더만
 ```
 
 ## vis 기능 전체 안내

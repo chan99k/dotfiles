@@ -20,8 +20,8 @@ return {
   opts = {
     workspaces = {
       {
-        name = "msbaek_vault",
-        path = vim.fn.expand("~/DocumentsLocal/msbaek_vault"),
+        name = "chan99k_vault",
+        path = vim.fn.expand([[~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault]]),
       },
     },
     use_default_keymaps = false,
@@ -30,7 +30,7 @@ return {
     daily_notes = {
       -- Optional, if you keep daily notes in a separate directory.
       -- Optional, if you want to change the date format for the ID of daily notes.
-      folder = "notes/dailies",
+      folder = "02-Areas/dailies",
       date_format = "%Y-%m-%d",
       -- Optional, if you want to change the date format of the default alias of daily notes.
       alias_format = "%B %-d, %Y",
@@ -85,7 +85,7 @@ return {
     ---@param title string|?
     ---@return string
     note_id_func = function(title)
-      -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+      -- Create note IDs with a timestamp and a suffix.
       -- In this case a note with the title 'My new note' will be given an ID that looks
       -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
       local suffix = ""
@@ -163,7 +163,7 @@ return {
     -- Optional, for templates (see below).
     templates = {
       -- folder = "Template",
-      folder = vim.fn.expand("~/DocumentsLocal/msbaek_vault/Template"),
+      folder = vim.fn.expand([[~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/_templates]]),
       -- date_format = "%Y-%m-%d",
       -- time_format = "%H:%M",
       -- -- A map for custom variables, the key should be the variable and the value a function

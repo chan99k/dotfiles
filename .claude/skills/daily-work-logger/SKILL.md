@@ -56,9 +56,9 @@ description: |
 | 항목 | 경로 |
 |------|------|
 | vault | `"~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/"` |
-| dailies | `{vault}/notes/dailies/` |
-| 미팅 노트 | `notes/dailies/YYYY-MM-DD-*.md` |
-| 기술 문서 | `001-INBOX/`, `003-RESOURCES/`, `notes/` |
+| dailies | `{vault}/02-Areas/dailies/` |
+| 미팅 노트 | `02-Areas/dailies/YYYY-MM-DD-*.md` |
+| 기술 문서 | `00-Inbox/`, `03-Resources/`, `01-Projects/` |
 | Claude 세션 | `~/.claude/projects/` |
 
 ---
@@ -76,7 +76,7 @@ echo "대상 날짜: $TARGET_DATE"
 
 2. **Daily Note 경로 확인**
 ```bash
-DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/notes/dailies/${TARGET_DATE}.md"
+DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/dailies/${TARGET_DATE}.md"
 ```
 
 ---
@@ -108,7 +108,7 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 
 ## 경로
 - Vault: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/
-- 분석 대상 디렉토리: 001-INBOX/, 003-RESOURCES/, 000-SLIPBOX/, notes/, work-log/
+- 분석 대상 디렉토리: 00-Inbox/, 03-Resources/, 01-Projects/, 02-Areas/
 
 ## 실행 단계
 1. Bash로 해당 날짜에 수정된 .md 파일 찾기 (macOS 호환):
@@ -153,18 +153,27 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 - Claude 프로젝트: ~/.claude/projects/
 
 ## 실행 단계
-1. Bash로 해당 날짜 세션 로그 찾기 (macOS 호환):
-   find ~/.claude/projects -name "*.jsonl" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | grep "{TARGET_DATE}" | awk '{print $2}'
+1. Bash로 해당 날짜 세션 로그 찾기 (프로젝트 디렉토리별 탐색, 10KB 이상만):
+   for dir in ~/.claude/projects/*/; do
+     find "$dir" -maxdepth 1 -name "*.jsonl" -size +10k -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null
+   done | grep "{TARGET_DATE}" | awk '{print $2}'
 
-   **주의**: macOS BSD find는 `-newermt` 옵션이 다르게 동작하므로 `stat` + `grep` 조합 사용
+   **최적화 포인트**:
+   - `-maxdepth 1`: 각 프로젝트 디렉토리 내 직접 파일만 탐색 (하위 디렉토리 무시)
+   - `-size +10k`: 빈 세션이나 짧은 세션(10KB 미만) 건너뛰기
+   - 프로젝트 디렉토리별 순회로 전체 재귀 탐색 방지
 
-2. 각 세션 로그에서 추출할 정보 (Bash로 head -100 등으로 일부만 읽기):
+2. 각 세션 로그에서 사용자 메시지만 추출:
    - 프로젝트 경로 (어떤 프로젝트에서 작업했는지) - 파일 경로에서 프로젝트명 추출
-   - 주요 작업 내용 (코드 작성, 버그 수정, 리팩토링 등)
-   - 사용자 요청 메시지 요약
+   - 사용자 요청 메시지만 선별하여 작업 내용 파악
 
-3. JSONL 파일 분석 시 jq 사용:
-   head -50 [파일] | jq -r 'select(.type=="user") | .message.content[:200]' 2>/dev/null
+3. JSONL 파일에서 사용자 메시지만 추출 (jq 사용):
+   jq -r 'select(.type=="human" or .type=="user") | (.message.content // .content // "") | if type=="array" then map(select(type=="object" and .type=="text") | .text) | join(" ") elif type=="string" then . else "" end | select(length > 0) | .[:150]' [파일] 2>/dev/null | head -20
+
+   **최적화 포인트**:
+   - 전체 파일에서 사용자 메시지만 필터링 (assistant/tool 결과 제외)
+   - 각 메시지를 150자로 자르고 최대 20개만 추출
+   - 세션 주제 파악에 충분한 최소 정보만 수집
 
 ## 출력 형식 (마크다운으로 반환)
 ### Claude Code 작업
@@ -247,13 +256,21 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 - 질문 패턴: 뭐야, 어떻게, 왜, What, How, Why
 
 ## 실행 단계
-1. Bash로 해당 날짜 세션 로그 찾기 (macOS 호환):
-   find ~/.claude/projects -name "*.jsonl" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | grep "{TARGET_DATE}" | awk '{print $2}'
+1. Bash로 해당 날짜 세션 로그 찾기 (프로젝트 디렉토리별 탐색, 10KB 이상만):
+   for dir in ~/.claude/projects/*/; do
+     find "$dir" -maxdepth 1 -name "*.jsonl" -size +10k -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null
+   done | grep "{TARGET_DATE}" | awk '{print $2}'
 
-   **주의**: macOS BSD find는 `-newermt` 옵션이 다르게 동작하므로 `stat` + `grep` 조합 사용
+   **최적화 포인트**:
+   - `-maxdepth 1`: 각 프로젝트 디렉토리 내 직접 파일만 탐색
+   - `-size +10k`: 빈 세션 건너뛰기
 
-2. 각 세션에서 학습 관련 대화 추출 (Bash로 일부만 읽기):
-   head -100 [파일] | jq -r 'select(.type=="user") | .message.content // "" | select(test("뭐야|어떻게|왜|배웠|알게|TIL|learned"; "i"))' 2>/dev/null
+2. 각 세션에서 사용자 메시지만 추출 후 학습 키워드 필터링:
+   jq -r 'select(.type=="human" or .type=="user") | (.message.content // .content // "") | if type=="array" then map(select(type=="object" and .type=="text") | .text) | join(" ") elif type=="string" then . else "" end | select(length > 0)' [파일] 2>/dev/null | grep -iE "뭐야|어떻게|왜|배웠|알게|TIL|learned|discovered|처음|새로운|이해|몰랐|What|How|Why" | head -20
+
+   **최적화 포인트**:
+   - 사용자 메시지만 필터링 후 학습 키워드 매칭
+   - 최대 20개만 추출하여 분석량 제한
 
 3. 학습 내용 분류:
    - 기술/도구: 새 라이브러리, CLI, API

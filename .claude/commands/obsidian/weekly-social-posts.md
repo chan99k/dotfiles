@@ -34,7 +34,7 @@ Things에서 최근 메모들을 수집하여 주제별로 분류하고, 소셜 
 
 5. **옵시디안 문서 저장**
 
-   - `001-INBOX/social-media-posts/` 디렉토리에 날짜별로 저장
+   - `00-Inbox/social-media-posts/` 디렉토리에 날짜별로 저장
    - 계층적 태그 자동 부여:
      - `social-media/posts`
      - `development/philosophy`

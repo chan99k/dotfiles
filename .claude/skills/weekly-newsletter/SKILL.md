@@ -72,17 +72,17 @@ description: |
 
 | 항목 | 경로 |
 |------|------|
-| vault | `~/DocumentsLocal/msbaek_vault/` |
-| coffee-time | `~/DocumentsLocal/msbaek_vault/coffee-time` |
-| dailies | `~/DocumentsLocal/msbaek_vault/notes/dailies/` |
-| newsletters | `~/DocumentsLocal/msbaek_vault/newsletters/` |
+| vault | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/` |
+| coffee-time | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/coffee-time` |
+| dailies | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/dailies/` |
+| newsletters | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/newsletters/` |
 | 사용자 프로필 | `~/git/aboutme/AI-PROFILE.md` |
 
 ## 입력 소스
 
 | 소스 | 경로 | 담당 서브 에이전트 |
 |------|------|------------------|
-| Daily Notes | `notes/dailies/` (토~금) | SubAgent 1 |
+| Daily Notes | `02-Areas/dailies/` (토~금) | SubAgent 1 |
 | coffee-time | `coffee-time/` (해당 주) | SubAgent 2 |
 | 주간 작성 문서 | vault 전체 (해당 주 수정) | SubAgent 3 |
 
@@ -127,7 +127,7 @@ echo "대상 기간: $SATURDAY (토) ~ $FRIDAY (금)"
 
 2. **출력 경로 확인**
 ```bash
-OUTPUT_FILE="$HOME/DocumentsLocal/msbaek_vault/newsletters/${WEEK_NUM}-newsletter.md"
+OUTPUT_FILE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/newsletters/${WEEK_NUM}-newsletter.md"
 ```
 
 ---
@@ -158,11 +158,11 @@ OUTPUT_FILE="$HOME/DocumentsLocal/msbaek_vault/newsletters/${WEEK_NUM}-newslette
 {SATURDAY} (토) ~ {FRIDAY} (금) 기간의 Daily Notes를 분석하여 주간 업무 하이라이트를 추출합니다.
 
 ## 경로
-- Daily Notes: ~/DocumentsLocal/msbaek_vault/notes/dailies/
+- Daily Notes: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/dailies/
 
 ## 실행 단계
 1. Bash로 해당 주 Daily Notes 찾기 (macOS 호환):
-   find ~/DocumentsLocal/msbaek_vault/notes/dailies -name "*.md" -type f \
+   find ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/notes/dailies -name "*.md" -type f \
      -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | \
      awk -v start="{SATURDAY}" -v end="{FRIDAY}" '$1 >= start && $1 <= end {print $2}'
 
@@ -210,7 +210,7 @@ OUTPUT_FILE="$HOME/DocumentsLocal/msbaek_vault/newsletters/${WEEK_NUM}-newslette
 {SATURDAY} (토) ~ {FRIDAY} (금) 기간의 coffee-time 노트를 분석하여 핵심 인사이트를 추출합니다.
 
 ## 경로
-- Coffee-time: ~/DocumentsLocal/msbaek_vault/coffee-time/
+- Coffee-time: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/coffee-time/
 
 ## 파일명 패턴
 - `YYYY. M. DD. 커피타임.md`
@@ -218,7 +218,7 @@ OUTPUT_FILE="$HOME/DocumentsLocal/msbaek_vault/newsletters/${WEEK_NUM}-newslette
 
 ## 실행 단계
 1. Bash로 해당 주 coffee-time 노트 찾기 (macOS 호환):
-   find ~/DocumentsLocal/msbaek_vault/coffee-time -name "*.md" -type f \
+   find ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/coffee-time -name "*.md" -type f \
      -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | \
      awk -v start="{SATURDAY}" -v end="{FRIDAY}" '$1 >= start && $1 <= end {print $2}'
 
@@ -264,12 +264,12 @@ OUTPUT_FILE="$HOME/DocumentsLocal/msbaek_vault/newsletters/${WEEK_NUM}-newslette
 {SATURDAY} (토) ~ {FRIDAY} (금) 기간에 생성/수정된 기술 문서들을 분석하여 외부 공유 적합 내용을 추출합니다.
 
 ## 경로
-- Vault: ~/DocumentsLocal/msbaek_vault/
-- 분석 대상: 001-INBOX/, 003-RESOURCES/, 000-SLIPBOX/
+- Vault: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/
+- 분석 대상: 00-Inbox/, 03-Resources/, 01-Projects/
 
 ## 실행 단계
 1. Bash로 해당 주에 수정된 .md 파일 찾기 (macOS 호환):
-   find ~/DocumentsLocal/msbaek_vault \( -path "*/001-INBOX/*" -o -path "*/003-RESOURCES/*" -o -path "*/000-SLIPBOX/*" \) \
+   find "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault" \( -path "*/00-Inbox/*" -o -path "*/03-Resources/*" -o -path "*/01-Projects/*" \) \
      -name "*.md" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | \
      awk -v start="{SATURDAY}" -v end="{FRIDAY}" '$1 >= start && $1 <= end {print $2}'
 

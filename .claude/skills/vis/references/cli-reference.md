@@ -183,7 +183,7 @@ vis tag "문서명.md"
 vis tag "문서명.md"
 
 # 폴더 전체 태깅
-vis tag "000-SLIPBOX/" --recursive
+vis tag "03-Resources/" --recursive
 
 # 미리보기 (변경 사항 확인)
 vis tag "문서명.md" --dry-run
@@ -228,7 +228,7 @@ vis add-related-docs "문서명.md"
 vis add-related-docs "문서명.md" --dry-run
 
 # 배치 처리
-vis add-related-docs --batch --pattern "000-SLIPBOX/*.md"
+vis add-related-docs --batch --pattern "03-Resources/*.md"
 
 # 원본 백업 + 기존 섹션 업데이트
 vis add-related-docs "문서명.md" --backup --update-existing
@@ -441,7 +441,7 @@ vis reindex --with-colbert
 vis reindex --force
 
 # 특정 폴더만
-vis reindex --include-folders 000-SLIPBOX 003-RESOURCES
+vis reindex --include-folders 01-Projects 03-Resources
 
 # ColBERT만 재인덱싱
 vis reindex --colbert-only
@@ -669,10 +669,10 @@ vis generate-moc "새로운 주제" --output "MOC-새로운주제.md"
 ### 문서 정리 및 연결
 ```bash
 # 1. 자동 태깅
-vis tag "000-SLIPBOX/" --recursive
+vis tag "03-Resources/" --recursive
 
 # 2. 관련 문서 링크 추가
-vis add-related-docs --batch --pattern "000-SLIPBOX/*.md"
+vis add-related-docs --batch --pattern "03-Resources/*.md"
 
 # 3. 중복 문서 확인
 vis duplicates

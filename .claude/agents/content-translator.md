@@ -34,7 +34,7 @@ tools_allowed:
    - YAML frontmatter 자동 생성
    - 계층적 태그 시스템
    - 이미지 다운로드 및 포함
-   - Zettelkasten 방법론 적용
+   - PARA 방법론 적용
 
 ## 사용 방법
 

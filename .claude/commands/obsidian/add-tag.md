@@ -85,7 +85,7 @@ $ARGUMENTS가 제공되지 않은 경우, 이 도움말을 표시합니다.
 ### 디렉토리 전체 처리
 
 ```
-/obsidian:add-tag 003-RESOURCES/ --recursive
+/obsidian:add-tag 03-Resources/ --recursive
 ```
 
 ### 인자 없이 실행

@@ -22,9 +22,9 @@ description: |
 
 | 항목 | 경로 |
 |------|------|
-| vault | `~/DocumentsLocal/msbaek_vault/` |
+| vault | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/` |
 | 세션 로그 | `~/.claude/projects/[encoded-path]/*.jsonl` |
-| 출력 | `~/DocumentsLocal/msbaek_vault/analytics/claude-weekly/` |
+| 출력 | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/analytics/claude-weekly/` |
 
 ## 실행 단계
 
@@ -166,7 +166,7 @@ tags:
 ```bash
 # 지난 주 리포트 찾기
 LAST_WEEK=$(date -v-7d +%Y-W%V)
-ls ~/DocumentsLocal/msbaek_vault/analytics/claude-weekly/${LAST_WEEK}.md 2>/dev/null
+ls ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/analytics/claude-weekly/${LAST_WEEK}.md 2>/dev/null
 ```
 
 ## 자주 사용하는 명령어
@@ -182,7 +182,7 @@ date +%Y-W%V
 find ~/.claude/projects -name "*.jsonl" -newermt "$(date -v-$(($(date +%u) - 1))d +%Y-%m-%d)" | wc -l
 
 # 출력 디렉토리 생성
-mkdir -p ~/DocumentsLocal/msbaek_vault/analytics/claude-weekly
+mkdir -p ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/analytics/claude-weekly
 ```
 
 ## 흐름 예시

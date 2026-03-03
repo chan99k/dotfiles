@@ -31,7 +31,7 @@ Claude Code 세션 로그에서 **새로운 기술, 라이브러리, 개념**에
 | Claude 세션 | `~/.claude/projects/` |
 | history.jsonl | `~/.claude/history.jsonl` |
 | transcripts | `~/.claude/transcripts/` |
-| TIL 출력 | `~/DocumentsLocal/msbaek_vault/notes/dailies/` (Daily Note 내) |
+| TIL 출력 | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/dailies/` (Daily Note 내) |
 
 ## 학습 감지 패턴
 

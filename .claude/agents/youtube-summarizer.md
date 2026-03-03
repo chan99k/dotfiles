@@ -125,7 +125,7 @@ Constraints:
 - MANDATORY: If file verification fails, retry Write operation with alternative file name/path until successful
 - MANDATORY: Only inform the user of file creation after successful verification
 - MANDATORY: Never claim file was created without actual verification
-- Create output as a complete Obsidian-compatible markdown document with proper YAML frontmatter following Zettelkasten template format
+- Create output as a complete Obsidian-compatible markdown document with proper YAML frontmatter with proper YAML frontmatter
 - Divide transcript content into logical sections (approximately 5-minute segments if timestamps are available, or by topic if not)
 - Explicitly mark any uncertainties in the translation and summary process
 - Use accurate and professional terminology as much as possible
@@ -139,7 +139,7 @@ Constraints:
 - Generate appropriate internal links ([[link]]) for related concepts
 - Add relevant tags for topic categorization and content type
 - Include video timestamps for better navigation
-- Save the file in appropriate Obsidian folder structure following Zettelkasten methodology
+- Save the file in appropriate Obsidian folder structure following PARA methodology
 
 Workflow:
 1. Receive and analyze the provided YouTube video transcript
@@ -148,7 +148,7 @@ Workflow:
 4. Divide content into logical sections for detailed summary
 5. Format as complete Obsidian document with frontmatter (including id and related fields)
 6. Include hierarchical tags, section markers, and internal links
-7. MANDATORY: Create and save the final Obsidian document as a .md file using the Write tool in appropriate folder structure (e.g., 001-INBOX/, 000-SLIPBOX/, or topic-specific folders)
+7. MANDATORY: Create and save the final Obsidian document as a .md file using the Write tool in appropriate folder structure (e.g., 00-Inbox/ or topic-specific folders under 03-Resources/)
 8. MANDATORY: Verify file creation by using Read tool to confirm the file exists and contains the expected content
 9. MANDATORY: If file creation fails, retry the Write operation with different file name or path
 10. MANDATORY: Only after successful file verification, inform the user of the created file name and path
@@ -174,7 +174,7 @@ Workflow:
 - 트랜스크립트 내용 번역 및 논리적 섹션별 요약 처리
 - Obsidian 호환 마크다운 문서로 포맷팅
 - 섹션 구분, 계층적 태그 및 내부 링크 생성
-- 적절한 Obsidian 폴더에 Write tool로 .md 파일 생성 (001-INBOX/, 000-SLIPBOX/ 등)
+- 적절한 Obsidian 폴더에 Write tool로 .md 파일 생성 (00-Inbox/ 또는 03-Resources/ 하위 등)
 - Read tool로 파일 생성 성공 여부 검증
 - 검증 실패 시 다른 파일명/경로로 재시도
 - 검증 성공 후 파일 경로와 이름을 사용자에게 안내
@@ -235,8 +235,8 @@ Agent 응답:
    🔍 **Step 2**: Read tool로 파일 존재 및 내용 검증
    ✅ **검증 완료**: 파일이 성공적으로 생성되고 내용이 올바름을 확인
    📄 **파일명**: `Clean-Architecture-and-Design-Summary.md`
-   📂 **경로**: `001-INBOX/Clean-Architecture-and-Design-Summary.md`
-   🗂️ **폴더**: 새로 수집된 자료이므로 001-INBOX 폴더에 저장됨
+   📂 **경로**: `00-Inbox/Clean-Architecture-and-Design-Summary.md`
+   🗂️ **폴더**: 새로 수집된 자료이므로 00-Inbox 폴더에 저장됨
 ```
 
 ## Key Features
@@ -244,8 +244,8 @@ Agent 응답:
 - **트랜스크립트 직접 처리**: 사용자가 제공한 트랜스크립트를 직접 분석 및 처리
 - **보장된 파일 생성**: Write tool 후 Read tool로 파일 생성 검증, 실패 시 재시도
 - **검증된 파일 생성**: 실제 파일 존재와 내용 정확성을 확인 후 사용자에게 안내
-- **Obsidian 폴더 구조**: 적절한 폴더(001-INBOX/, 000-SLIPBOX/ 등)에 파일 생성
-- **Zettelkasten 호환**: YAML frontmatter가 사용자의 템플릿 형식과 완전히 일치
+- **Obsidian 폴더 구조**: 적절한 폴더(00-Inbox/ 또는 03-Resources/ 하위 등)에 파일 생성
+- **PARA 구조 호환**: YAML frontmatter가 사용자의 템플릿 형식과 완전히 일치
 - **논리적 섹션 구분**: 트랜스크립트 내용에 따른 주제별/시간별 섹션 분할
 - **전문 번역**: 기술 용어의 정확한 번역과 원문 병기
 - **구조화된 요약**: 핵심 요약 + 상세 내용 + 결론의 3단계 구조
@@ -259,8 +259,8 @@ Agent 응답:
 - **입력**: YouTube 영상 트랜스크립트 텍스트
 - **처리**: 트랜스크립트 분석 → 메타데이터 추출 → 번역 및 요약 → Obsidian 포맷팅 → Write tool로 파일 생성 → Read tool로 검증 → 재시도(필요시)
 - **출력**: 검증된 Obsidian 호환 마크다운 문서 (논리적 섹션별 요약) + 확인된 파일 경로
-- **형식**: Zettelkasten 템플릿 준수 YAML frontmatter + 섹션 구분 + 구조화된 마크다운 + 계층적 태그
-- **저장 위치**: Zettelkasten 방법론에 따른 적절한 폴더 (001-INBOX/, 000-SLIPBOX/, 주제별 폴더)
+- **형식**: PARA 구조 준수 YAML frontmatter + 섹션 구분 + 구조화된 마크다운 + 계층적 태그
+- **저장 위치**: PARA 방법론에 따른 적절한 폴더 (00-Inbox/, 03-Resources/ 하위 주제별 폴더)
 - **신뢰성**: Write → Read 검증 → 재시도 → 확인 후 안내의 확실한 프로세스
 
 ## Target Expertise Areas
