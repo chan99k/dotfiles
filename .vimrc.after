@@ -21,8 +21,6 @@ set cursorline
 set background = "dark"
 set signcolumn = "yes"
 
-packadd! dracula
 syntax enable
-colorscheme dracula
 
 set gfn=Monaco:h16
