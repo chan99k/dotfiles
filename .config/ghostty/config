@@ -1,20 +1,22 @@
-font-family = Google Sans Code
-font-family = Sarasa Term K
-# font-family = Noto Sans CJK KR
-# font-family = JetBrains Mono
-font-size = 16
-theme = GitHub Light Default
+# ============================================================
+# Font
+# ============================================================
 
-# GitHub Light Default theme provides good contrast for terminal tools
-# Other GitHub Light variants: GitHub Light Colorblind, GitHub Light High Contrast
-# Previous: Catppuccin Latte
+# font-family = Google Sans Code
+# font-family = Sarasa Term K
+# font-family = Noto Sans CJK KR
+font-family = JetBrains Mono
+font-size = 13
+
+# ============================================================
+# Theme
+# ============================================================
+
+theme = Catppuccin Mocha
+# Previous light themes (preserved for reference)
+# theme = GitHub Light Default
 # theme = Catppuccin Latte
 
-# Claude Code highlight visibility fix for light theme
-# ANSI black as bg is too dark (#24292f) → light blue for readable highlights
-palette = 0=#dbe9f6
-
-# Warning/Error 색상 개선 - GitHub Light는 기본 색상 사용
 # Catppuccin Latte에서 사용했던 커스텀 palette (참고용으로 보존)
 # palette 3, 11: Warning (Yellow) - 더 진한 황금색으로 변경
 # palette 1, 9: Error (Red) - 더 진한 빨강으로 변경
@@ -22,50 +24,45 @@ palette = 0=#dbe9f6
 # palette = 11=#996700
 # palette = 1=#b01030
 # palette = 9=#901020
-# Dracula
-# Afterglow arcoiris Arthur Desert Earthsong
-# Ayu Mirage
+
+# ============================================================
+# Shell Integration & Cursor
+# ============================================================
+
 shell-integration-features = no-cursor, sudo,no-title
 cursor-style = block
 
-# Font and cell adjustments for Korean text
+# ============================================================
+# Korean Font Adjustments
+# ============================================================
+
 adjust-cell-height = 15%
 adjust-cell-width = 0%
 adjust-font-baseline = -2%
 grapheme-width-method = unicode
-
-# Font variations for better Korean rendering
 font-synthetic-style = bold,italic,bold-italic
 
-# Hide the mouse immediately when typing. The mouse becomes visible again
-# may dictate other scenarios where the mouse is shown. For example on macOS,3
-# the mouse is shown again when a new window, tab, or split is created.
+# ============================================================
+# Mouse
+# ============================================================
+
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = 2
+
+# ============================================================
+# Window
+# ============================================================
+
 window-padding-balance = true
 window-save-state = always
 window-colorspace = "display-p3"
-window-decoration = false
-macos-titlebar-style = hidden
-# macos-titlebar-style=transparekt
-# background = 1C2021
-# foreground = d4be98
+window-decoration = true
+macos-titlebar-style = tabs
+background-opacity = 0.88
 
-# The opacity level (opposite of transparency) of the background. A value of
-# 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
-# or greater than 1 will be clamped to the nearest valid value.
-background-opacity = 1
+# ============================================================
+# Keybindings
+# ============================================================
 
-# keybindings
-keybind = cmd+s>r=reload_config
-keybind = cmd+s>x=close_surface
-keybind = cmd+s>n=new_window
-# tabs
-keybind = cmd+s>c=new_tab
-keybind = cmd+s>shift+l=next_tab
+keybind = ctrl+grave_accent>r=reload_config
 
-keybind = super+d=unbind
-# keybind = super+d=new_split:right
-# keybind = super+shift+d=new_split:down
-# keybind = super+s>shift+d=new_split:down
-# keybind = super+s>d=new_split:rightb
