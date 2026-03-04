@@ -1,6 +1,6 @@
 ---
-description: Use when a completed workthrough or decision record needs to be published to the personal Astro blog.
-argument-hint: "<workthrough file path or filename>"
+description: Use when a completed workthrough, decision record, or translated technical document needs to be published to the personal Astro blog.
+argument-hint: "<file path or filename>"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
@@ -35,12 +35,13 @@ draft: false
 ```
 
 Tag vocabulary (hierarchical, extensible):
-- `개발/Spring`, `개발/Java`, `개발/TypeScript`, `개발/Kotlin`, etc.
+- `개발/Spring`, `개발/Java`, `개발/TypeScript`, `개발/Kotlin`, `개발/패턴`, etc.
 - `디버깅` -- troubleshooting posts
-- `아키텍처` -- architectural decisions
+- `아키텍처`, `아키텍처/분산시스템` -- architectural decisions
 - `TIL` -- short learning notes
 - `의사결정` -- decision records
 - `인프라` -- infrastructure, deployment, k8s
+- `번역/기술문서` -- translated technical documents
 
 Users can create new tags following the `category/topic` pattern.
 
@@ -50,16 +51,17 @@ Users can create new tags following the `category/topic` pattern.
 
 If `$ARGUMENTS` is provided:
 - Absolute path: use directly
-- Filename only: search `$VAULT/00-Inbox/` for workthrough files
+- Filename only: search `$VAULT/00-Inbox/` and `$VAULT/03-Resources/` for matching files
 
-If not provided: list recent workthrough files from `$VAULT/00-Inbox/`, ask user to select.
+If not provided: list recent files from `$VAULT/00-Inbox/`, ask user to select.
 
 ### STEP 2: Extract Metadata
 
 Read the file and extract:
 1. **title**: First H1 heading text. Strip `# ` prefix and all markdown syntax (inline code, links, bold).
-2. **description**: TL;DR section content. Keep up to 3 sentences. If no TL;DR section exists, ask user.
+2. **description**: TL;DR section content. Keep up to 3 sentences. If no TL;DR, use `Highlights / Summary` section. If neither exists, ask user.
 3. **pubDate**: From filename `YYMMDD` prefix, convert to `20YY-MM-DD`. If date cannot be parsed, use today.
+4. **source** (optional): If Obsidian frontmatter has a `source:` field, add `> 원문: [title](url)` line after the H1 heading.
 
 ### STEP 3: Generate Slug
 
@@ -77,7 +79,8 @@ Fallback patterns (try in order):
 1. `YYMMDD-SCOPE-NN-desc.md` -> `20YY-MM-DD-desc.md`
 2. `YYMMDD-SCOPE-desc.md` -> `20YY-MM-DD-desc.md` (no sequence)
 3. `YYMMDD-desc.md` -> `20YY-MM-DD-desc.md` (no scope)
-4. Cannot parse -> ask user for desired slug
+4. Free-form filename (e.g., `Saga distributed transactions pattern.md`) -> `{pubDate}-{lowercase-hyphenated-title}.md`
+5. Cannot parse -> ask user for desired slug
 
 If target file already exists, ask user: overwrite or append suffix (e.g., `-v2`).
 
@@ -135,6 +138,18 @@ Drop the Credibility column. If table has different columns, preserve as-is.
 Convert both checked and unchecked task list items:
 - `- [ ] text` -> `- text`
 - `- [x] text` -> `- text`
+
+**5d. Obsidian image syntax -> standard markdown + copy**
+
+Convert Obsidian wiki-link images and copy files:
+1. Find all `![[filename.ext]]` patterns in the document
+2. Convert to `![alt text](/images/filename.ext)`
+3. Copy image files from `$VAULT/_attachments/` to `{BLOG_PATH}/public/images/`
+4. If image not found in `_attachments/`, warn user
+
+**5e. Strip Obsidian frontmatter**
+
+Remove the source Obsidian YAML frontmatter (id, aliases, tags, author, created_at, source, etc.) and replace with blog frontmatter schema.
 
 ### STEP 6: Write and Report
 
