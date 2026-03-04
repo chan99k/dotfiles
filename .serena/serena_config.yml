@@ -124,3 +124,9 @@ ignored_paths: []
 # or with tool calls that find very many symbols.
 # Can be overridden in project.yml.
 symbol_info_budget: 10.0
+
+# whether global memories (the "global" topic) are allowed to be deleted or edited by the agent.
+# Global memories are stored in ~/.serena/memories/global/ and shared across all projects.
+# Set to false to protect global memories from accidental modification by agents.
+# Note: We recommend tracking global memories with git.
+edit_global_memories: true
