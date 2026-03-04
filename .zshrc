@@ -145,7 +145,10 @@ morning-update() {
     echo "Gemini CLI: $(gemini --version 2>/dev/null || echo 'version check failed')"
 
     echo "\n=== Done ==="
-    echo "Next: claude 실행 후 /daily-work-logger"
+    echo "Next:"
+    echo "  tmux new -s dev   # 새 세션"
+    echo "  tmux attach       # 기존 세션 복귀"
+    echo "  claude             # tmux 안에서 실행 후 /daily-work-logger"
 }
 
 # yazi: cd to selected directory on exit
