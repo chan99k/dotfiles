@@ -377,6 +377,8 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 4. **완료 메시지 출력**
 ```
 {TARGET_DATE} 작업 내역이 Daily Note에 반영되었습니다.
+
+TIP: `/project-status <프로젝트경로>` 로 현재 프로젝트의 Git/GitHub 현황도 확인할 수 있습니다.
 ```
 
 ---

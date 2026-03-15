@@ -1,4 +1,15 @@
 {
+  "env": {
+    "MAX_THINKING_TOKENS": "16000",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "16384",
+    "BASH_MAX_OUTPUT_LENGTH": "1000000",
+    "BASH_DEFAULT_TIMEOUT_MS": "120000",
+    "BASH_MAX_TIMEOUT_MS": "600000",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5-20250929",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1"
+  },
   "permissions": {
     "allow": [
       "Read",
@@ -7,7 +18,38 @@
       "Bash",
       "WebSearch",
       "Edit",
-      "Write"
+      "Write",
+      "Bash(ln:*)",
+      "Bash(/Users/chan99/chan99k-workspace/scripts/health-check.sh:*)",
+      "Bash(echo:*)",
+      "mcp__things__get_logbook",
+      "mcp__things__get_recent",
+      "Bash(echo 디렉토리 존재:*)",
+      "Bash(ls $DAILIES_PATH:*)",
+      "WebFetch(domain:www.baeldung.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(cd:*)",
+      "WebFetch(domain:spring.io)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(open:*)",
+      "Bash(xargs -I {} basename {})",
+      "Bash(test:*)",
+      "Bash(# Check the structure of the JSONL\nhead -3 ~/.claude/projects/-Users-chan99-chan99k-workspace/e0243419-8f68-48be-909a-95ec25755b07.jsonl 2>/dev/null | jq -r 'keys' 2>/dev/null)",
+      "Bash(# Check actual types in the JSONL\nhead -10 ~/.claude/projects/-Users-chan99-chan99k-workspace/e0243419-8f68-48be-909a-95ec25755b07.jsonl 2>/dev/null | jq -r '.type' 2>/dev/null)",
+      "Bash(bash:*)",
+      "Bash(VAULT=\"/Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k''s vault/chan99k''s vault\" echo \"=== 001-INBOX ===\" ls \"$VAULT/001-INBOX/\")",
+      "Bash(fc-list:*)",
+      "Bash(do echo:*)",
+      "Bash(cp:*)",
+      "Bash(__NEW_LINE_3454ed3caf01ad36__ find:*)",
+      "Bash(do:*)",
+      "Bash(command:*)",
+      "mcp__things__add_todo",
+      "Bash(rm:*)",
+      "Bash(stow:*)",
+      "WebFetch(domain:team-201-giftify.atlassian.net)",
+      "WebFetch(domain:ghostty.org)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
@@ -61,36 +103,17 @@
       "Bash(mount :*)",
       "Bash(umount:*)",
       "Bash(truncate:*)"
-    ]
-  },
-  "env": {
-    "MAX_THINKING_TOKENS": "16000",
-    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "16384",
-    "BASH_MAX_OUTPUT_LENGTH": "1000000",
-    "BASH_DEFAULT_TIMEOUT_MS": "120000",
-    "BASH_MAX_TIMEOUT_MS": "600000",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5-20250929",
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
-    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1"
+    ],
+    "defaultMode": "default"
   },
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title \"Claude Code - PreToolUse\" -message \"도구 실행 준비 중: $CLAUDE_TOOL_NAME\" -sound default"
-          }
-        ]
-      },
-      {
-        "matcher": "bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '\"\\(.tool_input.command) - \\(.tool_input.description // \"No description\")\"' >> ~/.claude/bash-command-log.txt"
+            "command": "jq -r '\"\\(.tool_input.file_path)\"' >> ~/.claude/file-edit-log.txt"
           }
         ]
       }
@@ -118,7 +141,7 @@
   },
   "enabledPlugins": {
     "oh-my-claudecode@omc": true,
-    "serena@claude-plugins-official": false,
+    "serena@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": false,
     "github@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
@@ -155,5 +178,8 @@
       "연결고리 찾는 중"
     ]
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "stable",
+  "minimumVersion": "2.1.63",
+  "voiceEnabled": false
 }

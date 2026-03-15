@@ -20,7 +20,7 @@ description: "`### 메시지 구조` 에 정의된 규칙에 따라 자동으로
 
    - `### 메시지 구조`에 정의된 규칙에 따라 메시지 작성
    - Conventional Commits 형식 준수
-   - 타입, 범위, 제목, 본문 자동 생성
+   - 타입, 제목, 본문 자동 생성
    - 한글 메시지는 반드시 임시 파일 방식으로 커밋 (하단 '한글 커밋 메시지 깨짐 방지' 섹션 참조)
 
 3. **커밋 실행**
@@ -84,7 +84,7 @@ description: "`### 메시지 구조` 에 정의된 규칙에 따라 자동으로
 ### 메시지 구조
 
 ```
-type(scope): subject (50자 이내)
+type: subject (50자 이내)
 
 본문: 72자로 줄바꿈. 최대 3개의 항목만 기술
 - 변경사항의 이유와 영향 설명
@@ -100,7 +100,7 @@ type(scope): subject (50자 이내)
 - claude/commands/add-tag.md 추가
 
 # 생성될 커밋 메시지
-feat(claude): add dynamic argument support to slash commands
+feat: slash 명령어에 동적 인자 지원 추가
 
 - organize-file과 add-tag 명령어에 $ARGUMENTS 변수 추가하여 동적 파일명
   처리 가능하도록 개선
@@ -117,7 +117,7 @@ feat(claude): add dynamic argument support to slash commands
 브랜치: main
 
 📝 커밋 메시지:
-feat(claude): add dynamic argument support to slash commands
+feat: slash 명령어에 동적 인자 지원 추가
 
 - organize-file과 add-tag 명령어에 $ARGUMENTS 변수 추가하여 동적 파일명
   처리 가능하도록 개선
@@ -156,14 +156,10 @@ rm /tmp/commit_msg.txt
 ### 임시 파일 내용 예시
 
 ```
-feat(scope): 한글 제목 예시
+feat: 한글 제목 예시
 
 - 한글 본문 첫 번째 항목
 - 한글 본문 두 번째 항목
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 ```
 
 ### 금지된 방법
