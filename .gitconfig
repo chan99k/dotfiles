@@ -8,26 +8,19 @@
 	editor = vim
 	excludesfile = ~/.gitignore
 	pager = delta
+	hooksPath = /Users/chan99/.config/git/hooks
 
 [http]
 	postBuffer = 524288000
 
 [i18n]
 	logOutputEncoding = utf-8
-
-[credential]
-	helper =
-	helper = /usr/local/share/gcm-core/git-credential-manager
-
-[credential "https://dev.azure.com"]
-	useHttpPath = true
-
 [credential "https://github.com"]
-	helper =
+	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
 
 [credential "https://gist.github.com"]
-	helper =
+	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
 
 [color]
@@ -124,3 +117,7 @@
 
 [advice]
 	statusHints = false
+[credential]
+	helper = !gh auth git-credential
+[credential "https://dev.azure.com"]
+	useHttpPath = true

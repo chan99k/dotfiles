@@ -159,3 +159,9 @@ function y() {
     [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
     rm -f -- "$tmp"
 }
+
+# secret masking 용 alias
+alias masking='sed "s/=.*/=****/"'
+
+# yt-dlp: use security wrapper (blocks --exec, --netrc-cmd, --ignore-config)
+alias yt-dlp='~/.local/bin/yt-dlp-safe'
