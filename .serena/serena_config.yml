@@ -129,4 +129,15 @@ symbol_info_budget: 10.0
 # Global memories are stored in ~/.serena/memories/global/ and shared across all projects.
 # Set to false to protect global memories from accidental modification by agents.
 # Note: We recommend tracking global memories with git.
-edit_global_memories: true
+project_serena_folder_location: $projectDir/.serena
+
+# list of regex patterns which, when matched, mark a memory entry as read‑only.
+# For example, "global/.*" will mark all global memories as read-only.
+# You can extend the list on a per-project basis in the project.yml configuration file.
+read_only_memory_patterns: []
+
+# line ending convention to use when writing source files.
+# Possible values: "lf" (Unix), "crlf" (Windows), "native" (platform default).
+# Note that Serena's own files (e.g. memories and configuration files) always use native line endings.
+# This setting can be overridden on a per-project basis in project.yml files.
+line_ending: native

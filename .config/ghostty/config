@@ -13,17 +13,6 @@ font-size = 13
 # ============================================================
 
 theme = Catppuccin Mocha
-# Previous light themes (preserved for reference)
-# theme = GitHub Light Default
-# theme = Catppuccin Latte
-
-# Catppuccin Latte에서 사용했던 커스텀 palette (참고용으로 보존)
-# palette 3, 11: Warning (Yellow) - 더 진한 황금색으로 변경
-# palette 1, 9: Error (Red) - 더 진한 빨강으로 변경
-# palette = 3=#b8860b
-# palette = 11=#996700
-# palette = 1=#b01030
-# palette = 9=#901020
 
 # ============================================================
 # Shell Integration & Cursor
@@ -58,7 +47,7 @@ window-save-state = always
 window-colorspace = "display-p3"
 window-decoration = true
 macos-titlebar-style = tabs
-background-opacity = 0.88
+background-opacity = 0.93
 
 # ============================================================
 # Keybindings
