@@ -1,0 +1,17 @@
+#!/bin/zsh
+# yt-dlp-safe: Security wrapper that blocks dangerous flags
+# Blocks: --exec (command injection CVE-2023/2024/2025), --netrc-cmd (CVE-2026)
+
+BLOCKED_FLAGS=(--exec --exec-before-dl --exec-after-dl --netrc-cmd --ignore-config --plugin-dirs)
+
+for arg in "$@"; do
+  for blocked in "${BLOCKED_FLAGS[@]}"; do
+    if [[ "$arg" == "$blocked"* ]]; then
+      echo "[BLOCKED] '$arg' is not allowed for security reasons."
+      echo "See: https://github.com/yt-dlp/yt-dlp/security/advisories"
+      exit 1
+    fi
+  done
+done
+
+command yt-dlp "$@"

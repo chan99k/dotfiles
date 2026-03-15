@@ -1,0 +1,13 @@
+# yt-dlp safe configuration
+# Security constraints applied per: https://github.com/yt-dlp/yt-dlp/security
+
+# Do not download video by default (subtitle extraction only)
+--skip-download
+
+# Subtitle extraction
+--write-auto-sub
+--sub-lang ko,en
+--sub-format srt/best
+
+# Output path
+-o ~/Downloads/yt-dlp/%(title)s.%(ext)s
