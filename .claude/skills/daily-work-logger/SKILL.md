@@ -55,7 +55,7 @@ description: |
 
 | 항목 | 경로 |
 |------|------|
-| vault | `"~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/"` |
+| vault | `{OBSIDIAN_VAULT}` |
 | dailies | `{vault}/02-Areas/dailies/` |
 | 미팅 노트 | `02-Areas/dailies/YYYY-MM-DD-*.md` |
 | 기술 문서 | `00-Inbox/`, `03-Resources/`, `01-Projects/` |
@@ -76,7 +76,7 @@ echo "대상 날짜: $TARGET_DATE"
 
 2. **Daily Note 경로 확인**
 ```bash
-DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/02-Areas/dailies/${TARGET_DATE}.md"
+DAILY_NOTE="$OBSIDIAN_VAULT/02-Areas/dailies/${TARGET_DATE}.md"
 ```
 
 ---
@@ -107,12 +107,12 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 {TARGET_DATE} 날짜에 생성/수정된 파일들을 분석하여 업무 관련 내용을 추출합니다.
 
 ## 경로
-- Vault: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/
+- Vault: $OBSIDIAN_VAULT
 - 분석 대상 디렉토리: 00-Inbox/, 03-Resources/, 01-Projects/, 02-Areas/
 
 ## 실행 단계
 1. Bash로 해당 날짜에 수정된 .md 파일 찾기 (macOS 호환):
-   find "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault" -name "*.md" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | grep "{TARGET_DATE}" | awk '{print $2}' | grep -v "notes/dailies/"
+   find "$OBSIDIAN_VAULT" -name "*.md" -type f -exec stat -f "%Sm %N" -t "%Y-%m-%d" {} \; 2>/dev/null | grep "{TARGET_DATE}" | awk '{print $2}' | grep -v "notes/dailies/"
 
    **주의**: macOS BSD find는 `-newermt` 옵션이 다르게 동작하므로 `stat` + `grep` 조합 사용
 
@@ -204,11 +204,11 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 {TARGET_DATE} 날짜의 미팅 노트를 분석하여 주요 내용을 추출합니다.
 
 ## 경로
-- 미팅 노트 패턴: ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/notes/dailies/{TARGET_DATE}-*.md
+- 미팅 노트 패턴: $OBSIDIAN_VAULT/notes/dailies/{TARGET_DATE}-*.md
 
 ## 실행 단계
 1. Bash로 미팅 노트 파일 찾기:
-   ls "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/notes/dailies/{TARGET_DATE}-"*.md 2>/dev/null
+   ls "$OBSIDIAN_VAULT/notes/dailies/{TARGET_DATE}-"*.md 2>/dev/null
 
 2. 발견된 각 미팅 노트 파일 읽기 (Read 도구 사용)
 
@@ -398,7 +398,7 @@ DAILY_NOTE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k'
 ### 컨디션: /10
 ```
 
-> **자기관리 기록 섹션**: `00-Inbox/chan99k-self-management-protocol-2026-v4.md`의 기록 템플릿.
+> **자기관리 기록 섹션**: `00-Inbox/{username}-self-management-protocol.md`의 기록 템플릿.
 > 이 섹션은 사용자가 수동으로 채움 (체크박스 탭). daily-work-logger는 빈 템플릿만 삽입.
 
 4. **완료 메시지 출력**

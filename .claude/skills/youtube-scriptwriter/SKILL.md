@@ -63,7 +63,7 @@ Phase 4                  Phase 5
 Save all artifacts to Obsidian vault:
 
 ```
-VAULT=~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault
+VAULT={OBSIDIAN_VAULT}
 
 01-Projects/youtube/inbox/{YYMMDD}-YT-{NN}-{kebab-topic}/
   00-reference-transcripts/    # ★ auto-scraped subtitles from reference videos

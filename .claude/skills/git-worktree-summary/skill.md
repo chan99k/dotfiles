@@ -182,7 +182,7 @@ declare -A branch_worktree        # branch -> worktree path (없으면 empty)
 
 ```
 === Git Worktree & Branch Summary ===
-Repository: /Users/chan99/IdeaProjects/grep/giftify-be
+Repository: /Users/username/projects/example-repo
 Default Branch: develop
 
 📊 Statistics:
@@ -222,7 +222,7 @@ Default Branch: develop
 
 ```markdown
 === Git Worktree & Branch Summary ===
-Repository: /Users/chan99/IdeaProjects/grep/giftify-be
+Repository: /Users/username/projects/example-repo
 Default Branch: develop
 
 📊 Statistics:

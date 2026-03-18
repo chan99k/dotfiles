@@ -91,6 +91,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Google Cloud Project ID
 export GOOGLE_CLOUD_PROJECT="gen-lang-client-0744229235"
 
+# SOPS (Secret management)
+export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
+
 
 # ============================================================
 # Tool-specific Integrations

@@ -1,7 +1,7 @@
 # Obsidian Vault Directory Structure
 
 ```
-VAULT=~/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault
+VAULT={OBSIDIAN_VAULT}
 
 00-Inbox/          # Unsorted incoming documents (triage target)
 01-Projects/       # Active project documentation
