@@ -1,0 +1,20 @@
+<templateSet group="user">
+  <template name="k2tc" value="import org.assertj.core.api.Assertions.assertThat&#10;import org.junit.jupiter.api.BeforeAll&#10;import org.junit.jupiter.api.DisplayName&#10;import org.junit.jupiter.api.Nested&#10;import org.junit.jupiter.api.Test&#10;&#10;@Nested&#10;class $NAME$Test {&#10;    @Test&#10;    @DisplayName(&quot;&quot;)&#10;    fun test01() {&#10;        assertThat(target.solution()).isEqualTo()&#10;    }&#10;&#10;    @Test&#10;    @DisplayName(&quot;&quot;)&#10;    fun test02() {&#10;        assertThat(target.solution()).isEqualTo()&#10;    }&#10;&#10;    @Test&#10;    fun test03() {&#10;        assertThat(target.solution()).isEqualTo()&#10;    }&#10;&#10;    @Test&#10;    @DisplayName(&quot;&quot;)&#10;    fun test04() {&#10;        assertThat(target.solution()).isEqualTo(0)&#10;    }&#10;&#10;    companion object {&#10;        private lateinit var target: $NAME$&#10;&#10;        @JvmStatic&#10;        @BeforeAll&#10;        fun setUp() {&#10;            this.target = $NAME$()&#10;        }&#10;    }&#10;}&#10;" description="kotlin koding test cases" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="KOTLIN" value="true" />
+    </context>
+  </template>
+  <template name="jtc" value="import static org.assertj.core.api.Assertions.*;&#10;&#10;import org.junit.jupiter.api.DisplayName;&#10;import org.junit.jupiter.api.Nested;&#10;import org.junit.jupiter.api.Test;&#10;&#10;@Nested&#10;public class $NAME$Test {&#10;    private $NAME$ target = new $NAME$();&#10;    &#10;    @Test&#10;    @DisplayName(&quot;test01&quot;)&#10;    void test01() {&#10;        assertThat(0).isEqualTo(0);&#10;    }&#10;&#10;    @Test&#10;    @DisplayName(&quot;test02&quot;)&#10;    public void test02() {&#10;        assertThat(0).isEqualTo(0);&#10;    }&#10;&#10;    @Test&#10;    @DisplayName(&quot;test03&quot;)&#10;    public void test03() {&#10;        assertThat(0).isEqualTo(0);&#10;    }&#10;&#10;}&#10;" description="java test code template" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="mabatis" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&#10;&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;&#10;        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;&#10;&lt;mapper namespace=&quot;$NAME$&quot;&gt;&#10;    &#10;&lt;/mapper&gt;" description="" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="XML" value="true" />
+    </context>
+  </template>
+</templateSet>

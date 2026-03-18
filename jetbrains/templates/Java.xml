@@ -1,0 +1,21 @@
+<templateSet group="Java">
+  <template name="ass" value="org.assertj.core.api.Assertions.assertThat($TARGET$).$END$" description="assertj assertThat()" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+    <variable name="TARGET" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="astt" value="org.assertj.core.api.Assertions.assertThatThrownBy($TARGET$).$END$" description="assertj assertThatThrownBy()" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+    <variable name="TARGET" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="te" value="@org.junit.jupiter.api.Test&#10;@org.junit.jupiter.api.DisplayName(&quot;$FIRST$&quot;)&#10;void $TEST_NAME$() {&#10;    $END$&#10;}" description="add JUnit testcase" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <variable name="FIRST" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="TEST_NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+</templateSet>

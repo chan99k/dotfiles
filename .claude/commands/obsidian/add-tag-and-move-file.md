@@ -25,7 +25,11 @@ $ARGUMENTS가 제공되지 않은 경우, 이 도움말을 표시합니다.
    - 세부 카테고리는 vault 구조에 따라 결정
 3. **파일 이동 실행**
    - `--dry-run` 옵션 사용 시 실제 이동 없이 결과만 표시
-   - 선택된 디렉토리로 파일 이동
+   - `obsidian move` CLI 사용 (백링크 자동 업데이트):
+     ```bash
+     cd "$OBSIDIAN_VAULT" && obsidian move path="00-Inbox/파일명.md" to="대상폴더/"
+     ```
+   - Obsidian 앱 미실행 시 `mv`로 fallback
    - 이동 후 확인 및 결과 보고
 
 ## 옵션 설명

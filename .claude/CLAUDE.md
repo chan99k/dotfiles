@@ -105,6 +105,32 @@ When creating git commits with Korean (or any non-ASCII) messages:
 **Co-Author**: Do NOT add `Co-Authored-By` lines for AI agents in commit messages. Commits should appear as authored solely by the human developer.
 </git_commit_messages>
 
+## Tool Selection
+
+<prefer_dedicated_tools>
+ALWAYS prefer dedicated tools over Bash equivalents. Dedicated tools run without permission prompts, produce structured output, and consume fewer tokens.
+
+| Instead of (Bash) | Use (Dedicated Tool) | Why |
+|---|---|---|
+| `find`, `ls` | Glob | Structured file list, no approval needed |
+| `grep`, `rg` | Grep | Supports output modes, context lines, head_limit |
+| `cat`, `head`, `tail` | Read | Line numbers included, image/PDF support |
+| `sed`, `awk` (file edit) | Edit | Precise replacements, safe and reviewable |
+| `echo >`, heredoc | Write | Proper encoding, no shell escaping issues |
+
+Reserve Bash for: git commands, build tools (gradle, npm), process management, and operations with no dedicated tool equivalent.
+</prefer_dedicated_tools>
+
+## Path Constants
+
+<path_constants>
+Frequently used paths — reference these instead of hardcoding full paths:
+
+- **OBSIDIAN_VAULT**: `/Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault`
+- **OBSIDIAN_INBOX**: `{OBSIDIAN_VAULT}/00-Inbox`
+- **WORKSPACE**: `/Users/chan99/chan99k-workspace`
+</path_constants>
+
 ## Large-scale Changes
 
 <large_scale_changes>

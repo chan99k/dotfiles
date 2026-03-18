@@ -111,6 +111,10 @@ eval "$(gw shell-init zsh 2>/dev/null)"
 # alias zshreload="source ~/.zshrc"
 alias tmux-clean='~/.tmux/scripts/tmux-clean.sh'
 
+# Obsidian CLI: run commands against the vault from anywhere
+export OBSIDIAN_VAULT="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault"
+obs() { (cd "$OBSIDIAN_VAULT" && obsidian "$@") }
+
 
 # ============================================================
 # Utility Functions
