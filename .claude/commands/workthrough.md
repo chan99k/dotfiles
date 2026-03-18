@@ -123,6 +123,53 @@ Write the finalized content and verify:
 head -50 "$VAULT/00-Inbox/{filename}.md"
 ```
 
+## STEP 6: Learning Extraction (Final Phase)
+
+**Note**: This is an opportunistic post-processing step. It runs automatically after successful workthrough generation but does not block completion. The workthrough document itself is the primary deliverable.
+
+After the workthrough document is successfully written, extract learning items from the current session's conversation history (already available to Claude during execution) and append them to today's daily note.
+
+1. **Get Current Date and Daily Note Path**:
+   ```bash
+   CURRENT_DATE=$(date +%Y-%m-%d)
+   DAILY_NOTE="$VAULT/02-Areas/dailies/$CURRENT_DATE.md"
+   ```
+
+2. **Analyze Current Session Conversation**:
+   Review this session's conversation for learning indicators:
+   - Keywords: 배웠, 알게, 처음, 새로운, TIL, learned, discovered
+   - User questions: 뭐야, 어떻게, 왜, What, How, Why
+   - New tools/libraries/concepts introduced during the session
+
+3. **Extract and Categorize Learning Items**:
+   - 기술/도구: New libraries, CLI tools, APIs
+   - 개념: Programming concepts, patterns, principles
+   - 해결방법: Error resolutions, problem-solving techniques
+
+4. **Append to Daily Note** (if exists and learning items found):
+   ```bash
+   # Check if daily note exists
+   test -f "$DAILY_NOTE" && echo "Daily note found"
+   ```
+
+   Append under "학습 기록" section (or create section if missing):
+   ```markdown
+   ### 학습 기록
+
+   #### 기술/도구
+   - **[도구명]**: [1줄 설명]
+
+   #### 개념
+   - **[개념명]**: [1줄 설명]
+   ```
+
+5. **Report Result**:
+   - Success: "Learning items appended to daily note: $DAILY_NOTE"
+   - Skipped: "No learning items found" or "Daily note does not exist"
+   - Error: Continue without blocking (log issue only)
+
+**Error Handling**: If learning extraction fails for any reason (no session logs, parsing errors, file access issues), report the skip reason and continue. Do not abort the workthrough command.
+
 # OUTPUT FORMAT (Markdown Template)
 
 ```markdown
