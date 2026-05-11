@@ -25,3 +25,7 @@ settings\.json\.full
 # Repo tooling
 \.pre-commit-config\.yaml
 \.secrets\.baseline
+
+# 외부 도구가 직접 설치하는 자산 — dotfiles 추적 X (stow 충돌 회피)
+# gstack: ~/.claude/skills/gstack 에 npm 으로 직접 설치됨. dotfiles 의 사본은 옛 백업.
+\.claude/skills/gstack

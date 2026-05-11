@@ -49,7 +49,102 @@
       "Bash(rm:*)",
       "Bash(stow:*)",
       "WebFetch(domain:team-201-giftify.atlassian.net)",
-      "WebFetch(domain:ghostty.org)"
+      "WebFetch(domain:ghostty.org)",
+      "mcp__plugin_serena_serena__activate_project",
+      "mcp__plugin_serena_serena__list_dir",
+      "mcp__plugin_serena_serena__read_file",
+      "mcp__plugin_serena_serena__find_file",
+      "mcp__plugin_serena_serena__search_for_pattern",
+      "mcp__plugin_serena_serena__think_about_collected_information",
+      "mcp__plugin_serena_serena__get_symbols_overview",
+      "mcp__plugin_serena_serena__find_symbol",
+      "mcp__plugin_serena_serena__think_about_task_adherence",
+      "mcp__plugin_serena_serena__insert_after_symbol",
+      "mcp__plugin_serena_serena__replace_content",
+      "mcp__plugin_serena_serena__execute_shell_command",
+      "mcp__plugin_serena_serena__think_about_whether_you_are_done",
+      "mcp__plugin_serena_serena__check_onboarding_performed",
+      "mcp__plugin_serena_serena__list_memories",
+      "mcp__plugin_serena_serena__replace_symbol_body",
+      "mcp__plugin_serena_serena__create_text_file",
+      "mcp__plugin_serena_serena__initial_instructions",
+      "mcp__plugin_serena_serena__write_memory",
+      "mcp__plugin_serena_serena__edit_memory",
+      "mcp__plugin_serena_serena__read_memory",
+      "mcp__plugin_serena_serena__find_referencing_symbols",
+      "mcp__plugin_serena_serena__get_current_config",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_type",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_install",
+      "mcp__plugin_playwright_playwright__browser_network_requests",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "mcp__plugin_playwright_playwright__browser_run_code",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_navigate_back",
+      "mcp__plugin_playwright_playwright__browser_hover",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "mcp__claude_ai_Vercel__list_teams",
+      "mcp__claude_ai_Vercel__get_deployment_build_logs",
+      "mcp__claude_ai_Vercel__get_project",
+      "mcp__claude_ai_Excalidraw__export_to_excalidraw",
+      "Skill(code-review:code-review)",
+      "WebFetch(domain:docs.tosspayments.com)",
+      "WebFetch(domain:m.blog.naver.com)",
+      "WebFetch(domain:blog.naver.com)",
+      "WebFetch(domain:coderanch.com)",
+      "WebFetch(domain:glances.readthedocs.io)",
+      "WebFetch(domain:garstecki.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:mvnrepository.com)",
+      "WebFetch(domain:repo1.maven.org)",
+      "WebFetch(domain:www.spring-doc.cn)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:gitorko.github.io)",
+      "WebFetch(domain:jakarta.ee)",
+      "WebFetch(domain:docs.jboss.org)",
+      "WebFetch(domain:docs.hibernate.org)",
+      "WebFetch(domain:beanvalidation.org)",
+      "WebFetch(domain:culturedcode.com)",
+      "WebFetch(domain:gaetanopiazzolla.github.io)",
+      "WebFetch(domain:speakerdeck.com)",
+      "WebFetch(domain:icraft.design)",
+      "WebFetch(domain:vercel.com)",
+      "Skill(obsidian:summarize-article)",
+      "mcp__things__add_project",
+      "WebFetch(domain:dimitri.codes)",
+      "WebFetch(domain:services.gradle.org)",
+      "WebFetch(domain:projectlombok.org)",
+      "WebFetch(domain:central.sonatype.com)",
+      "WebFetch(domain:plugins.gradle.org)",
+      "WebFetch(domain:grafana.com)",
+      "WebFetch(domain:auth0.com)",
+      "WebFetch(domain:k6.io)",
+      "WebFetch(domain:dev.to)",
+      "WebFetch(domain:mitchellh.com)",
+      "WebFetch(domain:www.cmux.dev)",
+      "WebFetch(domain:news.ycombinator.com)",
+      "WebFetch(domain:help.obsidian.md)",
+      "WebFetch(domain:obsidian.md)",
+      "WebFetch(domain:frankanaya.com)",
+      "WebFetch(domain:blog.wenhaofree.com)",
+      "WebFetch(domain:getsops.io)",
+      "WebFetch(domain:techblog.uplus.co.kr)",
+      "Skill(workthrough)",
+      "WebFetch(domain:argo-cd.readthedocs.io)",
+      "WebFetch(domain:argocd-image-updater.readthedocs.io)",
+      "WebFetch(domain:hub.docker.com)",
+      "WebFetch(domain:itnext.io)",
+      "WebFetch(domain:vikaspogu.dev)",
+      "WebFetch(domain:pkgs.alpinelinux.org)",
+      "Skill(plan-eng-review)",
+      "Skill(browse)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
@@ -118,6 +213,25 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/context-monitor.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/edit-counter.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -140,18 +254,12 @@
     ]
   },
   "enabledPlugins": {
-    "oh-my-claudecode@omc": true,
-    "serena@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": false,
-    "github@claude-plugins-official": true,
+    "serena@claude-plugins-official": false,
     "context7@claude-plugins-official": true,
     "code-review@claude-plugins-official": false,
     "playwright@claude-plugins-official": true,
     "learning-output-style@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": false,
-    "feature-dev@claude-plugins-official": false,
-    "superpowers@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": false
   },
   "spinnerVerbs": {
     "mode": "replace",
@@ -181,5 +289,9 @@
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "stable",
   "minimumVersion": "2.1.63",
-  "voiceEnabled": false
+  "preferredNotifChannel": "ghostty",
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "voiceEnabled": false,
+  "autoCompactWindow": 300000
 }

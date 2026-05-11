@@ -80,9 +80,22 @@ If you create any temporary new files, scripts, or helper files for iteration, c
 
 **Language:**
 - Response: Korean
-- Commit messages: Korean conventional commits (type/scope in English)
-- Code comments: English
+- Code comments: Korean (관행적 마커 TODO/FIXME/NOTE/HACK은 영어 keyword 유지, 설명만 한국어)
 - Technical terms: English on first mention
+
+**Commit messages:**
+- Format: Conventional Commits 1.0.0 (https://www.conventionalcommits.org/)
+- Type: English (feat/fix/chore/docs/style/refactor/perf/test/build/ci/revert)
+- Scope: Optional, English when used. Per-project policy may omit (e.g., single-module projects).
+- Subject: Korean
+- Body/Footer: Korean
+- Examples:
+    feat: 사용자 로그인 기능 추가
+    feat(auth): JWT 토큰 검증 로직 추가
+    fix: Ticker 형식 검증 우회 가능한 race condition 해결
+    chore: bump kotlin from 2.2.21 to 2.3.21
+- Per-project override: 프로젝트별 CLAUDE.md / 메모리에서 명시 시 우선
+- Compact form (context-tight 시 사용 가능): "Conventional Commits 1.0.0 — type English, subject/body Korean, scope optional"
 
 **Approach:**
 - If user specifies a tool, use only that tool (no substitution)
@@ -137,3 +150,81 @@ Frequently used paths — reference these instead of hardcoding full paths:
 - Show a few sample changes first and get confirmation before proceeding with full changes
 - Document procedures for repeatable tasks for future reuse
 </large_scale_changes>
+
+## gstack
+
+Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
+
+Available gstack skills:
+`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
+
+# deep-dive-doc
+- **deep-dive-doc** (`~/.claude/skills/deep-dive-doc/SKILL.md`) - 학부~석사 수준 시니어 백엔드/시스템 디자인 인터뷰 대비 심층 탐구 시리즈 작성 (MOC → 샘플 → 작성 → 팩트체크 → 정정 → 아카이빙). 기본 순차 작성, 사용자 명시 범위만 병렬화. Trigger: `/deep-dive-doc`
+When the user types `/deep-dive-doc`, invoke the Skill tool with `skill: "deep-dive-doc"` before doing anything else.
+
+---
+
+## agentic-team (멀티 에이전트 wrapper)
+
+`~/.claude/agentic-team/bin/` 의 wrapper 들을 통해 Codex(reviewer) 와
+Gemini(researcher) 를 외부 셸 또는 자연어 요청으로 호출. PM 은 Claude 본인.
+
+- 본 시스템 명세: `~/.claude/agentic-team/SPEC.md`
+- 비유사성 검증: `~/.claude/agentic-team/VERIFICATION.md`
+  (본 데모 `pandas-studio/agent-harness-tutorial`, CC BY-NC-ND 4.0 — 패턴만 흡수, 코드는 전부 본인 작성)
+
+### 라우팅 정책
+
+| 워커 | 호출 wrapper | 언제 부르나 |
+|---|---|---|
+| Gemini (researcher) | `ask-gemini "질문"` | 라이브러리/API/스펙 조사, recent changes, design rationale. repo grep 으로 답할 수 있는 건 직접 처리. |
+| Codex (reviewer) | `ask-codex "focus"` | 작업 단위 완료 후 non-trivial 변경의 리뷰. 사용자가 명시적으로 review 요청 시. trivial single-line edit, WIP, doc-only 는 제외. |
+
+자연어 트리거 — 사용자가 "코덱스한테 리뷰 시켜", "제미나이한테 이 라이브러리 변경점 물어봐" 같은 요청을 하면 위 wrapper 자동 호출.
+
+### NEED-RESEARCH 루프 처리
+
+Codex 출력이 `## NEED RESEARCH` 블록으로 끝나면:
+1. 각 질문마다 `ask-gemini` 호출 → 답변 *순차* 수집 (병렬 X, SPEC §6)
+2. 합본을 `<log-root>/<team>/research-<ts>.md` 로 저장
+3. `ask-codex --focus "<원래 focus>" --with-research <file>` 로 재호출
+4. blocker / major 발견은 사용자에게 먼저 표시 후 진행
+
+- 기본 모드: 사용자에게 "Gemini 호출할까요?" 묻고 진행.
+- 허가모드 (`AGENTIC_TEAM_AUTO_RESEARCH=1`): 자동 호출 + 결과만 보고.
+- 무한루프 방어: `AGENTIC_TEAM_MAX_RESEARCH_LOOPS` (default 2).
+
+### Dashboard
+
+`tmux prefix + R` 으로 현재 윈도우를 3-pane 분할 (PM | Gemini / Codex). pane 안
+단축키: `q` quit / `space` pause / `l` raw 로그 less.
+
+활성화: `~/.tmux.conf` 에 `source-file ~/.claude/agentic-team/tmux/keybinding.conf`
+한 줄 추가 후 `tmux source-file ~/.tmux.conf`.
+
+### 사용자 보고
+
+- 리서치 후: Gemini 핵심 2~4 줄 요약 + 로그 경로 인용
+- 리뷰 후: verdict (SHIP / NEEDS-FIX / DISCUSS) + blocker/major 인라인. 전체 로그는 링크만.
+
+### 금지
+
+- subagent (Agent tool) 안에서 wrapper 호출 금지 — 사용자가 라우팅 흐름을 못 봄. 메인 세션에서만.
+- NEEDS-FIX 발견을 사용자 확인 없이 자동 적용 금지.
+- secrets / credentials 가 포함된 입력으로 wrapper 호출 금지 (둘 다 외부 provider 로 송신됨).
+
+## graphify 그래프 운영 정책
+
+agentic-team 은 그래프를 *생성하지 않음*. 있으면 컨텍스트 자동 주입 (8KB cap,
+`<graphify_context>` 태그), 없으면 stderr 알림 후 그대로 진행.
+비활성화: wrapper `--no-graphify` 플래그 또는 `AGENTIC_TEAM_GRAPHIFY_DIR=` 빈 값.
+
+- **git 관리 프로젝트**: 첫 빌드 1회 (`/graphify .`) 후 `graphify hook install` —
+  코드 변경은 commit 마다 hook 이 무료(AST-only) 갱신.
+- **doc/paper/image 갱신 후**: 수동으로 `/graphify --update` (LLM 비용 발생).
+- **git 미관리 폴더** (Obsidian vault 일부 등): hook 불가 → 변경 후 수동 `/graphify --update`.
+- **각 worktree 별 graphify-out/**: 본체에서만 빌드 + hook 운영. worktree 에서는
+  그래프 없이 작업 (agentic-team 이 "no graph for this project" 알림으로 인지).
