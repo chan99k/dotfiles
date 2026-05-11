@@ -83,6 +83,11 @@ export PATH="/Users/chan99/.antigravity/antigravity/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# uv tools (graphify, etc.)
+export PATH="$HOME/.local/bin:$PATH"
+
+# agentic-team wrappers (ask-codex, ask-gemini, team-layout)
+export PATH="$HOME/.claude/agentic-team/bin:$PATH"
 
 # ============================================================
 # Environment Variables
@@ -172,3 +177,7 @@ alias masking='sed "s/=.*/=****/"'
 
 # yt-dlp: use security wrapper (blocks --exec, --netrc-cmd, --ignore-config)
 alias yt-dlp='~/.local/bin/yt-dlp-safe'
+
+# python: use Homebrew python3/pip3 as default
+alias python='python3'
+alias pip='pip3'
