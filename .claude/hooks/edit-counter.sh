@@ -22,7 +22,9 @@ else
 fi
 echo "$COUNT" > "$COUNTER_FILE"
 
-# 5회 이상이면 경고
-if [ "$COUNT" -ge 5 ]; then
+# 단계별 경고 (10회 info, 20회 warning)
+if [ "$COUNT" -ge 20 ]; then
   echo "warning: ${BASENAME}을 이 세션에서 ${COUNT}회 수정했습니다. 구조 변경이나 일괄 처리를 고려하세요."
+elif [ "$COUNT" -ge 10 ]; then
+  echo "info: ${BASENAME}을 이 세션에서 ${COUNT}회 수정했습니다."
 fi
