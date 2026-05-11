@@ -107,3 +107,17 @@ node_modules/
 .claude/image-cache/
 .claude/plans/
 .claude/plans/
+
+# ======================
+# agentic-team (멀티 에이전트 wrapper)
+# ======================
+# 2026-05-11 부 추적 시작. 본 데모(agent-harness-tutorial, CC BY-NC-ND 4.0)
+# 대비 line-level 비유사성 검증 완료 (VERIFICATION.md §3·§6: shared verbatim
+# 0). 베끼기 방어막 해제 사유:
+#   - SPEC.md §1~§13 의 본문 + 핵심 wrapper / 가드 코드 본인 표현으로 완성
+#   - §14 stage a 는 *실험 단계* (§14.7) — Giftify smoke 후 stable lock 예정
+#   - 향후 변경 시 VERIFICATION.md 동기화 필수 (§8/§9.x 패턴: hash·비유사성
+#     영향·의사결정 근거 보존)
+# 옛 디렉토리는 잔여 방어막 유지 (빈 채로 두었거나 정리 중인 경우).
+.claude/agent-harness/
+# 다른 머신 동기화는 별도 install 스크립트 또는 dotfiles-private 레포로.
