@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+# ask-codex — Codex Reviewer 워커 호출 wrapper
+#
+# 본 명세 SPEC.md §3 인터페이스(위치/옵션 둘 다)·§4 로그·§5 graphify·
+# §7 trust-boundary 통합 진입점.
+#
+# Stateless one-shot. PM(Claude main)이 매번 컨텍스트를 명시 주입.
+# wrapper 자체는 NEED-RESEARCH 루프 제어 X — Codex 응답만 stdout 으로 뱉음.
+# 루프 제어는 PM 책임.
+#
+# 호출 형태:
+#   ask-codex "리뷰 포커스 텍스트"
+#   ask-codex --focus "..." [--with-research path/to/file.md] [--no-graphify]
+#
+# 종료 코드:
+#   0   정상
+#   64  EX_USAGE       — 인자 오류
+#   66  EX_NOINPUT     — --with-research 파일 부재
+#   그 외 codex CLI 의 종료 코드 그대로 전달
+
+set -euo pipefail
+
+caller="ask-codex"
+
+# ---- self-locate (stow 심링크 경유 호출 대응) ---------------------------
+# stow 가 ~/.claude/agentic-team/bin/ask-codex 를 dotfiles 본체로 심링크.
+# realpath 로 본체 경로를 얻은 뒤 거기서 ../lib 를 가리키도록.
+if command -v readlink >/dev/null 2>&1 && readlink -f / >/dev/null 2>&1; then
+  _self=$(readlink -f "${BASH_SOURCE[0]}")
+else
+  # macOS BSD readlink 는 -f 미지원 — python fallback
+  _self=$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' \
+    "${BASH_SOURCE[0]}")
+fi
+_root=$(cd "$(dirname "$_self")/.." && pwd)
+
+# ---- 라이브러리 로드 ----------------------------------------------------
+# shellcheck source=../lib/team-name.sh
+source "${_root}/lib/team-name.sh"
+# shellcheck source=../lib/log-root.sh
+source "${_root}/lib/log-root.sh"
+# shellcheck source=../lib/trust-boundary.sh
+source "${_root}/lib/trust-boundary.sh"
+# shellcheck source=../lib/graphify.sh
+source "${_root}/lib/graphify.sh"
+
+# ---- usage --------------------------------------------------------------
+usage() {
+  cat <<EOF
+ask-codex — Codex Reviewer 워커 호출 (one-shot)
+
+Usage:
+  ask-codex "focus text"
+  ask-codex --focus "focus text" [--with-research FILE] [--no-graphify]
+
+Options:
+  --focus TEXT          리뷰 대상 텍스트 (위치 인자 대안)
+  --with-research FILE  Gemini 합본 마크다운 — <research_context> 로 첨부
+  --no-graphify         graphify 자동 첨부 비활성화
+  -h, --help            본 도움말
+
+Environment:
+  AGENTIC_TEAM_LOG_ROOT       로그 루트 override (default: <git-top>/.agentic-team/log)
+  AGENTIC_TEAM_NAME           팀 이름 override (default: tmux session 또는 "solo")
+  AGENTIC_TEAM_GRAPHIFY_DIR   graphify-out 디렉토리 override
+  AGENTIC_TEAM_GRAPHIFY_MAX_BYTES  graphify 발췌 cap (default: 8192)
+EOF
+}
+
+# ---- 인자 파싱 ----------------------------------------------------------
+focus=""
+with_research=""
+no_graphify=0
+
+if [ $# -eq 0 ]; then
+  usage >&2
+  exit 64
+fi
+
+# 모드 검출 — 첫 인자가 - 로 시작하면 옵션 모드
+case "$1" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  -*)
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --focus)
+          [ $# -ge 2 ] || { printf '[%s] --focus needs a value\n' "$caller" >&2; exit 64; }
+          focus="$2"; shift 2
+          ;;
+        --with-research)
+          [ $# -ge 2 ] || { printf '[%s] --with-research needs a path\n' "$caller" >&2; exit 64; }
+          with_research="$2"; shift 2
+          ;;
+        --no-graphify)
+          no_graphify=1; shift
+          ;;
+        -h|--help)
+          usage; exit 0
+          ;;
+        *)
+          printf '[%s] unknown option: %s\n' "$caller" "$1" >&2
+          exit 64
+          ;;
+      esac
+    done
+    [ -n "$focus" ] || { printf '[%s] --focus is required in option mode\n' "$caller" >&2; exit 64; }
+    ;;
+  *)
+    # 위치 인자 모드 — 정확히 1개. 모드 혼용 차단.
+    [ $# -eq 1 ] || { printf '[%s] positional mode takes exactly 1 arg; use --focus for option mode\n' "$caller" >&2; exit 64; }
+    focus="$1"
+    ;;
+esac
+
+# ---- 컨텍스트 결정 ------------------------------------------------------
+team=$(team_name)
+root=$(log_root)
+ts=$(date +'%Y%m%d-%H%M%S')
+log_dir="${root}/${team}"
+mkdir -p "$log_dir"
+log_file="${log_dir}/codex-${ts}.log"
+latest_link="${log_dir}/latest-codex.log"
+
+# ---- prompt 조립 (trust-boundary 적용) ----------------------------------
+# 1) 시스템 프롬프트 = roles/reviewer.md 내용
+sys_prompt=$(cat "${_root}/roles/reviewer.md")
+
+# 2) 리뷰 대상 — focus 인자 (untrusted)
+focus_safe=$(strip_closing_tags 'review_target' "$focus")
+
+# 3) (선택) 연구 결과 첨부 — Gemini 합본 마크다운 (untrusted)
+research_block=""
+if [ -n "$with_research" ]; then
+  [ -f "$with_research" ] || {
+    printf '[%s] research file not found: %s\n' "$caller" "$with_research" >&2
+    exit 66
+  }
+  research_raw=$(cat "$with_research")
+  research_safe=$(strip_closing_tags 'research_context' "$research_raw")
+  research_block=$(printf '\n<research_context>\n%s\n</research_context>\n' "$research_safe")
+fi
+
+# 4) (선택) graphify 컨텍스트 자동 첨부
+graphify_block=""
+graphify_status="none"
+if [ "$no_graphify" -eq 0 ]; then
+  if excerpt=$(graphify_context_excerpt); then
+    excerpt_safe=$(strip_closing_tags 'graphify_context' "$excerpt")
+    graphify_block=$(printf '\n<graphify_context>\n%s\n</graphify_context>\n' "$excerpt_safe")
+    graphify_status="attached"
+  else
+    printf '[%s] no graph for this project (graphify-out/graph.json not found)\n' "$caller" >&2
+    graphify_status="absent"
+  fi
+else
+  graphify_status="opted-out"
+fi
+
+# 5) 최종 prompt
+prompt=$(printf '%s\n\n<review_target>\n%s\n</review_target>%s%s\n' \
+  "$sys_prompt" "$focus_safe" "$research_block" "$graphify_block")
+
+# ---- 로그 헤더 ----------------------------------------------------------
+{
+  printf '=== ask-codex %s ===\n' "$ts"
+  printf 'team: %s\n' "$team"
+  printf 'cwd: %s\n' "$PWD"
+  printf 'focus: %s\n' "$focus"
+  printf 'with-research: %s\n' "${with_research:-<none>}"
+  printf 'graphify: %s\n' "$graphify_status"
+  printf '\n--- PROMPT ---\n%s\n\n--- RESPONSE ---\n' "$prompt"
+} > "$log_file"
+
+# ---- Codex 호출 ---------------------------------------------------------
+# stdin 으로 prompt 전달 → ARG_MAX 우회. -s read-only → 리뷰어가 파일 수정 X.
+# --skip-git-repo-check → Obsidian vault 등 git 외부에서도 호출 가능.
+rc=0
+printf '%s' "$prompt" \
+  | codex exec --skip-git-repo-check -s read-only - 2>&1 \
+  | tee -a "$log_file" \
+  || rc=$?
+
+# 종료 마커 + latest 심링크 갱신
+printf '\n--- END (rc=%d) ---\n' "$rc" >> "$log_file"
+ln -sfn "$(basename "$log_file")" "$latest_link"
+
+exit "$rc"
