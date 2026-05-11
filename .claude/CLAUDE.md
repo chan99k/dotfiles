@@ -14,7 +14,7 @@ Where:
 * scope: Session name or project abbreviation (e.g., SHAGO, KERNEL, INTERVIEW)
 * number: Two-digit incremental number, unique per date and scope (e.g., 01, 02, 03)
 * brief-description: Lowercase, hyphen-separated summary of the content (e.g., insurance-api-design, batch-optimization)
-* directory : /Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/00-Inbox
+* directory : /Users/chan99/chan99k-workspace/chan99k's vault/00-Inbox
 Example: `.../00-Inbox/251129-SHAGO-01-insurance-api-design.md`
 
 ---
@@ -126,7 +126,7 @@ Reserve Bash for: git commands, build tools (gradle, npm), process management, a
 <path_constants>
 Frequently used paths — reference these instead of hardcoding full paths:
 
-- **OBSIDIAN_VAULT**: `/Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault`
+- **OBSIDIAN_VAULT**: `/Users/chan99/chan99k-workspace/chan99k's vault`
 - **OBSIDIAN_INBOX**: `{OBSIDIAN_VAULT}/00-Inbox`
 - **WORKSPACE**: `/Users/chan99/chan99k-workspace`
 </path_constants>
