@@ -35,12 +35,17 @@ trigger: /mastery-course
 ## Output Path
 
 ```
-{OBSIDIAN_VAULT}/03-Resources/{domain}/{topic}-mastery/
+{OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/
 ├── 00-overview.md                   # MOC, Phase 정의, 시간 예산
 ├── 01-section-mapping.md            # 강의 목차 → Phase 매핑 매트릭스
 ├── 02-expert-critique-path.md       # 면접 질문, 안티패턴, 자가진단 체크리스트
-├── phase-0-*.md                     # Obsidian Advanced Slides (theme: black)
-├── phase-1-*.md
+├── digests/                         # (권장) 외부 자료 인라인 흡수 (Phase E.5)
+│   ├── {source-A}.md                # anchor digest (외부 책·논문·docs 깊이 흡수)
+│   ├── {source-B}.md                # anchor
+│   ├── {topic-X}-supplementary.md   # supplementary digest (얕은 자료 통합)
+│   └── ...                          # 자료당 1개 또는 통합당 1개
+├── phase-0-*.md                     # (선택) Obsidian Advanced Slides (theme: black)
+├── phase-1-*.md                     # (선택, 슬라이드 형태 학습 선호 시)
 ├── phase-N-*.md
 ├── _fact-check/
 │   ├── expert1-{lens-A}.md          # 예: docs-accuracy
@@ -50,7 +55,16 @@ trigger: /mastery-course
     └── roi-verdict.md               # ROI 판정 근거
 ```
 
-`{domain}` 예: `databases/`, `architecture/`, `kotlin/`, `spring/`. 새 도메인이면 사용자 확인.
+**digests/ vs phase-N-*.md 의 차이**:
+- `digests/`: **self-contained 학습 자료** — 외부 책·docs·논문을 vault 안에서 직접 읽고 학습 가능. 학습자가 외부 자료 없이도 Phase 진행 가능. **02-expert-critique-path.md 에서 wiki-link 로 연결** (`[[digests/{name}|title]]`).
+- `phase-N-*.md` 슬라이드: 복습·발표용 압축. 학습 후 빠른 review 에 적합.
+- **둘 중 하나만 만들거나 둘 다 만들 수 있음**. 학습자 선호도 + 시리즈 성격에 따라 결정. PostgreSQL Mastery 는 digests/ 만, Redis Mastery 는 slides 만 사용한 사례.
+
+**폴더 규약**:
+- 모든 mastery 시리즈는 `03-Resources/mastery-courses/` (복수형) 아래에 격리한다 (단발성 리소스와 분리).
+- `{domain}` 중간 폴더는 유지한다. 현행 도메인: `databases/`, `data-engineering/`, `observability/`, `architecture/`, `spring/`. 새 도메인이면 사용자 확인.
+- `{topic}` 폴더명에는 `-mastery` 접미사를 유지한다. 예: `mastery-courses/databases/mysql-mastery/`. (이유: 폴더만 단독 검색·인용될 때 시리즈 정체성을 자가식별 가능하도록.)
+- **예외 — 미이동/작업중**: `architecture/nats-mastery/` (scaffold, 미이동), `spring/mastery/` (진행 중). 작업 마무리 시점에 `mastery-courses/` 하위로 일괄 이동 예정.
 
 ## Pipeline
 
@@ -136,6 +150,85 @@ transition: slide
 - **토큰 오버플로우 방어**: 한 Phase가 16k 출력 한계 위험 시 자동 split (예: phase-3 → phase-3a + phase-3b). 출력 토큰 추정 > 12,000이면 사전 split.
 - 작성 동시성: Phase 간 독립이면 병렬 spawn 허용. 단 모든 prompt에 canonical Phase 정의 (Phase B 산출물) embed.
 
+### Phase E.5 — External Reference Digests (`digests/`)
+
+**언제 적용**: 02-expert-critique-path 가 "자료 → 실습 → 산출물 → 자가 진단" 패턴으로 짜여있어 *외부 자료 읽기를 전제*로 할 때. 학습자가 책·논문·블로그 없이 vault 안에서만 학습할 수 있도록 외부 자료를 *흡수*. PostgreSQL Mastery 시리즈 (2026-05) 의 핵심 학습으로 일반화.
+
+#### Anchor vs Supplementary 분류
+
+| 등급 | 깊이 | 분량 | 흡수 자료 수 | 5 섹션 제약 |
+|---|---|---|---|---|
+| **Anchor** | 깊음 | 800-1,500 줄 | 1-2 자료 통째 | 권장하지만 강제 아님 (다이어그램 5+, 표 8+, 코드 20+) |
+| **Supplementary** | 중간 | 400-800 줄 | 1-3 자료 통합 | **강제** (Part A~E 5 섹션 고정, 추가 신설 금지) |
+| **Light** | 가벼움 | 200-400 줄 | setup·cookbook 류 | 7 섹션 이내 권장 |
+
+**Anchor digest 선정 기준**:
+- 02 의 한 Phase 의 *주요* 자료 (예: Phase 1 Use The Index, Luke / Phase 3 InterDB)
+- 인터뷰 질문 5개 이상 단독 커버 가능
+- 학습 시간 예산 2h 이상
+
+**Supplementary digest 선정 기준**:
+- 02 의 동일 주제 자료 2-3개 통합 (예: GIN/GiST/BRIN 자료 3개 → pg-advanced-index-types 1개)
+- 또는 1개 자료지만 *anchor 분량 불요* (예: postgis-spatial-indexing)
+
+#### 작성 패턴
+
+**Frontmatter**:
+```yaml
+---
+title: "Digest — {원본 자료명}"
+source(s): {URL or 책 정보}
+phase: {N or "0+1" 식 cross-phase}
+parent: "[[03-Resources/mastery-courses/{domain}/{topic}-mastery/02-expert-critique-path]]"
+status: ready
+tags:
+  - resource/{domain}/{topic}
+  - topic/{subtopic}
+  - digest/external-reference
+last_updated: {YYYY-MM-DD}
+---
+```
+
+**구조 (supplementary 의 5 섹션 강제 패턴)**:
+1. 도입 (digest 역할, cross-ref 안내)
+2. Part A — 주요 개념 1
+3. Part B — 주요 개념 2
+4. Part C — 주요 개념 3
+5. Part D — 비교 매트릭스 / 운영 가이드
+6. Part E — 실용 사례 / 안티패턴 / Critique 관점
+7. **원문 참조** 블록 (소스 URL 인용 — 필수, 저작권 가드레일 면제 시에도 유지)
+
+**02 file 에서 연결** (두 패턴):
+```markdown
+# 자료 #1 (primary entry)
+- **인라인 digest**: [[digests/{name}|{title}]] — {핵심 설명}. **Phase N 질문 X·Y·Z 깊이 커버**.
+
+# 자료 #4·#5 (consolidated entry, secondary)
+- → 통합 digest: [[digests/{name}|{name}]] (자료 #1·#2 와 함께 흡수). {교차 설명}.
+```
+
+#### 작성 순서 (batch 권장)
+
+PostgreSQL Mastery 경험상 **배치 작성** 이 가장 효율:
+
+1. **Batch 1 (anchor 우선)**: 시리즈의 *canonical 자료* 2개 (예: 책 + 공식 docs) 를 anchor 로 spawn. 패턴 검증.
+2. **Batch 2 (남은 anchor)**: 각 Phase 의 핵심 자료 (예: 4개) 병렬 spawn. anchor 분량으로.
+3. **Batch 3 (supplementary 통합)**: 통합 가능한 자료들을 묶어 supplementary 로 spawn. 5 섹션 강제.
+4. **Batch 4 (가벼운 setup)**: cookbook·setup·tactical 가이드 (light).
+
+**병렬 spawn 규칙**:
+- 한 batch 내 모든 agent 는 *독립* spawn (background subagent, `feedback_background_docs.md` 메모리 준수)
+- WebFetch / WebSearch **금지** (사전 학습 지식만, hallucination 방어; fact-check 는 Phase F 에서)
+- Frontmatter 패턴 + cross-reference 대상 prompt 에 명시
+- 저작권 가드레일: `feedback_vault_personal_copyright_relax.md` 메모리 적용 시 책·다이어그램·예시 직접 옮김 허용. 단, 출처 URL 인용은 **항상 유지**.
+
+#### Drift Prevention — Digest 단계
+
+7. **분량 폭증**: 섹션 수 제약 ≠ 분량 제약. 표·다이어그램·코드 *밀도*가 진짜 lever. supplementary 는 **표 8개 이내, 코드 블록 25개 이내** 권장.
+8. **자기 보고 부정확**: agent self-report 줄 수는 *실제의 50-75%*. 항상 `wc -l` 로 검증. self-report 는 상대 비교용으로만.
+9. **Cross-reference rot**: digest 끼리 `[[...]]` 로 연결 후 한 쪽 파일명·섹션명 변경 시 자동 끊김. 파일명 잠금 + Obsidian 의 forward-link audit 정기 실행.
+10. **Brand/version freshness**: LLM 사전 학습 cutoff 한계로 brand 변경 (예: Timescale → TigerData) 미반영. Phase F fact-check 에서 *반드시* 검증.
+
 ### Phase F — Cross Fact-Check (_fact-check/)
 
 최소 2명, 권장 3명. **렌즈 분리 필수** (같은 렌즈 중복 금지).
@@ -165,6 +258,24 @@ transition: slide
 
 병렬 spawn (read-only이므로 안전). 결과 종합 후 사용자에게 fix 적용 옵션 제시.
 
+#### Digest Fact-Check 우선순위 (Phase E.5 산출물 대상)
+
+digest 가 있는 시리즈는 Phase F 가 *형식 검토* 외에 *내용 검증* 도 책임진다. 비용 통제를 위해 **2-tier 분류**:
+
+| Tier | 범위 | 검증원 | 위험도 신호 |
+|---|---|---|---|
+| **Tier 1 (필수)** | agent self-flagged "자신감 낮음" 영역 + 학습자가 *직접 컴파일·실행* 할 코드 (함수 시그니처, API 사용법, CLI 옵션) | 공식 docs / GitHub source / doxygen | 잘못되면 학습 중단 |
+| **Tier 2 (권장)** | 정량적 claim (default 값, 권장 파라미터, 압축률), brand/version 정보, 비교 매트릭스 | 공식 docs / changelog / 라이선스 페이지 | 잘못되면 잘못된 멘탈 모델 |
+| **Tier 3 (선택)** | 학술 논문 직접 인용, 역사적 맥락, 일반 통념 | 논문 PDF, 책 1차 출처 | 학습 가치 vs fetch 비용 trade-off |
+
+**검증 그룹핑**: 같은 source URL 한 번 fetch 로 multiple claim 동시 검증 (예: PG 17 docs Ch 50 한 페이지 → BackgroundWorker + WaitLatch 둘 다 검증). 비용 절감 60-70%.
+
+**자주 발견되는 fact-check 결과 패턴** (PostgreSQL Mastery 경험):
+1. **함수 시그니처 drift**: LLM 이 자신 있게 쓴 C 함수 시그니처가 실제와 다름 (return type, 파라미터 수, 타입). 가장 critical.
+2. **Brand/version freshness**: LLM cutoff 이후 변화 (Timescale → TigerData, Citus 9.5 task tracker removal). LLM 단독으론 불가능, fact-check 가 유일 경로.
+3. **Default vs Recommendation 혼동**: 라이브러리 *default* 와 paper/best-practice *권장값* 을 섞어 씀 (예: pgvector ef_construction default=64 vs Malkov 권장=200).
+4. **Self-confidence 의 역설**: agent 가 *자신 있게 썼지만* 부정확한 영역이 *self-flagged 낮은 confidence* 영역보다 더 자주 critical fix 대상. self-flag 만 의존 금지.
+
 ## Execution Flow
 
 ```
@@ -180,16 +291,28 @@ transition: slide
 4. Phase C+D 병렬: 01-section-mapping + 02-expert-critique-path
    (둘 다 00-overview만 의존)
    ↓
-5. Phase E: 슬라이드 작성
-   ├─ 사용자 옵션: 순차 / 병렬 (default 병렬)
-   ├─ Phase별 백그라운드 에이전트 spawn (canonical 정의 embed)
-   └─ 토큰 오버플로우 위험 → 자동 split
+5. 사용자 결정: digests/ vs slides 또는 둘 다
+   ├─ digests/ (자료 흡수형 학습): Phase E.5 진입
+   ├─ slides/ (복습·발표형): Phase E 진입
+   └─ 둘 다: E + E.5 순차 또는 병렬
    ↓
-6. Phase F: 팩트체크 병렬 spawn (≥2 expert lens)
+6a. Phase E (선택): 슬라이드 작성
+    ├─ 사용자 옵션: 순차 / 병렬 (default 병렬)
+    ├─ Phase별 백그라운드 에이전트 spawn (canonical 정의 embed)
+    └─ 토큰 오버플로우 위험 → 자동 split
+6b. Phase E.5 (권장): External Reference Digests
+    ├─ Batch 1: anchor 2개 (canonical 자료) → 패턴 검증
+    ├─ Batch 2: 남은 anchor 병렬 spawn (보통 4개)
+    ├─ Batch 3: supplementary 통합 (5 섹션 강제)
+    ├─ Batch 4: light cookbook 류
+    ├─ 각 batch 후 02 file 에 wiki-link 추가
+    └─ `wc -l` 로 분량 검증 (agent self-report 신뢰 금지)
    ↓
-7. 사용자에게 fix 옵션 제시 (Critical 강제, Major 권장, Minor 선택)
+7. Phase F: 팩트체크 병렬 spawn (≥2 expert lens, digest 있으면 Tier 1+2 우선)
    ↓
-8. 적용 후 종료
+8. 사용자에게 fix 옵션 제시 (Critical 강제, Major 권장, Minor 선택)
+   ↓
+9. 적용 후 종료
 ```
 
 ## Drift Prevention Rules
@@ -216,23 +339,35 @@ PostgreSQL/Redis/MSA 시리즈 운영 중 발견한 실패 모드 → 사전 차
 
 ❌ **금지**: 익명 블로그, 한 개인의 단발성 포스트, 출처 불명 코드 스니펫.
 
+**저작권 정책** (사용자 메모리 `feedback_vault_personal_copyright_relax.md` 참조):
+- chan99 vault 는 외부 공개 계획 없는 *비공개 개인 PKM*. mastery digest 작성 시 책 표·다이어그램·예시·문장의 직접 인용·근접 재구성 허용.
+- **출처 URL 인용은 *반드시* 유지** — 학습 자료 신뢰성 + 추후 원문 재방문 + Phase F fact-check 시 출처 검증.
+- 사용자가 향후 vault 일부를 외부 공개하기로 결정하면 본 정책 재검토 필요.
+
 ## Path Constants
 
 - `OBSIDIAN_VAULT`: `/Users/chan99/chan99k-workspace/chan99k's vault`
-- 학습 자료 경로: `{OBSIDIAN_VAULT}/03-Resources/{domain}/{topic}-mastery/`
+- 학습 자료 경로: `{OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/`
 - 사용자 메모리: `/Users/chan99/.claude/projects/-Users-chan99-chan99k-workspace/memory/`
 
 ## Reference Implementations
 
 성공 사례 (이 패턴이 산출한 결과물):
 
-| 시리즈 | 강의 | 산출물 |
+| 시리즈 (폴더) | 강의 | 산출물 |
 |---|---|---|
-| postgresql-mastery | (강의 미상) | 00-07 docs + slides/ + 3-expert fact-check |
-| redis-mastery | 인프런 코딩하는기술사 (60,000원, 12h) | 00-02 docs + 7 slide decks (295 슬라이드) + 2-expert fact-check |
-| MSA self-study guide | 인프런 Hong+Choi (60,000원, 6h27m) | 자기학습 가이드 + presentation |
+| `mastery-courses/databases/postgresql-mastery/` | (강의 미상) | 00-02 docs + **digests/ (15 파일, 14,423 줄)** + Phase F 14-call fact-check (2026-05) |
+| `mastery-courses/databases/redis-mastery/` | 인프런 코딩하는기술사 (60,000원, 12h) | 00-02 docs + 7 slide decks (295 슬라이드) + 2-expert fact-check |
+| `mastery-courses/databases/mysql-mastery/` | (강의 미상) | 00-02 docs + phase 0~6 + `_fact-check/` |
+| `mastery-courses/data-engineering/airflow-mastery/` | (강의 미상) | 00-02 docs + phase 0~6 + `_fact-check/` |
+| `mastery-courses/observability/distributed-tracing-mastery/` | (강의 미상) | 00-02 docs + phase 0~4 + `_fact-check/` |
+| `architecture/nats-mastery/` *(미이동)* | (강의 미상) | scaffold (00-overview만 완료, phase 미작성) |
+| `spring/mastery/` *(작업 중)* | (강의 미상) | scaffold (00-overview 작성 중) |
 
-새 시리즈 시작 시 이 셋 중 하나를 참조 템플릿으로 사용자에게 제시.
+**참조 템플릿 선택 가이드**:
+- 자료 흡수형 학습 (책·docs·논문 다수 흡수) → **postgresql-mastery** (digests/ 패턴 완성형)
+- 복습·발표 슬라이드 학습 → **redis-mastery** (slide decks 패턴)
+- 두 패턴 모두 일부 적용 → mysql-mastery 또는 airflow-mastery
 
 ## 관련 Skill
 
@@ -250,10 +385,12 @@ skill 종료 시 다음을 한 화면 안에 표시:
 **ROI 판정**: {점수}/25 — {수강 권장 / 자료 제작 / 사용자 선택}
 
 **산출물**:
-- {OBSIDIAN_VAULT}/03-Resources/{domain}/{topic}-mastery/
+- {OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/
 - 00-overview, 01-section-mapping, 02-expert-critique-path
-- N개 슬라이드 ({총 슬라이드 수})
+- (선택) N개 슬라이드 ({총 슬라이드 수})
+- (선택) digests/ {파일 수}개 ({총 줄 수} 줄, anchor {A}개 + supplementary {S}개)
 - 2~3 expert fact-check (Critical {N}/Major {N}/Minor {N})
+- (digest 있는 경우) Phase F Tier 1+2 fact-check: {WebFetch 호출 수}회, {정정 적용 digest 수}개
 
 **시간 예산**:
 - 원 강의: {X}시간 / {가격}원
