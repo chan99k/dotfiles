@@ -629,3 +629,17 @@ shared verbatim 0 (§3·§6) 그대로 유효.
 - **dual-mode 효과 측정**: M1 적용 후 audit-codex 의 ceo 호출이 *맥락에
   맞는* lens 를 자동 선택하는지 Giftify smoke 결과로 확인. 만약 두 lens 가
   *둘 다* 등장하거나 lens 선택 오류 시 §9.10 재방문.
+
+### 9.9.9 Giftify smoke test 결과 (2026-05-15)
+
+본 시스템의 첫 실 프로젝트(Giftify) 대상 smoke test 수행 결과.
+
+| 호출 | 페르소나 | 토큰 사용량 | streaming 블록 | Verdict | lens 선택 |
+|---|---|---|---|---|---|
+| #15 | ceo | 40,366 | 8 | SHIP | Lens B (Real product) ✓ |
+| #16 | cto | 86,200 | 8 | NEEDS-FIX | N/A |
+
+**분석**:
+- **Lens 자동 선택 정확도**: `roles/auditor.md` 의 §ceo dual-mode 지침에 따라 Giftify 를 실서비스로 정확히 인지하고 Lens B 를 적용함.
+- **meta-audit 과의 패턴 일치**: streaming 블록 수(8개)가 meta-audit 시와 동일하게 발생했으나, §9.9.5 의 3-layer defence 가동으로 dashboard 상 중복 카운트 없이 최종 결과만 정확히 표시됨을 확인.
+- **Verdicts**: CEO 는 현재 clean tree 상태를 `SHIP` 으로 판단한 반면, CTO 는 기존에 측정된 기술 부채(Cart SQL amplification 등)를 근거로 `NEEDS-FIX` 를 제시함. 이는 `audit-codex` 가 단순 diff 리뷰를 넘어 시스템 전체 맥락을 짚는 *전략 감사* 도구로서의 가치를 증명함.

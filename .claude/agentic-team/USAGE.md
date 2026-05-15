@@ -166,7 +166,43 @@ Codex 가 응답 완료 → log 파일에 `--- END (rc=0) ---` 기록 → watche
 색 의미: `NEEDS-FIX` 빨강 (보안·correctness 위험), Findings 의 `2 b` 빨강
 (Blocker 카운트), `1 M` 노랑 (Major), `1 m` 회색 (Minor).
 
-#### 4-B. SHIP 케이스 (정상)
+
+#### 4-B. `audit-codex` (전략 감사) 결과
+
+본인이 CEO 또는 CTO 관점이 필요할 때:
+`audit-codex --persona cto "Giftify"`
+
+우하단 Auditor pane 이 활성화되며, 페르소나 색상(cto=시안)으로 시각화됩니다.
+
+```
+┌────────────────────────────────────────────┬───────────────────────────────┐
+│ Claude PM                                    │ Gemini · researcher           │
+│                                              │ Status:  —                    │
+│ > Giftify 기술 부채 한 번 훑어봐줘           │ ─                             │
+│ Claude: audit-codex (cto) 호출합니다...      │ gemini · 21:03:10 · q/space/l │
+│ (응답 대기 중...)                            ├───────────────────────────────┤
+│                                              │ Codex · reviewer              │
+│                                              │ Verdict:  SHIP                │
+│                                              │ ...                           │
+│                                              ├───────────────────────────────┤
+│                                              │ Auditor · cto                 │ ← 시안색
+│                                              │ Focus:    Giftify             │
+│                                              │ Verdict:  NEEDS-FIX           │ ← 빨강
+│                                              │           Cart SQL amplifica… │
+│                                              │ Findings: 0 b / 2 M / 1 m     │
+│                                              │ ─                             │
+│                                              │ audit · 21:04:55 · q/space/l  │
+└────────────────────────────────────────────┴───────────────────────────────┘
+```
+
+**CTO 감사 결과 (Giftify smoke 실사례)**:
+- **Verdict**: `NEEDS-FIX` — 장바구니 write path 성능 병목 확인.
+- **Major**: `JpaCart.java:21` — `CascadeType.ALL` 로 인한 SQL 증폭(36회).
+- **Major**: `application-prod.yml:11` — Hikari pool size 미설정(기본값 의존).
+
+이처럼 `audit-codex` 는 코드의 문법적 오류가 아닌, **운영 리스크와 아키텍처 부채** 를 짚어줍니다.
+
+#### 4-C. SHIP 케이스 (정상)
 
 ```
                                               │ Codex · reviewer              │
