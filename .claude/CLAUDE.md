@@ -151,19 +151,16 @@ Frequently used paths — reference these instead of hardcoding full paths:
 - Document procedures for repeatable tasks for future reuse
 </large_scale_changes>
 
-## gstack
+<!--
+## gstack / graphify / deep-dive-doc skill 트리거 섹션 제거 (2026-05-18 zero-base)
 
-Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
+본 섹션은 ~/.claude/skills/ 에 해당 skill 이 존재할 때 자동 트리거 지시 용도였으나,
+zero-base 초기화로 모든 skill 제거 → 트리거 broken.
 
-Available gstack skills:
-`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`
-# graphify
-- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
-When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
-
-# deep-dive-doc
-- **deep-dive-doc** (`~/.claude/skills/deep-dive-doc/SKILL.md`) - 학부~석사 수준 시니어 백엔드/시스템 디자인 인터뷰 대비 심층 탐구 시리즈 작성 (MOC → 샘플 → 작성 → 팩트체크 → 정정 → 아카이빙). 기본 순차 작성, 사용자 명시 범위만 병렬화. Trigger: `/deep-dive-doc`
-When the user types `/deep-dive-doc`, invoke the Skill tool with `skill: "deep-dive-doc"` before doing anything else.
+웹 브라우징은 WebFetch / WebSearch / Playwright MCP 직접 사용.
+graphify CLI 정책은 아래 "graphify 그래프 운영 정책" 섹션에 별도 유지.
+deep-dive-doc 워크플로우는 필요 시 dotfiles/.claude/skills-backup/260518/deep-dive-doc/ 에서 복원.
+-->
 
 ---
 
