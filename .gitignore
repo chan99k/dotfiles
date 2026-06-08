@@ -54,6 +54,7 @@
 # ======================
 .gemini/
 .idea/
+graphify-out/
 Library/*
 !Library/LaunchAgents/
 Library/LaunchAgents/*
