@@ -61,8 +61,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 # PATH Configuration
 # ============================================================
 
-# Node.js 20 (LTS)
-export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+# Node.js — nvm으로 관리 (default: v20)
 
 # Deno runtime
 export PATH="/Users/chan99/.deno/bin:$PATH"
@@ -181,3 +180,7 @@ alias yt-dlp='~/.local/bin/yt-dlp-safe'
 # python: use Homebrew python3/pip3 as default
 alias python='python3'
 alias pip='pip3'
+
+# 머신별 시크릿 (API 키 등) — git 미추적
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+
