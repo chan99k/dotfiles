@@ -346,7 +346,7 @@ PostgreSQL/Redis/MSA 시리즈 운영 중 발견한 실패 모드 → 사전 차
 
 ## Path Constants
 
-- `OBSIDIAN_VAULT`: `/Users/chan99/chan99k-workspace/chan99k's vault`
+- `OBSIDIAN_VAULT`: CLAUDE.md Path Constants 참조
 - 학습 자료 경로: `{OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/`
 - 사용자 메모리: `/Users/chan99/.claude/projects/-Users-chan99-chan99k-workspace/memory/`
 

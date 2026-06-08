@@ -94,7 +94,7 @@ Obsidian 볼트에 학부~석사 수준의 한국어 기술 심층 탐구 시리
 
 | 항목 | 디폴트 |
 |---|---|
-| Obsidian 볼트 경로 | `/Users/chan99/Library/Mobile Documents/iCloud~md~obsidian/Documents/chan99k's vault/chan99k's vault/03-Resources/<series-name>/` |
+| Obsidian 볼트 경로 | `/Users/chan99/chan99k-workspace/chan99k's vault/03-Resources/<series-name>/` |
 | 시리즈 폴더명 | 도메인 기반 (`backend-interview-deep-dive` 등) |
 | 분량 범위 | 1,000~1,700 라인 |
 | Q&A 수 | 12개/문서 |
