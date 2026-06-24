@@ -4,8 +4,7 @@ return {
   {
     "projekt0n/github-nvim-theme",
     name = "github-theme",
-    lazy = false,
-    priority = 1000,
+    lazy = true,
     config = function()
       require("github-theme").setup({
         options = {
@@ -26,7 +25,7 @@ return {
     "LazyVim/LazyVim",
     opts = {
       -- GitHub Light theme
-      colorscheme = "github_light",
+      colorscheme = "catppuccin-mocha",
       -- Previous: catppuccin-latte
       -- colorscheme = "catppuccin-latte",
       -- colorscheme = "catppuccin-macchiato",

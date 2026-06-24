@@ -46,7 +46,7 @@ return {
           -- want to search for files in a specific path
           workspaces = {
             -- ["neobean_plugins"] = "$HOME/github/dotfiles-latest/neovim/neobean/lua/plugins",
-            ["neobean_plugins"] = "$HOME/dotfiles/.config/lazy-nvim/lua/plugins",
+            ["neobean_plugins"] = "$HOME/dotfiles/.config/nvim/lua/plugins",
           },
         },
       },
