@@ -1,0 +1,12 @@
+gui:
+  # 작은 tmux 페인에서도 포커스 패널이 넓게 보이도록 half 모드로 시작
+  # (lazygit 안에서 +/_ 로 normal <-> half <-> full 순환 가능)
+  screenMode: "half"
+  # 좌측 사이드 패널 폭 축소 (기본 0.3333)
+  sidePanelWidth: 0.25
+  # 포커스된 사이드 패널을 자동 확장
+  expandFocusedSidePanel: true
+  # 페인이 좁으면 메인 패널 분할을 자동 해제
+  mainPanelSplitMode: "flexible"
+  # 하단 상태줄 제거로 1줄 확보
+  showBottomLine: false
