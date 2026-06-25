@@ -106,9 +106,6 @@ export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
 # kiro terminal integration
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
-# gw (git worktree) shell integration
-eval "$(gw shell-init zsh 2>/dev/null)"
-
 
 # ============================================================
 # Aliases
