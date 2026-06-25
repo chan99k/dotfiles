@@ -15,7 +15,19 @@ if command -v gitleaks &>/dev/null; then
     fi
 fi
 
-# 2) Chain local project hooks (.git/hooks/pre-commit or .husky/pre-commit)
+# 2) Delegate to project hook manager
+TOPLEVEL="$(git rev-parse --show-toplevel 2>/dev/null)"
+
+# lefthook (lefthook.yml present): drive it directly so we don't need a
+# per-project core.hooksPath override (which would bypass this global hook).
+if [ -n "$TOPLEVEL" ] && [ -f "$TOPLEVEL/lefthook.yml" ] && command -v lefthook &>/dev/null; then
+    # --no-auto-install: skip lefthook's self-sync (it would warn about the
+    # global core.hooksPath, which is intentional in this dotfiles setup).
+    lefthook run pre-commit --no-auto-install || exit $?
+    exit 0
+fi
+
+# Fallback for non-lefthook repos: chain local hooks
 GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
 
 # Standard .git/hooks/pre-commit
@@ -25,7 +37,7 @@ if [ -x "$LOCAL_HOOK" ]; then
 fi
 
 # Husky (.husky/pre-commit)
-HUSKY_HOOK="$(git rev-parse --show-toplevel 2>/dev/null)/.husky/pre-commit"
+HUSKY_HOOK="$TOPLEVEL/.husky/pre-commit"
 if [ -x "$HUSKY_HOOK" ]; then
     "$HUSKY_HOOK" "$@" || exit $?
 fi

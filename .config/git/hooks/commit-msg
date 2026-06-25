@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Global commit-msg hook: delegate to lefthook when the project uses it.
+# Installed: 2026-06-25
+#
+# Mirrors the pre-commit delegation strategy: drive lefthook directly so a
+# project does not need a per-project core.hooksPath override.
+
+TOPLEVEL="$(git rev-parse --show-toplevel 2>/dev/null)"
+
+if [ -n "$TOPLEVEL" ] && [ -f "$TOPLEVEL/lefthook.yml" ] && command -v lefthook &>/dev/null; then
+    # --no-auto-install: skip lefthook's self-sync (it would warn about the
+    # global core.hooksPath, which is intentional in this dotfiles setup).
+    lefthook run commit-msg --no-auto-install "$1" || exit $?
+    exit 0
+fi
+
+# Fallback for non-lefthook repos: chain local commit-msg hook
+GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
+LOCAL_HOOK="$GIT_DIR/hooks/commit-msg"
+if [ -x "$LOCAL_HOOK" ]; then
+    "$LOCAL_HOOK" "$@" || exit $?
+fi
