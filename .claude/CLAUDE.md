@@ -116,7 +116,33 @@ When creating git commits with Korean (or any non-ASCII) messages:
 **CRITICAL**: Use the Write tool, NOT bash heredoc (`cat << EOF`), to ensure proper UTF-8 encoding.
 
 **Co-Author**: Do NOT add `Co-Authored-By` lines for AI agents in commit messages. Commits should appear as authored solely by the human developer.
+
+**Tone & Body**: `~/.claude/skills/planning/reference/commit-message.md` 레퍼런스를 준수한다.
+- Subject: `{type}: {한 줄 설명}` — 한국어, 기술 용어만 영문
+- Body: 2-5줄 `-` bullet list. trivial 변경은 생략. 5줄 초과 시 커밋을 쪼갤 것
+- Issue: 대응 이슈 있을 때만 subject에 `(#N)`. `closes #N`은 PR에서만 사용
+- PR 수준 장문 구조(Summary/What's Changed/Decisions) 금지
 </git_commit_messages>
+
+<pr_body>
+PR 본문 작성 시 `~/.claude/skills/planning/guides/pr-message.md` 가이드를 준수한다.
+
+- Scale Decision: diff 크기에 따라 섹션 선택 (소 < 100줄 / 중 100-500줄 / 대 500줄+)
+- 해당 없는 섹션은 삭제 (빈 섹션 금지)
+- 정성적 동기(Motivation) 우선, 측정치는 보조 자료
+- PR title에 괄호 scope 표시 안 함
+- `closes #N` / `relates to #N` 으로 이슈 연결
+- 언어: 한국어 본문, English type prefix (feat/fix/chore...)
+</pr_body>
+
+<remote_artifact_isolation>
+팀 원격 레포로 나가는(outward-facing) 산출물 — PR 본문, push되는 커밋 메시지, GitHub 이슈/리뷰 코멘트 — 에는 개인 트래킹 항목을 포함하지 않는다.
+
+- 금지 예: 개인 Linear 워크스페이스 이슈 식별자(`99K-x`), 개인 메모/핸드오프 참조
+- 팀 레포의 공식 참조는 GitHub `#N` 과 Jira `KAN-N`(팀 SSOT)뿐. Linear `99K-x`는 Jira `KAN-N`이 1차로 있을 때만 괄호 보조로 허용, Jira 매핑이 없으면 생략
+- "후속 작업은 99K-x에 등록됨" 류 추적 문구도 넣지 않는다 — 추적은 개인 Linear/로컬 메모리에만
+- 원격으로 나가는 텍스트를 작성·편집할 때 개인 식별자(`99K-`)를 스캔해 제거
+</remote_artifact_isolation>
 
 ## Tool Selection
 
