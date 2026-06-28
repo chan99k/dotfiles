@@ -27,13 +27,9 @@ PR 템플릿(`.github/pull_request_template.md`)을 읽는다.
 
 **템플릿이 있는 경우**: 모든 체크리스트 항목은 그대로 유지한다. 항목을 삭제하거나 문구를 수정하지 않는다.
 
-**템플릿이 없는 경우**: 아래 기본 체크리스트를 사용한다:
-```markdown
-- [ ] 변경사항에 대응하는 테스트 추가/수정
-- [ ] 의존성 변경이 있는 경우 문서화
-- [ ] DB/마이그레이션 변경이 있는 경우 스크립트 포함
-- [ ] 환경변수 변경이 있는 경우 .env.example 갱신
-```
+**템플릿이 없는 경우**: 이 스킬과 함께 저장된 `PR_TEMPLATE_DEFAULT.md`를 기본 템플릿으로 사용한다.
+스킬 경로 기준: `.claude/skills/pr/PR_TEMPLATE_DEFAULT.md` (전역) 또는 프로젝트 `.claude/skills/pr/PR_TEMPLATE_DEFAULT.md`.
+해당 파일을 읽어 구조(Summary / Context / Problem / Solution / Non-Goals / Resulting Context / Risks and Assumptions / Checklists)를 그대로 유지하면서 내용을 채운다.
 
 판정 규칙:
 - 해당 변경사항이 있고, 조치가 완료된 항목 → `[x]` 체크
