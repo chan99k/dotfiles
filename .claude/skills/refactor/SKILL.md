@@ -2,7 +2,8 @@
 name: refactor
 description: >-
   보이스카웃 룰에 따라 구현 전 기존 코드를 점검하고 정리한다.
-  네이밍, 아키텍처, DDD 컨벤션 위반을 수정하고 확장 가능한 구조를 마련한다.
+  DDD, Clean Architecture, Clean Code 원칙을 전략적 기준으로 삼아
+  언어·프레임워크에 무관하게 전술적 리팩터링을 수행한다.
   반드시 /inspect 실행 후에 사용한다.
 allowed_tools:
   - Read
@@ -10,7 +11,6 @@ allowed_tools:
   - Edit
   - Glob
   - Grep
-  - Bash(./gradlew*)
   - Bash(git *)
 ---
 
@@ -22,60 +22,109 @@ allowed_tools:
 `$ARGUMENTS`가 주어지면 해당 영역을 리팩터링한다.
 **전제: `/inspect`가 먼저 실행되어 Inspection Report가 존재해야 한다.**
 
+## 전략적 기준 (언어 무관)
+
+프로젝트에 `.claude/rules/` 하위 rule 파일이 있으면 그것을 1순위 기준으로 삼는다.
+없으면 아래 세 원칙을 순서대로 적용한다.
+
+```
+DDD (Strategic)         유비쿼터스 언어 일관성, Bounded Context 경계 존중,
+                        도메인 모델에 비즈니스 의도가 드러나는가
+                              ↓
+Clean Architecture      의존성 방향(도메인 → 애플리케이션 → 인프라),
+                        레이어 역할 혼재 없음, 외부 관심사 누출 차단
+                              ↓
+Clean Code              명확한 네이밍, 단일 책임, 짧고 응집된 함수,
+                        불필요한 중복·복잡도 제거
+```
+
 ## 실행 순서
 
-### Phase 1: 컨벤션 점검
+### Phase 1: 전략 점검 — DDD 관점
 
 Inspection Report의 "변경 지점" 파일들을 대상으로:
 
-#### Kotlin/Spring (`**/src/main/**`)
-- [ ] 파일명: `PascalCase.kt` (클래스당 1파일)
-- [ ] Extension 함수 모음: `{Type}Extensions.kt`
-- [ ] Top-level 함수: 내용을 설명하는 이름 (예: `DateFormatters.kt`). `Utils` 지양
-- [ ] 함수: `camelCase`
-- [ ] 상수: `UPPER_SNAKE_CASE` 또는 `companion object` 내 `const val`
-- [ ] nullable 최소화 — 불필요한 `?` 없음
-- [ ] `!!` 금지 — `requireNotNull` 사용
-- [ ] `val` 우선 (불변 선호)
-- [ ] 생성자 주입만 사용
-- [ ] `.claude/rules/` 하위 rule 파일이 있으면 해당 기준을 우선 적용한다
-- [ ] rule 파일 없는 경우 — 의존성 방향: domain ← application ← ui/infrastructure (멀티모듈), 또는 domain/service/repository/controller 패키지 역할 원칙 (단일모듈)
-- [ ] Controller에 비즈니스 로직 없음
+**유비쿼터스 언어**
+- [ ] 클래스·함수·변수명이 도메인 언어와 일치하는가? (`docs/domain/*/language.yaml` 존재 시 참조)
+- [ ] 금지 동의어(synonyms)를 사용하지 않는가?
+- [ ] 도메인 언어 파일이 없으면: 같은 개념에 대해 코드베이스 내 일관된 용어를 쓰는가?
 
-#### DDD (`docs/domain/*/language.yaml`, 존재 시)
-- [ ] 클래스/필드명이 유비쿼터스 언어와 일치
-- [ ] 금지 동의어 미사용
+**Bounded Context 경계**
+- [ ] 다른 컨텍스트의 내부 객체를 직접 참조하지 않는가? (Anti-Corruption Layer 또는 이벤트/DTO 경유)
+- [ ] 컨텍스트 간 데이터 흐름이 명시적으로 드러나는가?
 
-### Phase 2: 구조 개선
+### Phase 2: 전술 점검 — Clean Architecture 관점
+
+**의존성 방향**
+- [ ] 도메인/핵심 로직이 프레임워크·DB·외부 API를 직접 참조하지 않는가?
+- [ ] 멀티모듈: domain ← application ← infrastructure/ui 방향 준수
+- [ ] 단일모듈: 패키지 역할(domain/service/repository/controller)이 의존성 방향을 지키는가?
+
+**레이어 역할 혼재**
+- [ ] 진입점(Controller/Handler/Router): 요청 수신과 DTO 변환만 담당하는가? 비즈니스 로직 없음
+- [ ] 애플리케이션/서비스 레이어: 유스케이스 오케스트레이션, 트랜잭션 경계 담당
+- [ ] 도메인/핵심 레이어: 순수 비즈니스 규칙, 프레임워크 어노테이션 최소화
+- [ ] 인프라 레이어: 기술 구현체 격리 (DB, 메시징, 외부 API)
+
+**외부 관심사 누출**
+- [ ] 도메인 타입에 직렬화 포맷(`Json`, `Xml`, `Proto`), 전송 프로토콜(`HTTP`, `GRPC`) 노출 없음
+- [ ] 도메인 타입에 영속성 어노테이션이 과도하게 침투하지 않는가?
+
+### Phase 3: 전술 점검 — Clean Code 관점
+
+**네이밍**
+- [ ] 이름만으로 의도를 알 수 있는가? (약어, 무의미한 접미사 `Manager`/`Utils`/`Helper` 지양)
+- [ ] 언어 관용 네이밍 컨벤션을 따르는가? (camelCase/snake_case/PascalCase — 언어에 맞게)
+
+**함수·모듈 크기와 응집도**
+- [ ] 함수가 한 가지 일만 하는가? (단일 책임)
+- [ ] 함수 길이가 한 화면에 들어오는가? 길면 추출 검토
+- [ ] 중복 로직이 여러 곳에 흩어져 있는가? 통합 가능하면 통합
+
+**불필요한 복잡도**
+- [ ] 사용되지 않는 import, 변수, 함수 제거
+- [ ] 과도한 추상화(사용처가 하나인 인터페이스)를 단순화할 수 있는가?
+- [ ] 불변 우선 원칙: 변경 가능성이 없는 값을 가변 타입으로 선언하지 않는가?
+
+### Phase 4: 구조 개선
 
 Inspection Report의 "추천 작업 순서"를 기반으로:
 
-1. **인터페이스 조정**: 구현할 기능이 기존 Port 인터페이스로 충분한가? 확장이 필요한가?
-2. **추상화 수준**: 구체적 구현에 의존하는 코드를 추상화
-3. **중복 제거**: 비슷한 로직이 여러 곳에 흩어져 있으면 통합
-4. **불필요한 코드 제거**: 사용되지 않는 import, 변수, 함수
+1. **경계 조정**: 변경할 기능에 기존 인터페이스(Port/서비스 계약)가 적합한가? 확장이 필요한가?
+2. **추상화 수준 통일**: 한 함수 안에서 고수준 오케스트레이션과 저수준 구현 세부사항이 섞이지 않도록
+3. **중복 제거**: 동일 로직이 여러 레이어에 산재하면 책임 있는 레이어 하나에 응집
+4. **데드코드 정리**: 사용되지 않는 코드는 VCS 기록에 남기고 삭제
 
-### Phase 3: 테스트 확인
+### Phase 5: 테스트 확인
 
 **모든 리팩터링 후 반드시 테스트 실행** (프로젝트 빌드도구에 맞게):
 
 ```bash
-./gradlew test      # Gradle
-./mvnw test         # Maven
-npm test            # Node
+./gradlew test      # Gradle (JVM)
+./mvnw test         # Maven (JVM)
+npm test            # Node.js
+pytest              # Python
+go test ./...       # Go
+cargo test          # Rust
 ```
 
-### Phase 4: 커밋
+테스트가 없는 영역을 리팩터링할 경우: 먼저 특성화 테스트(characterization test)를 작성해 현재 동작을 고정한 뒤 리팩터링한다.
 
-리팩터링은 기능 구현과 **별도 커밋**으로 분리한다:
+### Phase 6: 커밋
 
+리팩터링은 기능 구현과 **반드시 별도 커밋**으로 분리한다.
+하나의 커밋에 리팩터링과 기능 추가를 섞으면 리뷰와 롤백이 어려워진다.
+
+커밋 메시지 예시 (Conventional Commits):
 ```
-refactor: repository 접근 로직을 별도 메서드로 추출
-refactor: DTO 네이밍을 도메인 용어와 일치시킴
+refactor: 유스케이스 레이어에서 영속성 로직 분리
+refactor: OrderService의 조회/명령 책임을 각 유스케이스 클래스로 추출
+refactor: 도메인 용어 통일 — 'book' → 'novel' (language.yaml 기준)
 ```
 
 ## 하지 말아야 할 것
 
-- **기능 변경**: 리팩터링 중에 새 기능을 추가하지 않는다
-- **과도한 리팩터링**: 작업 영역 밖의 코드는 건드리지 않는다
+- **기능 변경**: 리팩터링 커밋에 새 기능을 추가하지 않는다 — 리팩터링은 행동을 바꾸지 않는다
+- **과도한 리팩터링**: Inspection Report의 "변경 지점" 밖 코드는 건드리지 않는다
 - **테스트 없는 리팩터링**: 테스트 실행 없이 커밋하지 않는다
+- **추측성 추상화**: 현재 사용처가 하나인 것을 "나중에 쓸 것 같아서" 인터페이스로 뽑지 않는다
