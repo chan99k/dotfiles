@@ -178,6 +178,20 @@ alias yt-dlp='~/.local/bin/yt-dlp-safe'
 alias python='python3'
 alias pip='pip3'
 
+# brew-usage: brew 바이너리 호출 시 ~/.brew-usage.log에 타임스탬프 기록
+brew_usage_preexec() {
+  local cmd="${1%% *}"
+  local bin_path
+  bin_path=$(whence -p "$cmd" 2>/dev/null) || return
+  case "$bin_path" in
+    /opt/homebrew/bin/*|/usr/local/bin/*)
+      echo "$(date +%s) $cmd" >> "${HOME}/.brew-usage.log"
+      ;;
+  esac
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec brew_usage_preexec
+
 # 머신별 시크릿 (API 키 등) — git 미추적
 [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
 
