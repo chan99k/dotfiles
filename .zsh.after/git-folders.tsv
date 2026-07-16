@@ -1,0 +1,61 @@
+# git-folders.tsv — gj(폴더 점프) 표시용 설명 모음
+# format: <group>\t<name>\t<description>
+# group: 이름 옆 회색 태그. 같은 값 입력 시 fzf 가 그룹 필터.
+# 새 항목 추가 시 반드시 탭(TAB) 구분자 사용. gj 는 이 파일만 읽음.
+
+# ─── work: 회사·업무 (ktown4u) ───
+work	kt4u	회사(ktown4u) 프로젝트 루트 (69개 하위 repo)
+work	isms-docs	ISMS-P 정보보호·개인정보보호 인증 문서
+work	performance-review-2025	2025 인사평가 자료
+
+# ─── ai: Claude·AI 하네스/플러그인 ───
+ai	vault-intelligence	Obsidian 시맨틱 검색 시스템(vis)
+ai	msbaek-claude-plugins	msbaek-tdd Claude Code TDD 플러그인
+ai	verify-tdd-plugin	TDD 검증 플러그인
+ai	presentation-designer	Content Designer 하네스(발표 콘텐츠 생성)
+ai	ai-agent	AI 에이전트 실험(html-anything·harness·workshop)
+ai	lib	재사용 라이브러리·도구(claude-agent-template 등 19개)
+ai	LLM	LLM 리소스(SuperClaude·prompts·ai-dot-files)
+ai	claude-sessions	Claude 세션 기록 아카이브
+
+# ─── talk: 강연·발표·콘텐츠 ───
+talk	aboutme	자기소개·프로필(AI-PROFILE.md)
+talk	claude-code-talk-assets	Claude Code 사내 강연 자료
+talk	ollive	강연 자료(스크립트·마인드맵·개요)
+talk	brunch	브런치(@cleancode) 블로그 글 등록 프로젝트
+talk	lecture-presentation	강의 발표 자료
+talk	presentations	과거 발표 자료
+
+# ─── learn: 학습·TDD·리팩토링·책 ───
+learn	coding-dojo	코딩 연습·카타·ATDD 예제 모음(29개)
+learn	string-calculator	String Calculator TDD 카타
+learn	tidy-first-ecommerce	Tidy First 리팩토링 예제(e-commerce)
+learn	uncle-bob	Robert Martin(Uncle Bob) 예제
+learn	books	기술서적 예제 코드(buckpal·effective-java 등 11개)
+learn	study	스터디(clean-code-2nd-edition + harness)
+learn	learning	학습 프로젝트(kpop-order-demo)
+learn	samples-cloned	클론 샘플(ddd-with-spring·spring-security)
+learn	data-analysis	데이터 분석 학습(pydata-book·pyspark)
+
+# ─── pkm: PKM·메모 ───
+pkm	memo	개인 기술 메모(MSA·TDD·architecture 97개 .md)
+pkm	obsidian-resource	Obsidian 리소스(bookshelf)
+
+# ─── proj: 개인 프로젝트·블로그 ───
+proj	projects	개인 프로젝트(daily-dashboard·my-stock·weekly)
+proj	msbaek.github.io	개인 블로그(Jekyll Now)
+
+# ─── conf: 설정·템플릿·유틸리티 ───
+conf	scripts	유틸 스크립트(youtube transcript downloader 등)
+conf	codetemplate	코드·프로젝트 템플릿
+conf	pythonProject	Python 작업공간(26개)
+conf	alfred-preferences	Alfred 앱 환경설정 백업
+conf	dataGrip	DataGrip 설정·SQL 스크래치
+conf	databricks	Databricks 관련
+conf	tools	외부 도구(tokyotyrant)
+conf	theme	터미널/에디터 테마(dracula)
+
+# ─── etc: 개인 행정·기타 ───
+etc	medical-examination	건강검진 관련
+etc	scan	스캔 PDF 문서
+etc	reference	참고자료(현재 빈 폴더)

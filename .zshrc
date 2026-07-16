@@ -15,6 +15,7 @@ source ~/.zsh.after/msbaek.zsh
 source ~/.zsh.after/ktown4u.zsh
 source ~/.zsh.after/cw.zsh
 source ~/.zsh.after/cj.zsh
+source ~/.zsh.after/gj.zsh
 
 # NVM (lazy load - only loads when node/npm/nvm is first used)
 export NVM_DIR="$HOME/.nvm"

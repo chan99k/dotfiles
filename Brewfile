@@ -217,7 +217,7 @@ brew "redis"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
 # Powerful, clean, object-oriented scripting language
-brew "ruby", link: false
+brew "ruby"
 # Safe, concurrent, practical language
 brew "rust"
 # Experimental Rust compiler front-end for IDEs
@@ -276,8 +276,7 @@ brew "zsh-syntax-highlighting"
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
-# AeroSpace is an i3-like tiling window manager for macOS
-cask "nikitabobko/tap/aerospace"
+cask "aerospace"
 # Free, open-source macOS app to find and clean developer caches
 cask "bysiber/cleardisk/cleardisk"
 # Utilities designed to make common development tasks easier
@@ -311,8 +310,7 @@ cask "qmk-toolbox"
 cask "rectangle"
 # Tool that provides consistent, highly configurable symbols for apps
 cask "sf-symbols"
-# macOS teleprompter that highlights your script in real-time as you speak
-cask "f/textream/textream"
+cask "textream"
 # HTML to PDF renderer
 cask "wkhtmltopdf"
 # Input method helper
