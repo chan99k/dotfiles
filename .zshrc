@@ -81,3 +81,6 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # cc-orchestra
 source ~/.claude/skills/cc-orchestra/functions.zsh
+
+# Added by JetBrains Context CLI installer
+export PATH="$PATH:/Users/msbaek/.jbcontext/bin"
