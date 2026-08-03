@@ -13,6 +13,7 @@ tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "jesseduffield/lazygit"
 tap "jetbrains/utils", "https://github.com/JetBrains/homebrew-utils"
+tap "jhlee0409/tap", trusted: true
 tap "jstkdng/programs"
 tap "maciejwalkowiak/brew"
 tap "microsoft/inshellisense", "https://github.com/microsoft/inshellisense"
@@ -23,6 +24,7 @@ tap "osx-cross/arm"
 tap "osx-cross/avr"
 tap "oven-sh/bun"
 tap "qmk/qmk"
+tap "stablyai/orca", trusted: { casks: ["orca"] }
 tap "testingisdocumenting/brew"
 # General-purpose data compression with high compression ratio
 brew "xz"
@@ -202,6 +204,8 @@ brew "poppler"
 brew "postgresql@14"
 # Theme for zsh
 brew "powerlevel10k"
+# Framework for managing multi-language pre-commit hooks
+brew "pre-commit"
 # Python 3 bindings for the Cairo graphics library
 brew "py3cairo"
 # Python version management
@@ -277,6 +281,8 @@ brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
 cask "aerospace"
+# Browse and analyze Claude Code conversation history offline
+cask "jhlee0409/tap/claude-code-history-viewer"
 # Free, open-source macOS app to find and clean developer caches
 cask "bysiber/cleardisk/cleardisk"
 # Utilities designed to make common development tasks easier
@@ -311,7 +317,6 @@ cask "rectangle"
 # Tool that provides consistent, highly configurable symbols for apps
 cask "sf-symbols"
 cask "textream"
-# HTML to PDF renderer
 cask "wkhtmltopdf"
 # Input method helper
 cask "youtype"

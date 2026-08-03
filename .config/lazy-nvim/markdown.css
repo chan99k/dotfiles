@@ -327,3 +327,11 @@
   box-sizing: border-box;
   padding: 0;
 }
+
+@media print {
+  .markdown-body {
+    font-size: 11px;
+    line-height: 1.35;
+    padding: 15px;
+  }
+}
