@@ -24,7 +24,6 @@ tap "osx-cross/arm"
 tap "osx-cross/avr"
 tap "oven-sh/bun"
 tap "qmk/qmk"
-tap "stablyai/orca", trusted: { casks: ["orca"] }
 tap "testingisdocumenting/brew"
 # General-purpose data compression with high compression ratio
 brew "xz"
