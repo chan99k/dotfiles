@@ -265,5 +265,7 @@ If the stack is genuinely wrong for the work, stop and tell your human partner i
 
 **REQUIRED BACKGROUND:** `superpowers:using-git-worktrees` — isolation mechanics and native-tool detection. It has no notion of stack base; this skill supplies it.
 **RELATED:** `walking-through-pr-stacks` — reading an existing stack
+**REVIEWING A STACK:** `reference/stack-review-context.md` — cross-PR contract checks and how to
+report an issue a later PR resolves. Shared by `apply-review`, `preflight-review`, and cloud review.
 **DOWNSTREAM:** `pr` — project PR template and checklist
 **RELATED:** `commit-blueprint` — safety before state-mutating git commands

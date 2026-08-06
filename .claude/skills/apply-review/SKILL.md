@@ -24,6 +24,18 @@ allowed_tools:
 
 ## 실행 순서
 
+### Phase 0: 스택 감지
+
+```bash
+gh pr list --json number,headRefName,baseRefName,isDraft
+```
+
+대상 PR의 `baseRefName`이 default branch가 아니거나, 다른 PR의 `baseRefName`이 대상의
+`headRefName`이면 **스택이다.** `stacked-worktrees` 스킬의 `reference/stack-review-context.md`를
+읽고 Phase 3+ / Phase 6.5를 함께 수행한다.
+
+스택이 아니면 이 Phase를 건너뛰고 아래를 그대로 따른다.
+
 ### Phase 1: 리뷰 코멘트 수집
 
 ```bash
@@ -54,6 +66,23 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews
 4. **영향 범위** 파악 (해당 파일을 참조하는 다른 파일)
 
 변경이 크거나 아키텍처에 영향을 주는 경우 사용자에게 확인을 받는다.
+
+### Phase 3+: 수정 위치 결정 (스택인 경우만)
+
+코멘트가 가리키는 코드를 **어느 PR의 worktree에서 고칠지** 먼저 정한다. 코멘트가 달린
+PR이 항상 정답은 아니다.
+
+| 코멘트가 겨냥하는 것 | 수정할 PR |
+|---|---|
+| 이 PR이 도입한 코드 | 이 PR |
+| 하위 PR이 세운 계약(시그니처·가시성·불변식) | **하위 PR** |
+| 상위 PR에서만 드러나는 문제 | 원인을 만든 PR |
+
+하위 PR의 결함을 상위 PR에서 우회 수정하지 않는다. 하위 PR이 먼저 착지하므로,
+우회 수정은 결함을 그대로 default branch에 올려보낸다.
+
+수정 대상이 다른 PR이면 그 worktree에서 작업한다 — 대상 PR의 worktree에서 상대 경로로
+건드리지 않는다.
 
 ### Phase 4: 코드 수정
 
@@ -89,6 +118,32 @@ mkdir -p .log
 2. 답변 초안을 사용자에게 보여줌
 3. 코드 변경이 필요한 경우 Phase 4로 돌아감
 
+### Phase 6.5: restack (스택인 경우 REQUIRED)
+
+수정한 브랜치보다 **위에 있는 모든 브랜치**를 새 tip 위로 옮긴다. 하나라도 빠뜨리면 상위 PR은
+더 이상 존재하지 않는 버전의 하위 코드에 대고 컴파일된다.
+
+절차는 `stacked-worktrees` Step 4.5를 따른다. bottom-to-top으로 한 단계씩:
+
+```bash
+cd ../repo-pr2
+git fetch origin
+git rebase origin/pr1/<수정한 브랜치>
+git push --force-with-lease
+```
+
+이것은 **Step 4.5(리뷰 중 restack)이지 Step 5(landing)가 아니다.** Step 0의 Case A/B와
+무관하며, 두 경우 모두 필요하다. "Case B니까 rebase 불필요"는 landing에만 해당한다.
+
+완료 후 검증:
+
+```bash
+gh pr list --json number,headRefName,baseRefName --jq '.[] | select(.headRefName | startswith("pr"))'
+```
+
+각 `baseRefName`이 여전히 아래 브랜치를 가리키는지 확인한다. restack은 base 포인터를
+바꾸지 않으므로 이 출력은 수정 전과 같아야 한다.
+
 ## 출력 형식
 
 ```markdown
@@ -109,6 +164,13 @@ mkdir -p .log
 ### 미반영 (사유)
 | # | 태그 | 코멘트 요약 | 미반영 사유 |
 |---|------|-----------|-----------|
+
+### 스택 처리 (스택인 경우만, 아니면 이 절 삭제)
+| 항목 | 결과 |
+|------|------|
+| 수정한 PR | #177 (하위 PR 계약 문제라 #178 대신 여기서 수정) |
+| restack 대상 | #178, #179 |
+| base 검증 | 각 baseRefName 아래 브랜치 유지 확인 |
 
 ### Harness 개선 제안
 이번 리뷰에서 harness(rule/agent/skill)가 사전에 잡을 수 있었던 이슈:

@@ -3,4 +3,19 @@ direct_prompt: |
     - Potential bugs or security issues
       - ex. null pointer, number format, divide by zero exception
     - Consistency with project conventions
+
+  If this PR is part of a stack (its base is not the default branch, or another
+  open PR is based on this one), also do the following. Stacks land bottom-first,
+  so each PR must stand on its own at the moment it merges.
+    - Cross-PR contracts: for every symbol a higher PR uses from this one, confirm
+      in this PR's source that it exists, is visible (not private to another
+      class or module), and its signature and nullability match. A missing method
+      or an out-of-scope property access does not compile — report it.
+    - An issue a later PR resolves is reported, not dropped. Note where it is
+      resolved (`resolved in #178 File.kt:31`) and lower its severity only for dead
+      code, unused symbols, or incomplete abstractions. Never lower it for bugs,
+      security issues, missing tests, or contract violations — those break the
+      default branch at this PR's merge point, before the later PR exists.
+    - Do not propose collapsing, flattening, or re-basing the stack.
+
   Output findings in a structured list.
