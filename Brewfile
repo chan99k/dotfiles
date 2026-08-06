@@ -217,8 +217,12 @@ brew "ruby-build"
 brew "rbenv"
 # Persistent key-value database, with built-in net interface
 brew "redis"
+# SVG rendering tool and library
+brew "resvg"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
+# Utility that provides fast incremental file transfer
+brew "rsync"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
 # Safe, concurrent, practical language
@@ -229,6 +233,8 @@ brew "rust-analyzer"
 brew "saml2aws"
 # Software for mathematics, science, and engineering
 brew "scipy"
+# 7-Zip is a file archiver with a high compression ratio
+brew "sevenzip"
 # SOund eXchange: universal sound sample translator
 brew "sox"
 # Cross-shell prompt for astronauts
@@ -261,6 +267,8 @@ brew "vivid"
 brew "watch"
 # Internet file retriever
 brew "wget"
+# Why is this running?
+brew "witr"
 # Language Server for Yaml Files
 brew "yaml-language-server"
 # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -291,6 +299,7 @@ cask "font-carrois-gothic"
 cask "font-meslo-lg-nerd-font"
 cask "font-sarasa-gothic"
 cask "font-sf-pro"
+cask "font-symbols-only-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Libhangul-based keyboard input
