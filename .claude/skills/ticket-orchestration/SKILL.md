@@ -21,6 +21,10 @@ Run one ticket from research to a published stack of draft PRs, delegating what 
 - You are only creating the worktrees and branches → `stacked-worktrees` alone
 - You are only running the review gate → `review-until-threshold` alone
 
+**Known constraint — run this in the main loop, not inside a subagent.** Handed to one subagent as "carry this ticket end to end", the pipeline halts at a sub-skill boundary: `stacked-worktrees`, `review-until-threshold` and `commit-recomposition` each end by returning a report, and for a subagent, emitting that report ends its turn. Observed in three of four attempts on a real repository, at Phase 3 twice and at Phases 5, 6 and 7 once each. The last one wrote `다음 단계: Phase 4` and stopped on the next line, so this is not something the orchestrator can be told its way out of. Guidance added to close it was tried in two placements and reverted.
+
+Two ways around it, both for the caller: run the pipeline from the main loop, where the sub-skill report returns control instead of ending a turn; or drive a subagent phase by phase, treating each sub-skill report as the handoff it is.
+
 ## The Pipeline
 
 ```
