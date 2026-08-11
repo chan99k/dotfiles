@@ -226,6 +226,8 @@ rm() {
 alias greset='git add .; git reset --hard HEAD'
 alias pkm='bash ~/DocumentsLocal/msbaek_vault/.claude/pkm/dashboard.sh'
 alias cc-dashboard='python3 ~/.claude/bin/generate-cc-dashboard.py'
+# 프로젝트 폴더 rename 시 Claude Code 세션 폴더/히스토리도 함께 이관 (mv + projects/ rename + history.jsonl 치환)
+alias cc-rename='~/.claude/bin/claude-rename-project.sh'
 
 # ── Local LLM hardware checker (npx: no global install needed) ──
 alias llm-hw='npx llm-checker hw-detect'

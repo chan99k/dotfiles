@@ -16,6 +16,7 @@ a	listening-port	열린 LISTEN 포트 전체
 a	pid-by-port	지정 포트 점유 프로세스 (인자 필요)
 a	find_wifi_pwd	키체인에서 WiFi 비밀번호 찾기
 a	gs	git status
+a	cc-rename	프로젝트 폴더 rename 시 Claude Code 세션/히스토리 함께 이관 (mv+projects/+history.jsonl, idempotent)	claude
 
 # ─── Functions ───
 f	gpager	git pager hunk↔delta 런타임 토글 (ddiff/dshow=1회 delta)	git
