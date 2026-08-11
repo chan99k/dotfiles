@@ -328,7 +328,7 @@ alias cct='~/.claude/bin/cc-team-cleanup'
 alias d2h='diff2html -s side'
 
 # ktown4u-groupware Python CLI venv 활성화 (ktown4u-gw 명령 사용)
-alias gw='source ~/git/kt4u/ktown4u-groupware-tools/.venv/bin/activate && ktown4u-gw menu'
+alias gw='source ~/git/kt4u/ktown4u-groupware/.venv/bin/activate && ktown4u-gw menu'
 alias gdum='gdu -h -d 1'
 alias agfu='cargo install --git https://github.com/subinium/agf.git'
 alias find-largest-file='du -ah * | sort -rn'
