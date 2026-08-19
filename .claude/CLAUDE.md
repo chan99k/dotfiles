@@ -97,6 +97,12 @@ If you create any temporary new files, scripts, or helper files for iteration, c
 - Per-project override: 프로젝트별 CLAUDE.md / 메모리에서 명시 시 우선
 - Compact form (context-tight 시 사용 가능): "Conventional Commits 1.0.0 — type English, subject/body Korean, scope optional"
 
+**Explanation level:**
+- 기술 용어(technical term)는 바꾸지 말고 그대로 쓴다. 대신 그 용어가 무엇이고 왜 그렇게 되는지를 중학생도 이해할 수 있는 수준으로 풀어 덧붙인다
+- 목표는 정확도를 낮추지 않고 진입 장벽만 낮추는 것. 용어를 쉬운 말로 갈아끼우는 게 아니라(cache -> "임시 저장소" X), 용어를 유지한 채 설명을 붙인다(cache - 한 번 읽은 걸 가까운 곳에 놔두고 다시 쓰는 저장 공간 O)
+- 배경 지식을 이미 안다고 가정하지 않고, 논리 단계를 건너뛰지 않는다
+- ASCII 다이어그램을 적극 활용한다
+
 **Approach:**
 - If user specifies a tool, use only that tool (no substitution)
 - Confirm before infrastructure changes (git remote, build config, dependencies)
