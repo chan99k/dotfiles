@@ -1,21 +1,20 @@
 # Workthrough File Convention
 
-When I ask you to create a workthrough file, please name it using this format:
+When I ask you to create a workthrough file (개정 2026-09-07: 신볼트 규약에 정합):
 
-```
-YYMMDD-{scope}-{number}-{brief-description}.md
-```
+Where:
+* directory: `{OBSIDIAN_VAULT}/raw/inbox` (= /Users/chan99/vault/raw/inbox)
+
+Naming:
+- 검색어 기반 파일명. "어 이런거 있지 않았나" 할 때 떠오르는 단어를 그대로 넣는다
+  (예: `ops-console-배치-최적화-워크스루.md`)
+- 날짜코드형(YYMMDD-SCOPE-NN-...) 파일명 금지 - 신볼트 규칙이 명시적으로 배제하는 형태다
+- 날짜, scope, 종류는 파일명이 아니라 frontmatter 로 남긴다:
+  `created: YYMMDD`, `project: <scope>` + raw/ 필수 필드(scope, disclosure)
 
 What:
 - A Markdown-formatted document without unnecessary elements such as emojis, actively utilizing ASCII-based diagrams.
 - The document must be written as a detailed report rather than a brief summary. It should provide a comprehensive and structured explanation that clearly presents the full problem-solving process. This includes a thorough description of the background context, how the issue was discovered, the steps taken in attempts to resolve it, an analysis of the pros and cons of each approach, the rationale behind the final decision, and clearly defined follow-up actions.
-Where:
-* YYMMDD: Current date (e.g., 251129 for November 29, 2025)
-* scope: Session name or project abbreviation (e.g., SHAGO, KERNEL, INTERVIEW)
-* number: Two-digit incremental number, unique per date and scope (e.g., 01, 02, 03)
-* brief-description: Lowercase, hyphen-separated summary of the content (e.g., insurance-api-design, batch-optimization)
-* directory : /Users/chan99/chan99k-workspace/chan99k's vault/00-Inbox
-Example: `.../00-Inbox/251129-SHAGO-01-insurance-api-design.md`
 
 ---
 
@@ -103,6 +102,16 @@ If you create any temporary new files, scripts, or helper files for iteration, c
 - 배경 지식을 이미 안다고 가정하지 않고, 논리 단계를 건너뛰지 않는다
 - ASCII 다이어그램을 적극 활용한다
 
+**Forbidden glyphs:**
+- em dash(—) -> 하이픈(-) 또는 문장 분리
+- 가운뎃점(·) -> &, 쉼표 등 키보드에서 바로 입력 가능한 기호
+- 모든 산출물(대화, 문서, 커밋, PR)에 적용
+
+**Writing habits (대화 출력):**
+- 표나 코드블록이 바로 뒤따르면 그 결론 문장을 앞에 반복하지 않는다. 증거를 먼저 보이고 결론은 한 번만
+- 상태 서술은 직설로: "근거가 있다"(not "서 있다"), "규칙을 세운다/생긴다"(not "선다"), "리드가 하는 일이다"(not "그 자체다")
+- 요약 -> 근거 -> 재요약 3중 반복 금지. 같은 내용은 한 번
+
 **Approach:**
 - If user specifies a tool, use only that tool (no substitution)
 - Confirm before infrastructure changes (git remote, build config, dependencies)
@@ -171,12 +180,35 @@ Reserve Bash for: git commands, build tools (gradle, npm), process management, a
 <path_constants>
 Frequently used paths — reference these instead of hardcoding full paths:
 
-- **OBSIDIAN_VAULT**: `/Users/chan99/chan99k-workspace/chan99k's vault`
-- **OBSIDIAN_INBOX**: `{OBSIDIAN_VAULT}/00-Inbox`
+- **OBSIDIAN_VAULT**: `/Users/chan99/vault` - "옵시디언 볼트"는 항상 여기를 가리킨다.
+  ZenNotes(`zn`)와 Obsidian이 공유하는 정본. 폴더 규약은 `{OBSIDIAN_VAULT}/CLAUDE.md` 가 갖는다
+  (`raw/` 미검증, `knowledge/` 검증 통과, `maps/` MOC, `data/` metric 원본, `scripts/`)
+- **OBSIDIAN_INBOX**: `{OBSIDIAN_VAULT}/raw/inbox`
+- **LEGACY_VAULT**: `/Users/chan99/chan99k-workspace/chan99k's vault` - 구볼트.
+  기존 산출물이 남아 있으나 새 문서의 행선지가 아니다
 - **WORKSPACE**: `/Users/chan99/chan99k-workspace`
 </path_constants>
 
-## Large-scale Changes
+## Parallel Session Build Serialization
+
+한 머신에서 여러 세션이 같은 Gradle 프로젝트를 병렬 작업할 때, 빌드/테스트 실행은
+직렬화한다. Gradle 데몬과 Kotlin 컴파일 데몬은 머신당 하나라 동시 실행이 OOM 을 만들고,
+그 실패는 원인(옆 세션)이 메시지에 안 보여 재현도 안 된다.
+
+- `./gradlew` 호출은 flock 으로 감싼다: `flock /tmp/gradle-{project}.lock ./gradlew ...`
+  (예: ops-console 은 `/tmp/gradle-ops-console.lock`). 락 대기는 정상이다 - 기다렸다 돈다
+- 리드-하위 세션 구조에서는 하위 세션이 gradle 을 직접 돌리지 않고 리드가 일괄 실행하는
+  방식도 같은 효과다. 어느 쪽인지는 리드가 발주 때 정한다
+- 메모리 상향(kotlin.daemon.jvmargs)으로 대응하지 않는다 - 세션이 늘면 재발한다
+
+## Lead Session Working Habits
+
+리드 세션(메인 세션이 리드일 때 포함)이 일하는 방식. 관행으로만 지켜지던 것을 명문화한다.
+
+- **배치 요청**: 서로의 결과에 의존하지 않는 도구 호출과 사용자 질문은 한 응답에 모아 보낸다. 먼저 필요한 것을 속으로 목록화하고, 의존 없는 것을 한 번에 낸다
+- **명령 출력 전달**: 도구/명령 출력은 리드만 본다(사용자 터미널엔 몇 줄만 뜬다). 사용자가 읽어야 할 것은 답에 옮겨 넣는다. 51KB 로그면 판정 줄만 뽑아서
+- **위임 절제**: 서브에이전트는 독립적이고 병렬 가능한 큰 작업(넓은 다중 파일 조사 등)에만 쓴다. 몇 번의 도구 호출로 끝낼 일은 직접 하고, 자기 작업 검증에 서브에이전트를 쓰지 않는다. 한 개로 되면 한 개, spawn 수는 낮게
+- **정정 규율**: 이전 진술의 정정은 그것이 사용자의 코드/결론/결정을 바꿀 때만 한다. 바꾸면 짧고 분명하게 정정하고 작업을 잇는다. 아무것도 안 바뀌는 슬립은 조용히 고치고 넘어간다
 
 <large_scale_changes>
 - Show a few sample changes first and get confirmation before proceeding with full changes
