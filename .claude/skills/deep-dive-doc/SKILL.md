@@ -94,12 +94,12 @@ Obsidian 볼트에 학부~석사 수준의 한국어 기술 심층 탐구 시리
 
 | 항목 | 디폴트 |
 |---|---|
-| Obsidian 볼트 경로 | `/Users/chan99/chan99k-workspace/chan99k's vault/03-Resources/<series-name>/` |
-| 시리즈 폴더명 | 도메인 기반 (`backend-interview-deep-dive` 등) |
+| Obsidian 볼트 경로 | `{OBSIDIAN_VAULT}/raw/digests/<series-name>/` (= `/Users/chan99/vault/raw/digests/…`, 신볼트 규약. 구볼트 `chan99k's vault/03-Resources/`는 폐기) |
+| 시리즈 폴더명 | 도메인 기반 (`backend-interview-deep-dive` 등). `raw/` 안이라 시리즈 폴더 허용 |
 | 분량 범위 | 1,000~1,700 라인 |
 | Q&A 수 | 12개/문서 |
 | 인용 정책 | 1차 자료 우선 (RFC/논문/JEP/CVE/공식 docs) |
-| 첫 페이지 frontmatter | created, status, level, tags |
+| 첫 페이지 frontmatter | scope, disclosure, created(YYMMDD), status, level, tags — 앞 셋은 raw/ 필수 |
 
 ### Phase 1 — MOC 설계 및 주제 분해
 
@@ -310,7 +310,7 @@ Phase 2: 3개 에이전트 동시 spawn (G5, G6, G7)
 1. **MOC frontmatter** `status: in-progress → done`
 2. **MOC 체크리스트** 모두 `[x]` + 라인 수 + 핵심 인용 메모 추가
 3. **완료 마커 검증**: `tail -3 *.md | grep -c "TOPIC.*COMPLETE"`로 누락 확인
-4. **워크스루 문서** (선택): `YYMMDD-{scope}-{NN}-{description}.md` 형식, OBSIDIAN_INBOX 저장
+4. **워크스루 문서** (선택): 검색어 기반 파일명(예: `{series-name}-작성-회고.md`, 날짜코드·종류 접미사 강제 없음), OBSIDIAN_INBOX 저장. 속성은 frontmatter. workthrough 스킬 규약을 따른다
 5. **메모리 갱신** (선택): 시리즈 작성 패턴, 주의사항을 reference memory로 저장
 
 ## Tool Cheatsheet
@@ -350,14 +350,14 @@ backend 시리즈 38편 실측치 기준:
 5. ❌ **검증 누락된 outdated 정보** → 라이브러리 버전·CVE 신규 등은 늘 갱신 필요
 6. ❌ **MOC 동시 수정** → 메인 세션에서만 일괄 업데이트
 7. ❌ **마커 누락** → 모든 문서 끝에 `===[TOPIC #N COMPLETE]===` 강제
-8. ❌ **frontmatter 누락** → created/status/level/tags 4종 필수
+8. ❌ **frontmatter 누락** → scope/disclosure/created(YYMMDD) 3종은 raw/ 필수, status/level/tags는 시리즈 필수
 
 ## Output
 
-- 시리즈 폴더: `<Obsidian Vault>/03-Resources/<series-name>/`
+- 시리즈 폴더: `{OBSIDIAN_VAULT}/raw/digests/<series-name>/`
 - MOC: `00-MOC-<series-name>.md`
-- 문서: `NN-<topic-slug>.md` (NN = 두자리 번호)
-- (선택) 워크스루: `<OBSIDIAN_INBOX>/YYMMDD-{scope}-{NN}-{description}.md`
+- 문서: `NN-<topic-slug>.md` (NN = 두자리 순번. 시리즈 안 순서이지 날짜코드가 아니다)
+- (선택) 워크스루: `{OBSIDIAN_INBOX}/` 검색어 기반 파일명, 속성은 frontmatter
 
 ## Failure Modes & Recovery
 

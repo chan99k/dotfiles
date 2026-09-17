@@ -1,14 +1,18 @@
 ---
-created: {{YYYY-MM-DD}}
+scope: personal              # personal | company | oss
+disclosure: internal         # public | masked | internal (회사 작업은 internal)
+created: {{YYMMDD}}
+project: {{project}}
 status: in-progress          # plan-confirmed | in-progress | done | blocked
 tags: [{{domain-tags}}, workthrough]
 related:
   - "[[]]"
 ---
 
-# {{제목}} 워크스루
+# {{제목}}
 
 > {{한 줄 목적}}. {{git 보고서 / 이력서 / PR 등 반영 위치}}
+<!-- 제목은 주제만. "워크스루"라는 종류, 날짜, 프로젝트는 frontmatter(tags, created, project)에 있다 -->
 
 ## 1. 배경
 ### 1.1 출발점

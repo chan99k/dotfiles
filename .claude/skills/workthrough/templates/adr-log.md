@@ -1,9 +1,15 @@
 ---
-created: {{YYYY-MM-DD}}
-last_updated: {{YYYY-MM-DD}}
+scope: personal              # personal | company | oss
+disclosure: internal         # public | masked | internal
+created: {{YYMMDD}}
+project: {{project}}
 last_adr_number: 0
-tags: [{{project}}, adr, architecture-decision]
+tags: [adr, architecture-decision]
 ---
+<!-- 신볼트 규약: `updated`/`last_updated` 필드는 두지 않는다 (mtime과 git이 SSOT). -->
+<!-- 프로젝트 레포에 자체 ADR 파일이 있으면 이 템플릿 대신 그 파일을 쓴다. -->
+<!-- 볼트에 둘 때 파일명은 `{project}-adr-log.md`, 위치는 raw/inbox/. -->
+
 
 # {{프로젝트명}} ADR Log
 

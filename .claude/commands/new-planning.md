@@ -2,7 +2,7 @@
 
 Create planning documents using the planning skill.
 
-Ask only for missing inputs: SCOPE / target project / topic folder / one-line problem /
+Ask only for missing inputs: project name / topic keywords / one-line problem /
 who is the user / what exists today / what should change.
 
 Follow the skill's needs-driven flow:
@@ -14,4 +14,6 @@ Follow the skill's needs-driven flow:
 Apply the house grammar: numbered sections, ASCII diagrams, comparison tables,
 Obsidian frontmatter, Korean output.
 
-Filename rule: YYMMDD-{SCOPE}-{NN}-{type}.md (or .html for mockups).
+Save to {OBSIDIAN_VAULT}/raw/inbox/ with a search-term based filename (Korean ok, .html for mockups).
+No date code, no required project/type slots. Attributes (created YYMMDD, scope, disclosure, project,
+status, version, doc type via tags) live in frontmatter, never in the filename or H1.

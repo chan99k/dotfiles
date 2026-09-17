@@ -21,7 +21,9 @@ tags:
   - {도메인 태그 0~3개}
 source_repo: {예제 저장소 URL}        # 없으면 줄을 뺀다
 source_note: "{원문 확인분 / 다른 근거로 메운 분 + 식별자 / 미확인분}"
-created: {YYYY-MM-DD}
+scope: personal                       # raw/ 필수. personal | company | oss
+disclosure: internal                  # raw/ 필수. 책 인용분이 있으므로 기본 internal
+created: {YYMMDD}                     # raw/ 필수. 신볼트 규약은 YYMMDD
 status: seedling
 related:
   - "[[{같은 단원의 다른 노트}]]"

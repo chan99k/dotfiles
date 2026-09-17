@@ -15,4 +15,6 @@ Follow the spec guide workflow:
 Apply the house grammar: ASCII diagrams, code blocks for domain models,
 Obsidian frontmatter, Korean output.
 
-Filename rule: YYMMDD-{SCOPE}-{NN}-spec.md
+Save to {OBSIDIAN_VAULT}/raw/inbox/ with a search-term based filename (Korean ok).
+No date code, no required project/type slots. Attributes (created YYMMDD, scope, disclosure, project,
+status, scale, `spec` tag) live in frontmatter, never in the filename or H1.

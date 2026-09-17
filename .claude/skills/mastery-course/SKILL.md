@@ -35,7 +35,7 @@ trigger: /mastery-course
 ## Output Path
 
 ```
-{OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/
+{OBSIDIAN_VAULT}/raw/digests/mastery-courses/{domain}/{topic}-mastery/
 ├── 00-overview.md                   # MOC, Phase 정의, 시간 예산
 ├── 01-section-mapping.md            # 강의 목차 → Phase 매핑 매트릭스
 ├── 02-expert-critique-path.md       # 면접 질문, 안티패턴, 자가진단 체크리스트
@@ -60,8 +60,13 @@ trigger: /mastery-course
 - `phase-N-*.md` 슬라이드: 복습·발표용 압축. 학습 후 빠른 review 에 적합.
 - **둘 중 하나만 만들거나 둘 다 만들 수 있음**. 학습자 선호도 + 시리즈 성격에 따라 결정. PostgreSQL Mastery 는 digests/ 만, Redis Mastery 는 slides 만 사용한 사례.
 
-**폴더 규약**:
-- 모든 mastery 시리즈는 `03-Resources/mastery-courses/` (복수형) 아래에 격리한다 (단발성 리소스와 분리).
+**폴더 규약** (신볼트 규약 2026-09-07 기준, 구볼트 `03-Resources/` 경로는 폐기):
+- 모든 mastery 시리즈는 `raw/digests/mastery-courses/` (복수형) 아래에 격리한다 (단발성 digest와 분리).
+  `raw/` 안에서는 위치가 이미 tier(미검증)를 말하므로 그 아래를 시리즈 폴더로 나눠도 규약과 충돌하지 않는다
+  (`.claude/rules/folders.md` "raw/imported/ 내부 구조" 결정과 같은 논리). `knowledge/`에는 폴더를 만들지 않는다.
+- 모든 파일의 frontmatter에 `scope` / `disclosure` / `created`(YYMMDD)를 둔다. 기존 `created: YYYY-MM-DD`는 쓰지 않는다.
+  학습 자료는 대개 `scope: personal`, `disclosure: internal`(저작권 인용분 포함).
+- 구볼트에 있던 시리즈는 `raw/imported/oldvault/03-Resources/mastery-courses/` 아래에 원 경로 그대로 보존된다. 새 시리즈만 위 경로에 만든다.
 - `{domain}` 중간 폴더는 유지한다. 현행 도메인: `databases/`, `data-engineering/`, `observability/`, `architecture/`, `spring/`. 새 도메인이면 사용자 확인.
 - `{topic}` 폴더명에는 `-mastery` 접미사를 유지한다. 예: `mastery-courses/databases/mysql-mastery/`. (이유: 폴더만 단독 검색·인용될 때 시리즈 정체성을 자가식별 가능하도록.)
 - **예외 — 미이동/작업중**: `architecture/nats-mastery/` (scaffold, 미이동), `spring/mastery/` (진행 중). 작업 마무리 시점에 `mastery-courses/` 하위로 일괄 이동 예정.
@@ -179,7 +184,10 @@ transition: slide
 title: "Digest — {원본 자료명}"
 source(s): {URL or 책 정보}
 phase: {N or "0+1" 식 cross-phase}
-parent: "[[03-Resources/mastery-courses/{domain}/{topic}-mastery/02-expert-critique-path]]"
+scope: personal
+disclosure: internal
+created: {YYMMDD}
+parent: "[[02-expert-critique-path]]"   # Obsidian wikilink는 파일명으로 해석. 폴더 경로를 박지 않는다
 status: ready
 tags:
   - resource/{domain}/{topic}
@@ -347,7 +355,8 @@ PostgreSQL/Redis/MSA 시리즈 운영 중 발견한 실패 모드 → 사전 차
 ## Path Constants
 
 - `OBSIDIAN_VAULT`: CLAUDE.md Path Constants 참조
-- 학습 자료 경로: `{OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/`
+- 학습 자료 경로: `{OBSIDIAN_VAULT}/raw/digests/mastery-courses/{domain}/{topic}-mastery/`
+- 구볼트 이관분(읽기 전용): `{OBSIDIAN_VAULT}/raw/imported/oldvault/03-Resources/mastery-courses/`
 - 사용자 메모리: `/Users/chan99/.claude/projects/-Users-chan99-chan99k-workspace/memory/`
 
 ## Reference Implementations
@@ -385,7 +394,7 @@ skill 종료 시 다음을 한 화면 안에 표시:
 **ROI 판정**: {점수}/25 — {수강 권장 / 자료 제작 / 사용자 선택}
 
 **산출물**:
-- {OBSIDIAN_VAULT}/03-Resources/mastery-courses/{domain}/{topic}-mastery/
+- {OBSIDIAN_VAULT}/raw/digests/mastery-courses/{domain}/{topic}-mastery/
 - 00-overview, 01-section-mapping, 02-expert-critique-path
 - (선택) N개 슬라이드 ({총 슬라이드 수})
 - (선택) digests/ {파일 수}개 ({총 줄 수} 줄, anchor {A}개 + supplementary {S}개)

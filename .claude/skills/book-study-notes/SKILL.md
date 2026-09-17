@@ -143,7 +143,7 @@ source_note: "본문 미제공 — 책에서 직접 확인한 내용 없음.
 ## 파일 배치
 
 ```
-{볼트}/{책 슬러그}/
+{볼트}/{책 슬러그}/          ← Obsidian이면 {OBSIDIAN_VAULT}/raw/digests/{책 슬러그}/
   {책 이름} MOC.md
   {NN}장/
     {NN}-{MM}_{주제}_{유형}.md
@@ -165,7 +165,7 @@ MOC에는 진도 표(장·주제·노트 링크·상태)와, 역서/원서 판�
 | 볼트 | 쓰기 방법 | 주의 |
 |---|---|---|
 | ZenNotes | `mcp__zennotes__create_note` | 반환된 `path`를 그대로 재사용. `inbox/` 접두사를 붙이지 않는다 |
-| Obsidian | `{OBSIDIAN_VAULT}/03-Resources/` 아래 직접 파일 쓰기 | PARA 구조를 지킨다 |
+| Obsidian | `{OBSIDIAN_VAULT}/raw/digests/{책 슬러그}/` 아래 직접 파일 쓰기 | 신볼트 규약(2026-09-07). 구볼트 PARA `03-Resources/`는 폐기. `raw/` 안이므로 책·장 폴더 허용. frontmatter에 `scope`/`disclosure`/`created`(YYMMDD) 필수 |
 
 볼트가 지정되지 않으면 사용자에게 묻되, **그 질문 때문에 노트 작성을 멈추지 않는다** —
 스크래치패드에 먼저 쓰고 볼트 확정 후 옮긴다.

@@ -14,4 +14,6 @@ Follow the design-doc guide workflow:
 Apply the house grammar: ASCII diagrams, approach comparison format (Carrier/Effort/Risk/Trade-offs),
 layer-by-layer spec, Obsidian frontmatter, Korean output.
 
-Filename rule: YYMMDD-{SCOPE}-{NN}-design-doc.md
+Save to {OBSIDIAN_VAULT}/raw/inbox/ with a search-term based filename (Korean ok).
+No date code, no required project/type slots. Attributes (created YYMMDD, scope, disclosure, project,
+status, version, `design-doc` tag) live in frontmatter, never in the filename or H1.

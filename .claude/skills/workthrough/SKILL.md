@@ -18,12 +18,12 @@ Honesty about hypothesis-vs-evidence and about limitations is the whole point.
 
 ## Workflow (three lightweight phases)
 If the user only wants the empty skeleton, fill templates/workthrough.md with their
-SCOPE/filename and stop.
+project/filename and stop.
 
 ### Phase 1 — Gather
 Ask only for what's missing (skip anything already in context). Target:
-SCOPE + target project name (must match 01-Projects/ subfolder) + topic folder name
-(kebab-case subject grouping, e.g. cascade-perf) + one-line topic; timeline (timestamps if any); key
+project name (lowercase, for frontmatter `project:` and filename prefix) + topic keywords
+(what the user would search for later) + one-line topic; timeline (timestamps if any); key
 findings and which prior assumptions were wrong; decisions made + the rejected options;
 before/after numbers + how they were measured; what could NOT be done/measured.
 Keep questions tight; shorthand answers welcome; do not pad.
@@ -40,12 +40,14 @@ Write into templates/workthrough.md, applying the house grammar:
     narrative ADR — no separate document needed.
 - Use ASCII diagrams for flows and comparison tables for numbers — house style, use freely.
 - Always keep "한계" and "메타-학습"; never drop them to look cleaner.
-Filename: YYMMDD-{SCOPE}-{NN}-{kebab-brief}.md (date = work date).
-Save path: {OBSIDIAN_VAULT}/01-Projects/{project}/docs/workthroughs/{topic}/
-  - {project}: lowercase project name matching 01-Projects/ subfolder (e.g. giftify, blog)
-  - {topic}: kebab-case subject grouping (e.g. cascade-perf, cart-optimization)
-  - Create the directory chain if it doesn't exist.
-  - Compute NN from existing files sharing that date+SCOPE across all topic folders.
+Filename: search-term based, Korean allowed (e.g. `ops-console-배치-최적화.md`). Words like the
+  project name or "워크스루" appear only if they are natural search words, never as required
+  slots. Date-code names (`YYMMDD-SCOPE-NN-...`) are forbidden by the vault rules (신볼트 규약
+  2026-09-07). Date, project, doc type, status live in frontmatter (`created`, `project`,
+  `tags: [.., workthrough]`, `status`), not in the filename or the H1 title.
+Save path: {OBSIDIAN_VAULT}/raw/inbox/ (= /Users/chan99/vault/raw/inbox). Flat, no
+  project/topic folder chain — folders mean tier in this vault, never subject.
+  The subject axis is frontmatter `project:`.
 
 ### Phase 3 — Challenge (honesty pass)
 Before finishing, review the draft adversarially and report gaps:
@@ -55,9 +57,11 @@ Before finishing, review the draft adversarially and report gaps:
 Fix it, or surface it under "한계". This stands in for a fresh-reader test for a solo author.
 
 ## Conventions
-- Frontmatter: created (authoring date; may differ from filename date),
+- Frontmatter: `scope` (personal | company | oss), `disclosure` (public | masked | internal),
+  `created` (YYMMDD, work date) — these three are required in raw/. Then `project`,
   status (freeform: plan-confirmed | in-progress | done | blocked),
   tags (domain tags + workthrough), related (Obsidian [[wikilinks]]).
+  Company work defaults to `disclosure: internal`.
 - Body order: 배경(+가설) → 사건 흐름 → 핵심 발견 → 의사결정 기록 → 정량 결과 → 한계 → 다음 액션 → 메타-학습 → 관련 자료.
 - Output language: Korean. Instruction text in these skill files: English.
 
@@ -65,7 +69,8 @@ Fix it, or surface it under "한계". This stands in for a fresh-reader test for
 When the user asks for an ADR log (not a full workthrough), load guides/adr.md.
 This produces a single per-project document listing lean architecture decisions as a
 timestamped log, grouped by module then by decision type.
-Path: {OBSIDIAN_VAULT}/01-Projects/{project}/docs/adr-log.md
+Path: the project repo's own ADR file if it has one (e.g. chan99k-blog `ADR.md`); otherwise
+`{OBSIDIAN_VAULT}/raw/inbox/{project}-adr-log.md`.
 
 ## Keywords
 워크스루, workthrough, 작업 기록, 회고, retrospective, dev log, 의사결정 기록, 측정 사이클, ADR, 아키텍처 결정, architecture decision record, ADR 로그, ADR 정리

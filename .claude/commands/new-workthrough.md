@@ -2,8 +2,10 @@
 
 Create a workthrough using the workthrough skill.
 
-Ask only for missing inputs: SCOPE / target project folder / topic folder / one-line topic /
+Ask only for missing inputs: project name / topic keywords / one-line topic /
 timeline / decisions / before-after numbers / what couldn't be verified.
 
-Follow the skill's three phases (Gather → Draft → Challenge), the house grammar, and the
-filename rule YYMMDD-{SCOPE}-{NN}-{kebab-brief}.md.
+Follow the skill's three phases (Gather → Draft → Challenge) and the house grammar.
+Save to {OBSIDIAN_VAULT}/raw/inbox/ with a search-term based filename (Korean ok). No date code,
+no required project/type slots. Attributes (created YYMMDD, scope, disclosure, project, status,
+`workthrough` tag) live in frontmatter, never in the filename or H1.

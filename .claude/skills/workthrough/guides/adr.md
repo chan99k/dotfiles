@@ -13,10 +13,13 @@ workthrough that triggered the decision; the ADR log is the index.
 ## File location
 
 ```
-{OBSIDIAN_VAULT}/01-Projects/{project}/docs/adr-log.md
+1. Project repo's own ADR file, if one exists (e.g. chan99k-blog: ADR.md)   <- preferred
+2. {OBSIDIAN_VAULT}/raw/inbox/{project}-adr-log.md                            <- otherwise
 ```
 
 One file per project. Create if it does not exist (use templates/adr-log.md as skeleton).
+The old `01-Projects/{project}/docs/adr-log.md` path is retired (신볼트 규약 2026-09-07).
+Vault copies need frontmatter `scope`, `disclosure`, `created` (YYMMDD), `project`.
 
 ## Workflow
 
