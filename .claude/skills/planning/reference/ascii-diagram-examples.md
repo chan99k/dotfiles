@@ -1,6 +1,7 @@
 # ASCII Diagram Examples
 
-House style reference. Use these as templates when generating diagrams in PRDs and specs.
+House-style reference. Use these as templates when generating diagrams in PRDs and specs.
+Labels inside the diagrams are Korean because that is the output language of the documents.
 
 ## 1. Value Chain (Executive Summary)
 
@@ -30,7 +31,7 @@ House style reference. Use these as templates when generating diagrams in PRDs a
                                     └────────┘
 ```
 
-## 3. Comparison Table (v1 vs v2)
+## 3. Comparison Table (as-is vs to-be)
 
 ```
 ┌──────────────┬──────────────────┬───────────────────┐
@@ -77,6 +78,6 @@ House style reference. Use these as templates when generating diagrams in PRDs a
 
 - Use box-drawing characters: `┌ ┐ └ ┘ ─ │ ┬ ┴ ├ ┤ ┼`
 - Arrows: `→ ← ▲ ▼ ──────→`
-- Keep width under 70 characters for readability.
+- Keep the width under 70 characters for readability.
 - Korean labels inside boxes.
 - Annotate roles or actions below in parentheses.

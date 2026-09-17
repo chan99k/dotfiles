@@ -1,7 +1,8 @@
 # Risk Matrix Format
 
-PRD Section 10 uses a 3-axis risk matrix: Business, Technical, Operations.
-Each axis is a separate table with consistent columns.
+PRD Section 10 uses a three-axis risk matrix: business, technical, operational.
+Each axis is a separate table with the same columns. Column headers and enum values are
+Korean because they appear in the generated document.
 
 ## Format
 
@@ -24,21 +25,21 @@ Each axis is a separate table with consistent columns.
 
 ## Rules
 
-- Number risks per axis: BR-1, BR-2... / TR-1, TR-2... / OR-1, OR-2...
-- Probability: 낮음 / 중간 / 높음
-- Impact: 낮음 / 중간 / 높음 / 매우 높음
-- Response column must be actionable — not "모니터링" alone.
-  Bad: "주시한다". Good: "일 1회 pg_dump 백업 + 장애 시 30분 내 복구 절차 문서화".
-- If ALL risks are 낮음/낮음, you're probably not being honest. Push back.
+- Number risks per axis: BR-1, BR-2 ... / TR-1, TR-2 ... / OR-1, OR-2 ...
+- Probability (확률): 낮음 (low) / 중간 (medium) / 높음 (high)
+- Impact (영향): 낮음 (low) / 중간 (medium) / 높음 (high) / 매우 높음 (very high)
+- The response column (대응) must be actionable, not "monitor" alone.
+  Bad: "keep an eye on it". Good: "daily pg_dump backup plus a documented 30-minute recovery procedure".
+- If ALL risks are low/low, the author is probably not being honest. Push back.
 
-## When to Use
+## When to use
 
-- Team projects or startup applications: full 3-axis matrix (required).
-- Solo side projects: optional. If included, keep to 3-5 risks total across all axes.
-  Skip if the user explicitly says "리스크는 생략".
+- Team projects or startup applications: the full three-axis matrix is required.
+- Solo side projects: optional. If included, keep it to 3 to 5 risks across all axes.
+  Skip it if the user explicitly says to omit risks.
 
-## Anti-Patterns
+## Anti-patterns
 
-- "보안 리스크 있음" without specifying WHAT security risk.
-- All risks having the same probability — that's a sign of lazy assessment.
-- Response = "TBD" — either decide now or move to Open Questions.
+- "There is a security risk" without saying WHAT security risk.
+- Every risk with the same probability: a sign of lazy assessment.
+- Response = "TBD": either decide now or move it to Open Questions.

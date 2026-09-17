@@ -1,18 +1,21 @@
 ---
-created: {{YYYY-MM-DD}}
-status: draft
+scope: personal                  # personal | company | oss
+disclosure: internal             # public | masked | internal
+created: {{YYMMDD}}
+project: {{project}}
+status: draft                    # draft | in-review | approved | implemented
 scale: full
 tags: [{{domain-tags}}, spec]
-jira_issue:        # 팀 트래커 1차 참조 (예: PROJ-123). 대응 이슈 있을 때만
-linear_issue:      # 개인 트래커 핸들 (예: LIN-45)
+jira_issue:        # primary team-tracker reference (e.g. PROJ-123), only when a matching issue exists
+linear_issue:      # personal tracker handle (e.g. LIN-45)
 related:
   - "[[{{Design Doc 파일명}}]]"
 ---
 
-# Spec: {{한 줄 목표}}
+# {{한 줄 목표}}
 
 > Linear 대응: Issue (1 PR)
-> 상태: {{draft / in-review / approved / implemented}}
+<!-- H1 is the goal only. The doc type lives in the frontmatter tag spec, the status in the status field -->
 
 ## Scope
 
@@ -20,7 +23,7 @@ related:
 
 ## Context
 
-- 상위 설계: [[{{Design Doc}}]] — {{관련 결정 ID 참조 (예: BeD3, ClD5)}}
+- 상위 설계: [[{{Design Doc}}]] - {{관련 결정 ID 참조 (예: BeD3, ClD5)}}
 - 선행 조건: {{이 작업 전에 완료되어야 하는 것}}
 - 제약: {{이 scope 안에서의 기술/시간/규제 제약}}
 
@@ -53,9 +56,9 @@ Status:   {{200 / 400 / 404 / 409 ...}}
 
 ## Acceptance Criteria
 
-- [ ] {{관찰 가능한 동작}} — {{검증 방법}}
-- [ ] {{관찰 가능한 동작}} — {{검증 방법}}
-- [ ] {{관찰 가능한 동작}} — {{검증 방법}}
+- [ ] {{관찰 가능한 동작}} - {{검증 방법}}
+- [ ] {{관찰 가능한 동작}} - {{검증 방법}}
+- [ ] {{관찰 가능한 동작}} - {{검증 방법}}
 
 ## Sub-issue Breakdown
 
@@ -65,7 +68,7 @@ Status:   {{200 / 400 / 404 / 409 ...}}
 | S2 | {{제목}} | {{commit~PR}} | {{}} |
 | S3 | {{제목}} | {{commit~PR}} | {{}} |
 
-<!-- 각 Sub-issue는 Lightweight Spec (spec-light)으로 상세화 가능 -->
+<!-- Each sub-issue can be detailed as a Lightweight Spec (spec-light) -->
 
 ## 관련 자료
 

@@ -1,16 +1,19 @@
 ---
-created: {{YYYY-MM-DD}}
+scope: personal                  # personal | company | oss
+disclosure: internal             # public | masked | internal
+created: {{YYMMDD}}
+project: {{project}}
 status: draft                    # draft | in-review | approved | superseded
+version: 1.0                     # bump when the PRD changes after review
+audience: [{{선택된 대상}}]        # Product | Engineering | Design | Business
 tags: [{{domain-tags}}, prd]
 related:
-  - "[[]]"
+  - "[[{{관련 문서 파일명}}]]"
 ---
 
-# {{프로젝트명}} — {{기능/제품명}} PRD
+# {{기능/제품명}}
 
-**문서 버전**: 1.0
-**작성일**: {{YYYY-MM-DD}}
-**대상**: {{Product, Engineering, Design, Business}}
+<!-- H1 is the subject only. Version, created date, audience and doc type (tag prd) live in frontmatter -->
 
 ---
 
@@ -153,7 +156,7 @@ T+{{}}  {{다음 단계}}
 
 ## 11. Roadmap
 
-### Phase 1 — {{이름}} ({{기간}})
+### Phase 1 - {{이름}} ({{기간}})
 ```
 ┌──────────────────────────────────────┐
 │  Week 1                              │

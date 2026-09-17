@@ -1,14 +1,18 @@
 ---
-created: {{YYYY-MM-DD}}
-status: draft
+scope: personal                  # personal | company | oss
+disclosure: internal             # public | masked | internal
+created: {{YYMMDD}}
+project: {{project}}
+status: draft                    # draft | in-review | approved | superseded
 tags: [{{domain-tags}}, screen-spec]
 related:
   - "[[{{PRD 파일명}}]]"
 ---
 
-# {{기능명}} 화면명세
+# {{기능명}}
 
 > {{PRD 링크}} 기반 화면 단위 상세기획
+<!-- H1 is the feature name only. The doc type lives in the frontmatter tag screen-spec -->
 
 ## 화면 목록
 
@@ -19,7 +23,7 @@ related:
 
 ---
 
-## S1 — {{화면명}}
+## S1 - {{화면명}}
 
 ### 목적
 {{이 화면이 존재하는 이유 한 문장}}
@@ -67,4 +71,4 @@ related:
 
 ---
 
-<!-- 화면 S2, S3... 동일 포맷으로 반복 -->
+<!-- Repeat the same block for S2, S3, ... -->

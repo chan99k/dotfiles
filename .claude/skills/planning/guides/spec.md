@@ -1,71 +1,76 @@
 # Spec Guide
 
-A spec answers "WHAT exactly to implement" — domain models, API contracts, data flows,
-acceptance criteria. It bridges Design Doc (architecture decisions) to code (implementation).
+A spec answers "WHAT exactly to implement": domain models, API contracts, data flows,
+acceptance criteria. It bridges the design doc (architecture decisions) to code.
 
-Design Doc decides HOW. Spec defines WHAT to build within that decision.
+The design doc decides HOW. The spec defines WHAT to build within that decision.
 
 ## Linear Hierarchy Mapping
 
 ```
-Initiative / Project  ←  Design Doc
-  Issue               ←  Spec (Full)      → 1 PR
-    Sub-issue          ←  Spec (Light)     → commit ~ PR
+Initiative / Project  <-  Design Doc
+  Issue               <-  Spec (Full)      -> 1 PR
+    Sub-issue         <-  Spec (Light)     -> commit to PR
 ```
 
 ## When to use
 
 - After a design doc's architecture decisions are made, before coding starts.
-- When the user says "스펙", "spec", "구현 명세", "명세서", "implementation spec".
+- When the user asks for a spec (스펙, spec, 구현 명세, 명세서, implementation spec).
 - When `/new-spec` is invoked directly.
 - When decomposing an issue into sub-issues with clear acceptance criteria.
 
-## Scale: Full vs Lightweight
+## Scale: Full, Lightweight, Intent Ticket
 
-**Full Spec** (100-200 lines): Issue level. One PR deliverable.
-Use `templates/spec.md`. All sections required.
-Includes Sub-issue Breakdown section that lists child work units.
+**Full Spec** (100 to 200 lines): issue level, one PR deliverable.
+Use `templates/spec.md`. All sections required. Includes a Sub-issue Breakdown section that
+lists the child work units.
 
-**Lightweight Spec** (30-80 lines): Sub-issue level. Commit-to-PR deliverable.
-Use `templates/spec-light.md`. Minimal sections — scope, spec body, acceptance criteria.
-No further decomposition needed. This IS the smallest work unit.
+**Lightweight Spec** (30 to 80 lines): sub-issue level, commit-to-PR deliverable.
+Use `templates/spec-light.md`. Minimal sections: scope, spec body, acceptance criteria.
+No further decomposition. This IS the smallest work unit.
 
-**Intent Ticket** (10-25 lines): Jira/팀 트래커용 의도 중심 티켓. Use `templates/spec-jira-light.md`.
-Sections: What / How / Out-of-scope / Done when. 도메인 모델·API·data flow 같은 구현
-상세는 **일부러 뺀다** — 티켓에 박으면 코드와 어긋나 죽은 정보가 된다. 의도와 경계,
-완료 조건만 남긴다. Out-of-scope는 독립 헤더로 둬 경계 분쟁을 막는다.
+**Intent Ticket** (10 to 25 lines): an intent-centered ticket for Jira or another team
+tracker. Use `templates/spec-jira-light.md`. Sections: What / How / Out of scope / Done when.
+Implementation detail such as domain models, APIs and data flows is left out on purpose:
+once pinned into a ticket it drifts from the code and becomes dead information. Keep only
+the intent, the boundary and the completion condition. Out of scope gets its own header to
+prevent boundary disputes.
 
-Decide scale:
-- 구현 상세까지 정의해야 하나? → 도메인 모델/API가 필요하면 **Full** 또는 **Lightweight**.
-- 의도·경계·완료 조건만으로 충분한가(구현은 PR/코드에 맡김)? → **Intent Ticket**.
-- 더 쪼개지는가? Yes → Full, No → Lightweight/Intent.
+Decide the scale:
+- Do implementation details need to be defined? If a domain model or API is needed,
+  choose **Full** or **Lightweight**.
+- Are intent, boundary and completion condition enough (implementation left to the PR and
+  code)? Choose **Intent Ticket**.
+- Does it split further? Yes: Full. No: Lightweight or Intent.
 
 ## Workflow
 
-### Step 1 — Scope
+### Step 1: Scope
 
-Gather (ask only for what's missing):
-- Project name + Linear team (if known)
-- Parent document: Design Doc or existing Linear Issue URL
-- One-line goal: "이 spec이 완료되면 뭐가 달라지는가?"
-- Scale: Full (Issue) or Lightweight (Sub-issue)?
+Gather only what is missing:
+- Project name and Linear team (if known)
+- Parent document: design doc, or an existing Linear issue URL
+- One-line goal: what is different once this spec is done?
+- Scale: Full (issue), Lightweight (sub-issue) or Intent Ticket
 
-### Step 2 — Draft
+### Step 2: Draft
 
-Write into the appropriate template, applying these rules:
+Write into the appropriate template, following the Section Walkthrough rule in `SKILL.md`
+and these section rules.
 
 **Section-specific guidance:**
 
 | Section | Brainstorm? | Notes |
 |---------|-------------|-------|
-| Scope | No | One paragraph, boundary statement |
-| Context | No | Link parent doc, cite relevant decisions |
-| Domain Model | No | Kotlin/SQL code blocks, actual field names |
-| API Contract | No | Endpoint, method, request/response shape |
+| Scope | No | One paragraph, a boundary statement |
+| Context | No | Link the parent doc, cite the relevant decisions |
+| Domain Model | No | Kotlin or SQL code blocks, actual field names |
+| API Contract | No | Endpoint, method, request and response shape |
 | Data Flow | No | ASCII diagram showing the happy path |
-| Edge Cases | **Yes** | Generate 5-10 candidates, user curates |
-| Acceptance Criteria | **Yes** | Generate checklist candidates, user curates |
-| Sub-issue Breakdown | **Yes** | Full spec only — propose decomposition |
+| Edge Cases | **Yes** | Generate 5 to 10 candidates. The user curates |
+| Acceptance Criteria | **Yes** | Generate checklist candidates. The user curates |
+| Sub-issue Breakdown | **Yes** | Full spec only. Propose the decomposition |
 
 **Domain model format:**
 
@@ -88,75 +93,75 @@ Status:   200 / 400 (validation) / 404 / 409 (conflict)
 **Acceptance criteria format:**
 
 ```markdown
-- [ ] {observable behavior} — {verification method}
+- [ ] {observable behavior} - {verification method}
 ```
 
-Each criterion must be: observable (not "코드가 깨끗하다"), verifiable (test or manual check),
-and independent (not "위의 것이 되면").
+Each criterion must be observable (not "the code is clean"), verifiable (a test or a manual
+check), and independent (not "once the one above works").
 
-### Step 3 — Challenge
+### Step 3: Challenge
 
 Before finishing, review adversarially:
-- Can a developer start coding from this spec alone (without reading the design doc)?
-- Are all field names, types, and constraints explicit? No "적절한" or "필요한" placeholders?
+- Can a developer start coding from this spec alone, without reading the design doc?
+- Are all field names, types and constraints explicit? No "appropriate" or "as needed" placeholders?
 - Does every acceptance criterion have a verification method?
-- Are edge cases covered or explicitly marked as out-of-scope?
-- "이 spec을 넘겨받은 다른 개발자가 PR을 열 수 있는가?"
+- Are edge cases covered, or explicitly marked out of scope?
+- Could another developer who inherits this spec open a PR?
 
-Fix gaps or add to acceptance criteria.
+Fix the gaps, or add them to the acceptance criteria.
 
-### Step 4 — Linear
+### Step 4: Linear
 
-After spec completion, offer Linear integration:
+After the spec is complete, offer Linear integration.
 
-**For Full Spec (Issue level):**
-- "Linear Issue 생성할까요?" → create issue with:
-  - Title: spec의 one-line goal
-  - Description: scope + acceptance criteria summary
-  - Label: `spec`
-  - Parent: project (if known)
-  - Sub-issues: from Sub-issue Breakdown section (each with title + acceptance criteria)
+**For a Full Spec (issue level):** offer to create a Linear issue with:
+- Title: the spec's one-line goal
+- Description: scope plus a summary of the acceptance criteria
+- Label: `spec`
+- Parent: the project, if known
+- Sub-issues: from the Sub-issue Breakdown section, each with a title and acceptance criteria
 
-**For Lightweight Spec (Sub-issue level):**
-- "Linear Sub-issue 생성할까요?" → create sub-issue with:
-  - Title: spec의 one-line goal
-  - Description: scope + acceptance criteria
-  - Label: `spec`
-  - Parent issue: from context
+**For a Lightweight Spec (sub-issue level):** offer to create a Linear sub-issue with:
+- Title: the spec's one-line goal
+- Description: scope plus acceptance criteria
+- Label: `spec`
+- Parent issue: from context
 
 **Common Linear fields:**
-- Status: Backlog (default) or Todo (if immediately actionable)
+- Status: Backlog by default, or Todo if immediately actionable
 - Assignee: ask if needed
-- After creation: write Linear issue URL back into spec frontmatter (`linear_issue` field)
+- After creation, write the Linear issue URL back into the spec frontmatter (`linear_issue`)
 
-### Step 5 — Next Steps
+### Step 5: Next Steps
 
-After spec + Linear completion, offer:
-- "Lightweight Spec으로 Sub-issue 상세화 → 각 sub-issue에 대해 spec-light 작성"
-- "구현 시작 → 코딩"
-- "페르소나 리뷰 → 3인 관점 피드백"
-- "여기서 끝"
+After the spec and Linear steps, offer:
+- Detail each sub-issue as a Lightweight Spec (spec-light)
+- Start implementation
+- Persona review: feedback from three viewpoints
+- Stop here
 
 ## Anti-patterns
 
-- **No design decisions here**: Approach comparison belongs in Design Doc.
-  If you're debating A vs B, you need a design doc first.
-- **No vague acceptance criteria**: "잘 동작한다" is not a criterion.
-  Every criterion needs an observable behavior + verification method.
-- **No premature sub-issue breakdown in lightweight specs**: Lightweight IS the leaf.
-  If it needs sub-issues, upgrade to full spec.
-- **No orphan specs**: Every spec must reference a parent (design doc or Linear issue).
+- **No design decisions here**: approach comparison belongs in the design doc.
+  If you are debating A vs B, you need a design doc first.
+- **No vague acceptance criteria**: "it works well" is not a criterion.
+  Every criterion needs an observable behavior plus a verification method.
+- **No premature sub-issue breakdown in lightweight specs**: lightweight IS the leaf.
+  If it needs sub-issues, upgrade to a full spec.
+- **No orphan specs**: every spec must reference a parent (design doc or Linear issue).
   A spec without context is a spec that will be ignored.
-- **No duplicate content from design doc**: Reference decisions, don't repeat rationale.
-  `(ref: Design Doc BeD3)` is enough.
+- **No duplicate content from the design doc**: reference decisions, do not repeat the
+  rationale. `(ref: Design Doc BeD3)` is enough.
 
 ## Conventions
 
-- Frontmatter: same as other planning docs (created, status, tags, related with wikilinks).
-  Add `linear_issue: ` field (populated after Linear creation).
-  Add `scale: full | light` field.
-- Status values: `draft` → `in-review` → `approved` → `implemented`.
+- Frontmatter: same as other planning docs (scope, disclosure, created, project, status,
+  tags, related with wikilinks). Add `linear_issue` (populated after Linear creation) and
+  `scale: full | light | intent`.
+- Status values: `draft`, `in-review`, `approved`, `implemented`.
 - ASCII diagrams for data flows. Code blocks for domain models and API contracts.
-- Output language: Korean. Instruction text: English.
-- Filename: `YYMMDD-{SCOPE}-{NN}-spec.md`
-- Save path: same as other planning docs.
+- Output language is Korean. Instruction text is English.
+- Filename: search-term based, no date code (for example `giftify-장바구니-cascade.md`).
+  Sub-issue specs add the sub-issue keyword. The `spec` tag and the `scale` field carry the
+  document type; do not encode them in the filename or the H1.
+- Save path: same as other planning docs (`raw/inbox/`, see the Save Path section in `SKILL.md`).

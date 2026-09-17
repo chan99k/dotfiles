@@ -1,16 +1,20 @@
 ---
-created: {{YYYY-MM-DD}}
-status: draft
+scope: personal                  # personal | company | oss
+disclosure: internal             # public | masked | internal
+created: {{YYMMDD}}
+project: {{project}}
+status: draft                    # draft | in-review | approved | implemented
 scale: light
 tags: [{{domain-tags}}, spec]
-jira_issue:        # 팀 트래커 1차 참조 (예: PROJ-123). 대응 이슈 있을 때만
-linear_issue:      # 개인 트래커 핸들 (예: LIN-45)
+jira_issue:        # primary team-tracker reference (e.g. PROJ-123), only when a matching issue exists
+linear_issue:      # personal tracker handle (e.g. LIN-45)
 related:
   - "[[{{상위 Spec 파일명}}]]"
 ---
 
-# Spec: {{한 줄 목표}}
+# {{한 줄 목표}}
 
+<!-- H1 is the goal only. The doc type lives in the frontmatter tag spec, the status in the status field -->
 > Linear 대응: Sub-issue (commit ~ PR)
 > 상위: [[{{상위 Spec}}]] S{{N}}
 
@@ -26,5 +30,5 @@ related:
 
 ## Acceptance Criteria
 
-- [ ] {{관찰 가능한 동작}} — {{검증 방법}}
-- [ ] {{관찰 가능한 동작}} — {{검증 방법}}
+- [ ] {{관찰 가능한 동작}} - {{검증 방법}}
+- [ ] {{관찰 가능한 동작}} - {{검증 방법}}

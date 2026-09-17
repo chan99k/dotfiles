@@ -1,18 +1,18 @@
 # Commit Message Reference
 
-Minimal commit message guide. 2-5 lines body, `-` bullet for readability.
+Minimal commit message guide. A 2 to 5 line body as a `-` bullet list for readability.
 
 ## Subject Line
 
-Format: `{type}: {한 줄 설명}`
+Format: `{type}: {one-line description}`
 
-- Conventional Commits type prefix (English)
-- Korean subject, 기술 용어는 영문 그대로
-- No parenthetical scope (per feedback_no_scope_in_commit)
-- Max ~72 characters
-- Issue reference `(#N)`: 대응되는 이슈가 있을 때만. `closes`는 커밋이 아닌 PR에서 처리
+- Conventional Commits type prefix, in English
+- Korean subject; technical terms stay in English as they are
+- No parenthetical scope (per `feedback_no_scope_in_commit`)
+- At most about 72 characters
+- Issue reference `(#N)` only when there is a matching issue. `closes` is handled in the PR, not the commit
 
-Examples:
+Examples (Korean subjects as they would actually be written):
 ```
 feat: JWT 검증에 leeway 추가 및 strict 모드 전환
 fix: saved_payment가 비정상 step에서 덮어쓰이는 버그 수정
@@ -23,7 +23,8 @@ feat: position 모듈 + 테이블명 컨벤션 통일 (#22)
 
 ## Body
 
-2-5줄. `-` bullet list. 해당 없으면 body 생략 (trivial chore, single-line fix).
+2 to 5 lines as a `-` bullet list. Omit the body when nothing applies (trivial chore,
+single-line fix).
 
 ```
 - auth.py: JWT leeway=5 추가 (Supabase clock skew 대응)
@@ -32,19 +33,19 @@ feat: position 모듈 + 테이블명 컨벤션 통일 (#22)
 ```
 
 Rules:
-- 기술 용어 영문 그대로, 설명은 한국어
-- `—` dash로 인라인 근거 연결 가능
-- 파일 단위 나열 금지 — 도메인/기능 단위로 요약
-- 5줄 초과 시 subject가 너무 넓은 것 — 커밋을 쪼개야 하는 신호
+- Technical terms stay in English; the explanation is Korean.
+- An inline rationale goes in parentheses or after a hyphen (-). Never an em dash; it is a forbidden glyph in all outputs.
+- Do not list file by file. Summarize by domain or feature.
+- More than 5 lines means the subject is too broad: a signal to split the commit.
 
 ## Issue Reference
 
-- 대응 이슈가 있으면 subject 끝에 `(#N)` 또는 body에 `relates to #N`
-- `closes #N`은 커밋이 아닌 **PR 본문에서만** 사용
+- If there is a matching issue, put `(#N)` at the end of the subject or `relates to #N` in the body.
+- Use `closes #N` **only in the PR body**, never in a commit.
 
 ## Anti-patterns
 
-- **No giftify-be 스타일 장문**: Summary/What's Changed/Decisions 같은 PR 수준 구조를 커밋에 넣지 않음
-- **No diff narration**: 모든 파일 나열 금지
-- **No future tense**: 커밋은 현재 상태를 기록
-- **No "~을 위한 작업"**: WHAT을 직접 서술
+- **No long-form giftify-be style**: PR-level structure such as Summary / What's Changed / Decisions does not belong in a commit.
+- **No diff narration**: never enumerate every file.
+- **No future tense**: a commit records the current state.
+- **No "work for ..." phrasing**: state WHAT directly.
