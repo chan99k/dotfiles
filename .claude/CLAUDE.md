@@ -175,6 +175,28 @@ ALWAYS prefer dedicated tools over Bash equivalents. Dedicated tools run without
 Reserve Bash for: git commands, build tools (gradle, npm), process management, and operations with no dedicated tool equivalent.
 </prefer_dedicated_tools>
 
+## Browser Selection
+
+<browser_selection>
+The human's default browser is Dia. The agent's default browser is ego lite.
+These are independent: the `ego-browser` CLI talks to ego lite directly and never
+consults macOS LaunchServices.
+
+- Do browser work through the `/ego-browser` skill. Do not load the
+  claude-in-chrome MCP tools or the Playwright MCP tools. The user's logged-in
+  sessions live only in ego lite, so no other browser can reach an authenticated
+  screen.
+- Do not open pages with `open <url>` or `open <file>.html`. The `http`, `https`,
+  and `public.html` handlers all resolve to Dia, so this opens a window the agent
+  cannot drive. Use it only when the point is to show the user something, and say
+  in the reply that Dia will open.
+- The `--web` flags of `gh` (`gh pr create --web`, `gh repo view --web`) reach Dia
+  for the same reason. When the agent must keep operating the page, get the URL
+  and open it with ego-browser instead.
+- Do not set `$BROWSER`. It is shell-wide, so it would also redirect commands the
+  user types by hand and break the "human uses Dia" half of this split.
+</browser_selection>
+
 ## Path Constants
 
 <path_constants>
