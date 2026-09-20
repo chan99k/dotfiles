@@ -140,6 +140,26 @@ update-claude-code() {
     echo "Claude Code updated to: $(claude --version)"
 }
 
+# loci 미처리 증거 감지 (알림만, 실행하지 않는다)
+# 신볼트 raw/research 에서 `> 승격됨` 마커가 없는 노트를 세어 파일명까지 보여준다.
+# 승격 자체는 세션에서 loci 를 직접 돌려 처리한다 - 판정 근거를 눈으로 보고
+# 개입할 수 있어야 잘못된 승격이 조용히 굳지 않는다 (260911 headless 경로 폐기).
+loci-check() {
+    local dir="$HOME/vault/raw/research" f
+    local -a pending
+    [[ -d "$dir" ]] || { echo "loci: $dir 없음, 건너뜀"; return 0 }
+    for f in "$dir"/*.md(N); do
+        [[ "${f:t}" == "승격-대장.md" ]] && continue
+        head -12 -- "$f" | grep -q '승격됨' || pending+=("${f:t}")
+    done
+    if (( ${#pending} == 0 )); then
+        echo "loci: 미처리 증거 0건, 건너뜀"
+        return 0
+    fi
+    echo "loci: 미처리 증거 ${#pending}건. 세션에서 loci 를 돌리세요."
+    printf '  %s\n' "${pending[@]}"
+}
+
 # Morning system update (all-in-one)
 morning-update() {
     echo "=== Brew ==="
@@ -151,6 +171,9 @@ morning-update() {
     echo "\n=== Gemini CLI ==="
     npm update -g @google/gemini-cli
     echo "Gemini CLI: $(gemini --version 2>/dev/null || echo 'version check failed')"
+
+    echo "\n=== loci ==="
+    loci-check
 
     echo "\n=== Done ==="
     echo "Next:"
