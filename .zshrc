@@ -218,3 +218,23 @@ add-zsh-hook preexec brew_usage_preexec
 # 머신별 시크릿 (API 키 등) — git 미추적
 [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
 
+# ── Anthropic API 키 (Keychain) ────────────────────────────────────────────
+# 규칙: service = anthropic-<프로젝트>-<환경>, account = $USER
+#   예) anthropic-blog-interview-prod, anthropic-blog-interview-local
+# 값은 Keychain에만 둔다 — .secrets(평문 파일)에 넣지 않는다.
+
+anthkey() {
+  [ -z "$1" ] && { print -u2 "usage: anthkey <프로젝트>-<환경>   예: blog-interview-prod"; return 2 }
+  security find-generic-password -a "$USER" -s "anthropic-$1" -w 2>/dev/null \
+    || { print -u2 "anthropic-$1 없음 — 등록: anthkey-set $1"; return 1 }
+}
+
+anthkey-set() {
+  [ -z "$1" ] && { print -u2 "usage: anthkey-set <프로젝트>-<환경>"; return 2 }
+  local k; read -rs "k?ANTHROPIC_API_KEY ($1): "; echo
+  # 빈 값 가드 — 비에코 프롬프트가 값을 못 받으면 조용히 빈 항목이 저장된다.
+  # 그 경우 나중에 401/403으로만 드러나 원인 추적이 오래 걸린다.
+  [ -z "$k" ] && { print -u2 "빈 값 — 중단"; return 1 }
+  security add-generic-password -a "$USER" -s "anthropic-$1" -w "$k" -U && echo "저장: anthropic-$1"
+}
+
