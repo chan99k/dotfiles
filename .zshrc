@@ -140,24 +140,57 @@ update-claude-code() {
     echo "Claude Code updated to: $(claude --version)"
 }
 
-# loci 미처리 증거 감지 (알림만, 실행하지 않는다)
-# 신볼트 raw/research 에서 `> 승격됨` 마커가 없는 노트를 세어 파일명까지 보여준다.
-# 승격 자체는 세션에서 loci 를 직접 돌려 처리한다 - 판정 근거를 눈으로 보고
-# 개입할 수 있어야 잘못된 승격이 조용히 굳지 않는다 (260911 headless 경로 폐기).
-loci-check() {
-    local dir="$HOME/vault/raw/research" f
-    local -a pending
-    [[ -d "$dir" ]] || { echo "loci: $dir 없음, 건너뜀"; return 0 }
-    for f in "$dir"/*.md(N); do
+# 볼트 대기열 감지 (알림만, 실행하지 않는다)
+#
+# 260920 개정: loci-check 에서 이름과 범위를 넓혔다. 전에는 raw/research 만 봤고
+# 거기는 늘 0건이었다. 정작 쌓이는 곳은 raw/inbox 였는데 아무도 세지 않아
+# 146건이 될 때까지 몰랐다.
+#
+# 승격과 분류 자체는 세션에서 직접 돌린다 - 판정 근거를 눈으로 보고 개입할 수
+# 있어야 잘못된 승격이 조용히 굳지 않는다 (260911 headless 경로 폐기).
+#
+# 세는 것:
+#   research 미승격   raw/research 에서 승격됨 마커가 없는 노트
+#   inbox 승격대기    dest: knowledge 인데 아직 마커가 없는 노트
+#   브런치 초안       status 별. 사용자가 직접 쓰는 것이라 세기만 한다
+#   미분류            status 도 dest 도 없는 노트. 행선지가 정해지지 않았다
+#   미추적 .md        커밋되지 않은 노트. 구볼트 git 이 이 수치로 죽었다
+vault-check() {
+    local V="$HOME/vault" f
+    [[ -d "$V" ]] || { echo "vault: $V 없음, 건너뜀"; return 0 }
+
+    local -a research_pending inbox_pending unclassified
+    for f in "$V"/raw/research/*.md(N); do
         [[ "${f:t}" == "승격-대장.md" ]] && continue
-        head -12 -- "$f" | grep -q '승격됨' || pending+=("${f:t}")
+        head -14 -- "$f" | grep -q '승격됨' || research_pending+=("${f:t}")
     done
-    if (( ${#pending} == 0 )); then
-        echo "loci: 미처리 증거 0건, 건너뜀"
-        return 0
-    fi
-    echo "loci: 미처리 증거 ${#pending}건. 세션에서 loci 를 돌리세요."
-    printf '  %s\n' "${pending[@]}"
+
+    local skeleton=0 flesh=0 ready=0 st
+    for f in "$V"/raw/inbox/*.md(N); do
+        # 재료팩과 대장은 Jira 가 상태를 들고 있다. 여기서 세면 이중 계상이다
+        [[ "${f:t}" == *재료팩* || "${f:t}" == *대장* ]] && continue
+        if grep -q '^dest: knowledge' -- "$f"; then
+            head -14 -- "$f" | grep -q '승격됨' || inbox_pending+=("${f:t}")
+            continue
+        fi
+        st=$(grep -m1 '^status:' -- "$f")
+        case "$st" in
+            *draft-skeleton*)   (( skeleton++ )); continue ;;
+            *draft-flesh*)      (( flesh++ ));    continue ;;
+            *ready-to-publish*) (( ready++ ));    continue ;;
+        esac
+        grep -qE '^(status|dest):' -- "$f" || unclassified+=("${f:t}")
+    done
+
+    local untracked
+    untracked=$(git -C "$V" ls-files --others --exclude-standard -- '*.md' 2>/dev/null | wc -l | tr -d ' ')
+
+    print -r -- "vault: research 미승격 ${#research_pending} | inbox 승격대기 ${#inbox_pending} | 브런치 skeleton ${skeleton} flesh ${flesh} 발행대기 ${ready} | 미분류 ${#unclassified} | 미추적 .md ${untracked}"
+
+    (( ${#research_pending} )) && { echo "  [research] 세션에서 loci 를 돌리세요"; printf '    %s\n' "${research_pending[@]}" }
+    (( ${#inbox_pending} ))    && { echo "  [inbox] 팩트체크 대기";               printf '    %s\n' "${inbox_pending[@]}" }
+    (( ${#unclassified} ))     && { echo "  [미분류] 행선지를 정하세요";           printf '    %s\n' "${unclassified[@]}" }
+    return 0
 }
 
 # Morning system update (all-in-one)
@@ -172,8 +205,8 @@ morning-update() {
     npm update -g @google/gemini-cli
     echo "Gemini CLI: $(gemini --version 2>/dev/null || echo 'version check failed')"
 
-    echo "\n=== loci ==="
-    loci-check
+    echo "\n=== vault ==="
+    vault-check
 
     echo "\n=== Done ==="
     echo "Next:"
