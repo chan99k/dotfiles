@@ -123,3 +123,13 @@ node_modules/
 # 옛 디렉토리는 잔여 방어막 유지 (빈 채로 두었거나 정리 중인 경우).
 .claude/agent-harness/
 # 다른 머신 동기화는 별도 install 스크립트 또는 dotfiles-private 레포로.
+
+# ======================
+# Goose 스킬 링크 / 에디터 백업
+# ======================
+# .config/goose/skills/ 는 ~/.agents/skills/ (여러 에이전트 도구가 공유하는 풀)
+# 로 나가는 심볼릭 링크만 들어 있다. stow 로 배포하면 링크를 가리키는 링크가
+# 생기고, 대상 디렉토리는 이 레포가 관리하지 않아 다른 머신에서 전부 깨진다.
+# 기기마다 Goose 설치 과정이 알아서 건다.
+.config/goose/skills/
+*.bak-*
