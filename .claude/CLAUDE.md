@@ -189,6 +189,22 @@ Frequently used paths — reference these instead of hardcoding full paths:
 - **WORKSPACE**: `/Users/chan99/chan99k-workspace`
 </path_constants>
 
+## Atlassian Site Double-Check
+
+<atlassian_site_check>
+개인 사이트와 팀 사이트가 서로 다른 MCP 서버에 붙어 있다. 서버 선택이 곧 사이트 선택이라, 잘못 고르면 팀 SSOT 에 개인 티켓이 생긴다.
+
+| 사이트 | MCP 서버 | 프로젝트 키 |
+|---|---|---|
+| `chan99k.atlassian.net` (개인) | 로컬 `atlassian` (`mcp__atlassian__*`) | C9K |
+| `infiniction.atlassian.net` (팀) | claude.ai 커넥터 (`mcp__claude_ai_Atlassian_Rovo__*`) | KAN |
+
+- 호출 전 대상 사이트를 먼저 정하고, 그 사이트가 허용된 서버의 도구만 쓴다. cloudId 에는 사이트 주소를 넘긴다
+- 세션의 첫 Atlassian 호출 전에 `getAccessibleAtlassianResources` 로 허용 사이트를 1회 확인한다
+- 쓰기(생성, 수정, 전이, 댓글, 페이지 작성) 전에는 답에 사이트명을 적어 보인다
+- 개인 운영 세션(일정, 투두, C9K)은 WORKSPACE 에서 연다
+</atlassian_site_check>
+
 ## Parallel Session Build Serialization
 
 한 머신에서 여러 세션이 같은 Gradle 프로젝트를 병렬 작업할 때, 빌드/테스트 실행은
