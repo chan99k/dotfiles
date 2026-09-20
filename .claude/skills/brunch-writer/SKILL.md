@@ -1,6 +1,6 @@
 ---
 name: brunch-writer
-description: 브런치 블로그 글 작성을 도와주는 Skill. 사용자가 초안 파일(.md)을 @멘션하면서 "브런치", "글 작성", "블로그 글" 등을 언급하면 활성화. vault-intelligence 시스템으로 관련 자료를 검색하고, 구조 제안, 스타일 체크 등을 수행. 단, Claude가 직접 글을 쓰지 않고 사용자의 글쓰기를 보조하는 역할.
+description: (보관, 2026-09-19 부터 harvesting-writing-evidence 가 대체) 브런치 글 자료 조사와 재료 팩은 harvesting-writing-evidence 를 쓴다. 이 스킬의 Phase 2~5(구조 제안, 받아쓰기, 스타일 체크)는 사용자 결정으로 비활성. 사용자가 명시적으로 /brunch-writer 를 호출할 때만 참고용으로 연다.
 allowed-tools: Read, Bash, Grep, Glob, Write
 ---
 
