@@ -1,5 +1,5 @@
 ---
-name: apply-review
+name: chan99k-apply-review
 description: >-
   GitHub PR 리뷰 코멘트를 가져와서 분류하고 코드에 반영한다.
   필수/제안/질문 레벨을 파싱하여 우선순위를 정하고, 코드 수정 후 테스트를 실행한다.

@@ -1,5 +1,5 @@
 ---
-name: refactor
+name: chan99k-refactor
 description: >-
   보이스카웃 룰에 따라 구현 전 기존 코드를 점검하고 정리한다.
   DDD, Clean Architecture, Clean Code 원칙을 전략적 기준으로 삼아

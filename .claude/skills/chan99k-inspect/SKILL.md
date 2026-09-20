@@ -1,5 +1,5 @@
 ---
-name: inspect
+name: chan99k-inspect
 description: >-
   구현/리팩터링 전 코드베이스를 탐색하여 변경 지점, 사이드이펙트, 도메인 로직 의존 관계를 분석한다.
   모든 구현 작업의 첫 단계로 실행한다.

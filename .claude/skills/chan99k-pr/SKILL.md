@@ -1,6 +1,6 @@
 ---
-name: pr
-description: Create a GitHub PR with the project PR template, auto-checking checklist items based on actual changes
+name: chan99k-pr
+description: Create a GitHub PR with the project PR template, auto-checking checklist items based on actual changes. Generic fallback for repos that have no project-level pr skill; bundles a default template.
 ---
 
 ## GitHub PR 생성
@@ -28,7 +28,7 @@ PR 템플릿(`.github/pull_request_template.md`)을 읽는다.
 **템플릿이 있는 경우**: 모든 체크리스트 항목은 그대로 유지한다. 항목을 삭제하거나 문구를 수정하지 않는다.
 
 **템플릿이 없는 경우**: 이 스킬과 함께 저장된 `PR_TEMPLATE_DEFAULT.md`를 기본 템플릿으로 사용한다.
-스킬 경로 기준: `.claude/skills/pr/PR_TEMPLATE_DEFAULT.md` (전역) 또는 프로젝트 `.claude/skills/pr/PR_TEMPLATE_DEFAULT.md`.
+스킬 경로 기준: `.claude/skills/chan99k-pr/PR_TEMPLATE_DEFAULT.md` (전역) 또는 프로젝트 `.claude/skills/pr/PR_TEMPLATE_DEFAULT.md`.
 해당 파일을 읽어 구조(Summary / Context / Problem / Solution / Non-Goals / Resulting Context / Risks and Assumptions / Checklists)를 그대로 유지하면서 내용을 채운다.
 
 판정 규칙:
