@@ -156,6 +156,7 @@
       "Bash(kill -9 -1:*)",
       "Bash(git push --force:*)",
       "Bash(git push -f :*)",
+      "Bash(git push --no-verify:*)",
       "Bash(docker system prune:*)",
       "Bash(kubectl delete namespace:*)",
       "Bash(kubectl delete ns :*)",
@@ -195,9 +196,15 @@
       "Bash(umount:*)",
       "Bash(truncate:*)"
     ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/chan99/chan99k-workspace/chan99ks-zVault"
+    ],
     "defaultMode": "default"
   },
-  "model": "claude-opus-4-6",
   "hooks": {
     "PreToolUse": [
       {
@@ -206,6 +213,24 @@
           {
             "type": "command",
             "command": "jq -r '\"\\(.tool_input.file_path)\"' >> ~/.claude/file-edit-log.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/guard-git-push.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/chan99/go/bin/cairn hook"
           }
         ]
       }
@@ -250,6 +275,10 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
   "enabledPlugins": {
     "serena@claude-plugins-official": false,
     "context7@claude-plugins-official": true,
@@ -260,7 +289,12 @@
     "code-simplifier@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "kotlin-agent-skills@Kotlin": true,
-    "remember@claude-plugins-official": true
+    "remember@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "github@claude-plugins-official": false,
+    "kotlin-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "Kotlin": {
@@ -300,9 +334,17 @@
   "autoCompactWindow": 300000,
   "autoUpdatesChannel": "stable",
   "minimumVersion": "2.1.63",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "skipWorkflowUsageWarning": true,
+  "verbose": false,
   "preferredNotifChannel": "ghostty",
   "fileCheckpointingEnabled": false,
   "remoteControlAtStartup": false,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "voiceEnabled": false
+  "voiceEnabled": true,
+  "model": "claude-fable-5[1m]"
 }
