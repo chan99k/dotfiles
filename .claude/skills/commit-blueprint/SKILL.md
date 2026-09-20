@@ -100,6 +100,38 @@ git log -1 --format='%h %s'          # 다시 확인
 
 재스테이징 경로는 **처음 청사진에 적은 목록 그대로**다. 커밋 실패 후 status 에 새로 보이는 파일을 목록에 추가하지 않는다 — 그것은 내 변경이 아닐 수 있다.
 
+## 인덱스에서 내릴 때는 `git restore --staged`
+
+남이 stage 해 둔 것을 커밋에서 빼야 할 때가 있다. 시크릿 파일이 올라가 있는 경우가 대표적이다. 이때 쓰는 명령은 하나다.
+
+```
+git restore --staged <경로>     # 인덱스에서만 내린다. 워킹트리 내용은 그대로
+```
+
+`git rm --cached` 를 쓰지 않는다. staged 내용이 워킹트리와도 HEAD 와도 다르면 git 이 거부하고 `-f` 를 권하는데, **`-f` 는 그 staged 판본을 버린다.** 남이 만든 것일 수 있는 판본이다.
+
+```
+error: the following file has staged content different from both the
+file and the HEAD:
+    .env
+(use -f to force removal)
+```
+
+이 메시지를 보면 `-f` 를 붙이지 말고 `git restore --staged` 로 갈아탄다. 거부는 사고가 아니라 경고다.
+
+**시크릿이 인덱스에 있으면 순서는 이렇다.**
+
+```
+1  git restore --staged <경로>      먼저 커밋 경로에서 뺀다
+2  .gitignore 에 추가               다시 올라오지 않게 한다
+3  git log --all -- <경로>          과거에 커밋된 적 있는지 본다
+4  없으면 끝. 있으면 이력 재작성과 키 교체가 따로 필요하다
+```
+
+3번을 건너뛰지 않는다. 커밋된 적이 있으면 `.gitignore` 는 아무것도 되돌리지 못한다. 그리고 **어느 경우든 값은 교체한다.** 추적에서 뺀 것과 노출되지 않은 것은 다르다.
+
+내용을 확인하려고 파일을 출력할 때는 마스킹이 실제로 먹었는지 보고 나서 붙인다. 구분자를 잘못 짚으면(`=` 로 가정했는데 파일은 ` : ` 였다) 마스킹이 통째로 빗나가 평문이 그대로 나간다.
+
 ## Red Flags — STOP, Preflight부터
 
 - "빨리 해줘 / 사용자 바쁨" → Preflight는 싸다, 한다
@@ -110,6 +142,8 @@ git log -1 --format='%h %s'          # 다시 확인
 - 커밋 후 `git log -1` 없이 다음 단계로 넘어감
 - 커밋이 안 생긴 원인을 hook 이라 단정 (동시 writer 를 먼저 배제했나?)
 - 복구에 `reset` / `stash` / `--amend` / `--no-verify` / `add -A` 가 등장
+- `git rm --cached` 가 거부했는데 `-f` 를 붙일 생각이 든다 → `git restore --staged` 로 간다
+- 시크릿을 인덱스에서 빼고 "처리 끝"이라 말함 → 값 교체와 이력 확인이 남았다
 
 ## Rationalizations
 
