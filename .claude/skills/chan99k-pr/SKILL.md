@@ -51,7 +51,24 @@ PR 템플릿(`.github/pull_request_template.md`)을 읽는다.
 3. **Related Issues**: 커밋 메시지에서 이슈 번호 추출 (없으면 비워둠)
 4. **Checklist**: Step 2의 판정 결과 반영
 
-### Step 4: PR 생성
+### Step 4: push 전 안전 점검
+
+PR 생성이든 기존 PR 갱신이든, push 가 필요한 시점이면 먼저 `chan99k-push-preflight`
+스킬을 호출해 10항목 점검을 통과시킨다. 하나라도 걸리면 push 와 PR 생성을 중단하고
+걸린 항목을 보고한다. 특히:
+
+- 점검 9(연결 PR)에서 열린 PR 이 이미 있으면 `gh pr create` 대신 push + `gh pr edit`
+  경로로 분기한다 (edit 전 원격 본문 재확인)
+- 점검 3(fast-forward)이 DIVERGED 면 자동 진행하지 않는다
+
+추가로 **PR 제목과 본문 자체를 발행 직전에 스캔**한다 (push-preflight 는 커밋/diff 만 보고
+PR 본문은 git 을 안 지나므로 여기가 유일한 관문이다):
+
+- 개인 트래커 식별자 패턴 (`99K-` 등 개인 워크스페이스 접두어) -> 0건이어야 발행
+- 금지 기호 (가운뎃점, em dash) -> 0건이어야 발행
+- 걸리면 발행을 중단하고 해당 줄을 보고한다. `gh pr edit` 로 기존 본문을 고칠 때도 같다
+
+### Step 5: PR 생성
 
 ```
 gh pr create --title "[PREFIX] 제목" --body "<작성된 본문>" --base <base>
@@ -62,6 +79,9 @@ gh pr create --title "[PREFIX] 제목" --body "<작성된 본문>" --base <base>
   - `[FIX]` — 버그 수정
   - `[HOTFIX]` — 긴급 수정
   - `[REFACTOR]` — 리팩토링, 구조 개선
+  - `[CHORE]` — 빌드·설정·의존성 등 부수 작업
+  - `[TEST]` — 테스트 추가·수정
+  - `[DOCS]` — 문서 변경
 - prefix 뒤에는 변경 사항을 대표하는 간결한 제목
 - `--base`는 Step 1에서 탐지한 default branch 사용
 - 생성된 PR URL을 출력

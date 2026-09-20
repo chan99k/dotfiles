@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Global pre-push hook: 무단/자동 push 차단(가드) + lefthook 위임(테스트 게이트)
+# Installed: 2026-07-01, lefthook 위임 추가: 2026-07-30
+#
+# 배경: 명시적 승인 없이 push+PR이 나간 사고가 있었다. 모든 push에
+# 의식적 의도를 강제한다. 호출자(사람/Claude/서브에이전트/자동화)가
+# 누구든 git push 바이너리는 이 hook을 통과하므로 전부 잡힌다.
+#
+# 두 책임:
+#   [가드] 승인 없는 비인터랙티브 push 차단
+#   [게이트] 승인된 push는 프로젝트 lefthook pre-push(예: ./gradlew test) 실행
+#
+# 규칙:
+#   1) 가드: GIT_PUSH_OK=1(의식적 승인) 도 아니고 TTY(사람 터미널) 도 아니면 차단
+#   2) 가드를 통과한 승인된 push는 lefthook pre-push 로 위임 → 테스트 게이트 실행
+#      - GIT_PUSH_OK=1(에이전트 승인 push) 도 게이트를 거친다. "push 승인"과
+#        "테스트 스킵"은 별개의 결정이기 때문.
+#   3) 게이트까지 건너뛰려면 git 네이티브 --no-verify (아래 한계 참조)
+#
+# 한계: git push --no-verify 는 git 설계상 이 hook 자체를 스킵한다(가드+게이트 모두).
+#       그 경로는 Claude 도구 계층의 guard-git-push.sh(PreToolUse)에서 커버.
+#
+# 우회(사람): 터미널에서 그냥 push(게이트는 실행됨), 또는 git push --no-verify(게이트 스킵)
+# 우회(Claude): 사용자 승인 후  GIT_PUSH_OK=1 git push ...   (게이트 실행)
+#               red 베이스 등 게이트까지 스킵해야 하면 --no-verify 추가(별도 승인)
+
+# 1) 가드: 승인(GIT_PUSH_OK=1) 도 TTY 도 아니면 차단
+#    (git은 ref 목록을 stdin으로 주므로 stderr로 TTY 판별)
+if [ "${GIT_PUSH_OK:-}" != "1" ] && [ ! -t 2 ]; then
+    echo "" >&2
+    echo "🛑 pre-push 차단: 승인 없는 비인터랙티브 push" >&2
+    echo "   TTY가 없고 GIT_PUSH_OK도 설정되지 않았습니다." >&2
+    echo "   Claude라면: 사용자 승인을 먼저 받고 아래로 실행하세요" >&2
+    echo "       GIT_PUSH_OK=1 git push ..." >&2
+    echo "" >&2
+    exit 1
+fi
+
+# --- 여기 도달 = 승인된 push (GIT_PUSH_OK=1 또는 사람 TTY) ---
+
+# 2) lefthook 위임: 프로젝트 테스트 게이트 실행
+#    per-project core.hooksPath override 없이 lefthook을 직접 구동해
+#    이 전역 hook이 우회되지 않게 한다 (pre-commit/commit-msg와 동일 전략).
+TOPLEVEL="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [ -n "$TOPLEVEL" ] && [ -f "$TOPLEVEL/lefthook.yml" ] && command -v lefthook &>/dev/null; then
+    # --no-auto-install: lefthook self-sync 생략(전역 core.hooksPath 경고 억제,
+    # 이 dotfiles 셋업에서는 의도된 구성).
+    lefthook run pre-push --no-auto-install || exit $?
+    exit 0
+fi
+
+# 3) 비-lefthook 레포: 가드만 통과시키고 종료
+exit 0
