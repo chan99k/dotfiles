@@ -24,19 +24,28 @@
 # 우회(Claude): 사용자 승인 후  GIT_PUSH_OK=1 git push ...   (게이트 실행)
 #               red 베이스 등 게이트까지 스킵해야 하면 --no-verify 추가(별도 승인)
 
-# 1) 가드: 승인(GIT_PUSH_OK=1) 도 TTY 도 아니면 차단
+# 1) 가드: 승인(GIT_PUSH_OK=1) 도 TTY 도 IntelliJ 버튼도 아니면 차단
 #    (git은 ref 목록을 stdin으로 주므로 stderr로 TTY 판별)
-if [ "${GIT_PUSH_OK:-}" != "1" ] && [ ! -t 2 ]; then
+#    IntelliJ 판별은 git 의 "직계 부모"만 본다. 조상 전체를 보면 IntelliJ 내장 터미널에서
+#    도는 Claude(idea -> zsh -> claude -> git)까지 통과하므로 직계 부모로 한정한다.
+GIT_PARENT_CMD="$(ps -o comm= -p "$(ps -o ppid= -p "$PPID" | tr -d ' ')" 2>/dev/null)"
+case "$GIT_PARENT_CMD" in
+    */"IntelliJ IDEA.app/Contents/MacOS/idea") FROM_INTELLIJ=1 ;;
+    *) FROM_INTELLIJ=0 ;;
+esac
+
+if [ "${GIT_PUSH_OK:-}" != "1" ] && [ ! -t 2 ] && [ "$FROM_INTELLIJ" != "1" ]; then
     echo "" >&2
     echo "🛑 pre-push 차단: 승인 없는 비인터랙티브 push" >&2
     echo "   TTY가 없고 GIT_PUSH_OK도 설정되지 않았습니다." >&2
     echo "   Claude라면: 사용자 승인을 먼저 받고 아래로 실행하세요" >&2
     echo "       GIT_PUSH_OK=1 git push ..." >&2
+    echo "   (git 부모 프로세스: ${GIT_PARENT_CMD:-알 수 없음})" >&2
     echo "" >&2
     exit 1
 fi
 
-# --- 여기 도달 = 승인된 push (GIT_PUSH_OK=1 또는 사람 TTY) ---
+# --- 여기 도달 = 승인된 push (GIT_PUSH_OK=1, 사람 TTY, IntelliJ 버튼) ---
 
 # 2) lefthook 위임: 프로젝트 테스트 게이트 실행
 #    per-project core.hooksPath override 없이 lefthook을 직접 구동해
