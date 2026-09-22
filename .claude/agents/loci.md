@@ -153,6 +153,10 @@ digest    ## 원문 / ## 요지 / ## 내 판단   + 본문에 근거 라벨 최�
 - 첫 등장하는, 자체 노트가 있을 만한 것은 `[[wikilink]]`. 링크는 후하게.
 - 태그는 0~2개. 폴더가 분류하니 폴더명을 태그로 중복하지 않는다.
 - 도구가 돌려준 `path` 를 그대로 재사용. root 모드이므로 `inbox/` 를 붙이지 않는다.
+- **`create_note` 로 신볼트 `knowledge/`(또는 `raw/digests/`)에 만들 때는 `folder: inbox`,
+  `subpath: knowledge`(또는 `raw/digests`)를 넘긴다.** root 모드에서는 `inbox` 가 볼트 루트다.
+  `folder: archive` 를 넘기면 `archive/knowledge/` 에 생긴다(9회차 실수, 260922).
+  생성 직후 반환된 `path` 가 의도한 폴더인지 확인한다.
 - 시각 요소가 필요하면 KaTeX/Mermaid 등 네이티브 렌더러(ASCII 아트 금지).
 - 금지 글자: em dash(—) 대신 하이픈, 가운뎃점(·) 대신 쉼표나 &.
 
