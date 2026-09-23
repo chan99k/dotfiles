@@ -3,24 +3,30 @@ name: chan99k-refactor
 description: >-
   보이스카웃 룰에 따라 구현 전 기존 코드를 점검하고 정리한다.
   DDD, Clean Architecture, Clean Code 원칙을 전략적 기준으로 삼아
-  언어·프레임워크에 무관하게 전술적 리팩터링을 수행한다.
-  반드시 /inspect 실행 후에 사용한다.
-allowed_tools:
+  언어, 프레임워크에 무관하게 전술적 리팩터링을 수행한다.
+  반드시 /chan99k-inspect 실행 후에 사용한다.
+allowed-tools:
   - Read
   - Write
   - Edit
   - Glob
   - Grep
   - Bash(git *)
+  - Bash(./gradlew*)
+  - Bash(./mvnw*)
+  - Bash(npm*)
+  - Bash(pytest*)
+  - Bash(go test*)
+  - Bash(cargo test*)
 ---
 
-# Refactor — 보이스카웃 룰
+# Refactor - 보이스카웃 룰
 
 > "캠프장을 떠날 때는 도착했을 때보다 깨끗하게 남겨라."
 > 구현을 시작하기 전에, 작업 영역의 기존 코드를 먼저 정리한다.
 
 `$ARGUMENTS`가 주어지면 해당 영역을 리팩터링한다.
-**전제: `/inspect`가 먼저 실행되어 Inspection Report가 존재해야 한다.**
+**전제: `/chan99k-inspect`가 먼저 실행되어 Inspection Report가 존재해야 한다.**
 
 ## 전략적 기준 (언어 무관)
 
@@ -30,22 +36,22 @@ allowed_tools:
 ```
 DDD (Strategic)         유비쿼터스 언어 일관성, Bounded Context 경계 존중,
                         도메인 모델에 비즈니스 의도가 드러나는가
-                              ↓
-Clean Architecture      의존성 방향(도메인 → 애플리케이션 → 인프라),
+                              v
+Clean Architecture      의존성 방향(도메인 -> 애플리케이션 -> 인프라),
                         레이어 역할 혼재 없음, 외부 관심사 누출 차단
-                              ↓
+                              v
 Clean Code              명확한 네이밍, 단일 책임, 짧고 응집된 함수,
-                        불필요한 중복·복잡도 제거
+                        불필요한 중복, 복잡도 제거
 ```
 
 ## 실행 순서
 
-### Phase 1: 전략 점검 — DDD 관점
+### Phase 1: 전략 점검 - DDD 관점
 
 Inspection Report의 "변경 지점" 파일들을 대상으로:
 
 **유비쿼터스 언어**
-- [ ] 클래스·함수·변수명이 도메인 언어와 일치하는가? (`docs/domain/*/language.yaml` 존재 시 참조)
+- [ ] 클래스, 함수, 변수명이 도메인 언어와 일치하는가? (`docs/domain/**/language.yaml` 존재 시 참조)
 - [ ] 금지 동의어(synonyms)를 사용하지 않는가?
 - [ ] 도메인 언어 파일이 없으면: 같은 개념에 대해 코드베이스 내 일관된 용어를 쓰는가?
 
@@ -53,11 +59,11 @@ Inspection Report의 "변경 지점" 파일들을 대상으로:
 - [ ] 다른 컨텍스트의 내부 객체를 직접 참조하지 않는가? (Anti-Corruption Layer 또는 이벤트/DTO 경유)
 - [ ] 컨텍스트 간 데이터 흐름이 명시적으로 드러나는가?
 
-### Phase 2: 전술 점검 — Clean Architecture 관점
+### Phase 2: 전술 점검 - Clean Architecture 관점
 
 **의존성 방향**
-- [ ] 도메인/핵심 로직이 프레임워크·DB·외부 API를 직접 참조하지 않는가?
-- [ ] 멀티모듈: domain ← application ← infrastructure/ui 방향 준수
+- [ ] 도메인/핵심 로직이 프레임워크, DB, 외부 API를 직접 참조하지 않는가?
+- [ ] 멀티모듈: domain <- application <- infrastructure/ui 방향 준수
 - [ ] 단일모듈: 패키지 역할(domain/service/repository/controller)이 의존성 방향을 지키는가?
 
 **레이어 역할 혼재**
@@ -70,13 +76,13 @@ Inspection Report의 "변경 지점" 파일들을 대상으로:
 - [ ] 도메인 타입에 직렬화 포맷(`Json`, `Xml`, `Proto`), 전송 프로토콜(`HTTP`, `GRPC`) 노출 없음
 - [ ] 도메인 타입에 영속성 어노테이션이 과도하게 침투하지 않는가?
 
-### Phase 3: 전술 점검 — Clean Code 관점
+### Phase 3: 전술 점검 - Clean Code 관점
 
 **네이밍**
 - [ ] 이름만으로 의도를 알 수 있는가? (약어, 무의미한 접미사 `Manager`/`Utils`/`Helper` 지양)
-- [ ] 언어 관용 네이밍 컨벤션을 따르는가? (camelCase/snake_case/PascalCase — 언어에 맞게)
+- [ ] 언어 관용 네이밍 컨벤션을 따르는가? (camelCase/snake_case/PascalCase - 언어에 맞게)
 
-**함수·모듈 크기와 응집도**
+**함수, 모듈 크기와 응집도**
 - [ ] 함수가 한 가지 일만 하는가? (단일 책임)
 - [ ] 함수 길이가 한 화면에 들어오는가? 길면 추출 검토
 - [ ] 중복 로직이 여러 곳에 흩어져 있는가? 통합 가능하면 통합
@@ -119,12 +125,12 @@ cargo test          # Rust
 ```
 refactor: 유스케이스 레이어에서 영속성 로직 분리
 refactor: OrderService의 조회/명령 책임을 각 유스케이스 클래스로 추출
-refactor: 도메인 용어 통일 — 'book' → 'novel' (language.yaml 기준)
+refactor: 도메인 용어 통일 - 'user' -> 'member' (language.yaml 기준)
 ```
 
 ## 하지 말아야 할 것
 
-- **기능 변경**: 리팩터링 커밋에 새 기능을 추가하지 않는다 — 리팩터링은 행동을 바꾸지 않는다
+- **기능 변경**: 리팩터링 커밋에 새 기능을 추가하지 않는다 - 리팩터링은 행동을 바꾸지 않는다
 - **과도한 리팩터링**: Inspection Report의 "변경 지점" 밖 코드는 건드리지 않는다
 - **테스트 없는 리팩터링**: 테스트 실행 없이 커밋하지 않는다
 - **추측성 추상화**: 현재 사용처가 하나인 것을 "나중에 쓸 것 같아서" 인터페이스로 뽑지 않는다
