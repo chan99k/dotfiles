@@ -3,7 +3,7 @@ name: chan99k-inspect
 description: >-
   구현/리팩터링 전 코드베이스를 탐색하여 변경 지점, 사이드이펙트, 도메인 로직 의존 관계를 분석한다.
   모든 구현 작업의 첫 단계로 실행한다.
-allowed_tools:
+allowed-tools:
   - Read
   - Glob
   - Grep
@@ -13,7 +13,7 @@ allowed_tools:
   - Bash(find*)
 ---
 
-# Inspect — 변경 영향 분석
+# Inspect - 변경 영향 분석
 
 > **읽기 전용**. 이 스킬은 코드를 수정하지 않는다. 분석 리포트만 생성한다.
 
@@ -24,14 +24,14 @@ allowed_tools:
 ### Phase 1: 요구사항 이해
 
 1. `$ARGUMENTS`에서 작업 목표를 파악한다
-2. 관련 도메인 용어를 `docs/domain/*/language.yaml`에서 조회한다 (존재 시)
+2. 관련 도메인 용어를 `docs/domain/**/language.yaml`에서 조회한다 (존재 시)
 3. 관련 설계 문서를 `docs/plans/`, `docs/`, ADR 디렉터리 등에서 찾아 읽는다 (존재 시)
 
 ### Phase 2: 코드 탐색
 
 1. **진입점 식별**: 작업과 관련된 파일을 Glob/Grep으로 찾는다
 2. **의존 그래프 추적**: 해당 모듈/함수를 참조하는 모든 파일을 추적한다
-   - 멀티모듈(도메인 분리): Controller → Service → Domain (Port) → Adapter 흐름 추적
+   - 멀티모듈(도메인 분리): Controller -> Service -> Domain (Port) -> Adapter 흐름 추적
    - 단일모듈: 패키지 경계(예: domain/service/repository) 기준으로 추적
 3. **테스트 현황**: 관련 테스트 파일 존재 여부와 커버리지를 확인한다
 
@@ -39,9 +39,9 @@ allowed_tools:
 
 1. **직접 변경**: 수정이 필요한 파일 목록
 2. **간접 영향**: 변경으로 인해 깨질 수 있는 코드
-   - Entity 필드 변경 → DTO, Repository, Service, Controller
-   - 뷰 템플릿(Thymeleaf/JSP/React 등)이 있으면 → model attribute/props 변경 영향
-   - Port 인터페이스 변경(클린 아키텍처) → Adapter 구현체
+   - Entity 필드 변경 -> DTO, Repository, Service, Controller
+   - 뷰 템플릿(Thymeleaf/JSP/React 등)이 있으면 -> model attribute/props 변경 영향
+   - Port 인터페이스 변경(클린 아키텍처) -> Adapter 구현체
    - 관련 테스트 파일
 3. **DB 스키마 영향**: 필드 추가/변경 시 마이그레이션 필요 여부
 4. **API 계약 영향**: OpenAPI spec / proto / 클라이언트 계약 변경이 필요한가?
