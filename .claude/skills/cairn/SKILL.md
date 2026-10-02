@@ -1,6 +1,6 @@
 ---
 name: cairn
-description: Use when cairn 훅 차단 메시지(🛑 cairn gate-a / gate-zero / gate-b)를 만났을 때, .cairn.yaml이 있는 레포에서 파일을 수정하려 할 때, 또는 지식 정렬 대장(ledger)을 시드·갱신해야 할 때
+description: (deprecated 2026-10-02, 설치 해제됨) cairn 은 폐기했다. ③ 평가간극 표면화 원칙은 affx 의 receipt 와 finish gate 로 이관한다. 참고용으로만 남긴다. 원래 용도 - Use when cairn 훅 차단 메시지(🛑 cairn gate-a / gate-zero / gate-b)를 만났을 때, .cairn.yaml이 있는 레포에서 파일을 수정하려 할 때, 또는 지식 정렬 대장(ledger)을 시드·갱신해야 할 때
 ---
 
 # cairn — 지식 정렬 대장 규약

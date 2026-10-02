@@ -224,15 +224,6 @@
             "command": "bash ~/.claude/hooks/guard-git-push.sh"
           }
         ]
-      },
-      {
-        "matcher": "Write|Edit|NotebookEdit|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/chan99/go/bin/cairn hook"
-          }
-        ]
       }
     ],
     "PostToolUse": [
