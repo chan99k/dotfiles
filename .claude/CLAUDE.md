@@ -260,18 +260,6 @@ Frequently used paths — reference these instead of hardcoding full paths:
 zero-base 초기화로 모든 skill 제거 → 트리거 broken.
 
 웹 브라우징은 WebFetch / WebSearch / Playwright MCP 직접 사용.
-graphify CLI 정책은 아래 "graphify 그래프 운영 정책" 섹션에 별도 유지.
+graphify 는 2026-10-16 완전 제거 (CLI, 전역 git hook, 스킬, 운영 정책 섹션, graphify-out 산출물).
 deep-dive-doc 워크플로우는 필요 시 dotfiles/.claude/skills-backup/260518/deep-dive-doc/ 에서 복원.
 -->
-
----
-
-## graphify 그래프 운영 정책
-
-컨텍스트 자동 주입 (8KB cap, `<graphify_context>` 태그). 그래프 없으면 그대로 진행.
-
-- **git 관리 프로젝트**: 첫 빌드 1회 (`/graphify .`) 후 `graphify hook install` —
-  코드 변경은 commit 마다 hook 이 무료(AST-only) 갱신.
-- **doc/paper/image 갱신 후**: 수동으로 `/graphify --update` (LLM 비용 발생).
-- **git 미관리 폴더** (Obsidian vault 일부 등): hook 불가 → 변경 후 수동 `/graphify --update`.
-- **각 worktree 별 graphify-out/**: 본체에서만 빌드 + hook 운영. worktree 에서는 그래프 없이 작업.
