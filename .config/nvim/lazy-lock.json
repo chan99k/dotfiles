@@ -61,6 +61,5 @@
   "venv-selector.nvim": { "branch": "main", "commit": "26a6da0348dc2d0a3787e095bd4e68d976304bb2" },
   "vim-antlr4": { "branch": "master", "commit": "f8c57956be08598ecf30229cbaa4addf0d2901d4" },
   "vim-plist": { "branch": "master", "commit": "aa781a387c70a9ea30cbce8da988e19693f5aaec" },
-  "vim-tmux-navigator": { "branch": "master", "commit": "e41c431a0c7b7388ae7ba341f01a0d217eb3a432" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }
 }

@@ -113,7 +113,6 @@ export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
 
 # alias zshconfig="nano ~/.zshrc"
 # alias zshreload="source ~/.zshrc"
-alias tmux-clean='~/.tmux/scripts/tmux-clean.sh'
 
 # Obsidian CLI: run commands against the vault from anywhere
 export OBSIDIAN_VAULT="$HOME/chan99k-workspace/chan99k's vault"
@@ -210,9 +209,7 @@ morning-update() {
 
     echo "\n=== Done ==="
     echo "Next:"
-    echo "  tmux new -s dev   # 새 세션"
-    echo "  tmux attach       # 기존 세션 복귀"
-    echo "  claude             # tmux 안에서 실행 후 /daily-work-logger"
+    echo "  claude             # herdr pane 에서 실행 후 /daily-check-in"
 }
 
 # yazi: cd to selected directory on exit

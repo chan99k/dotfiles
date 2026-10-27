@@ -59,7 +59,6 @@ stylua .
   - `img-clip.lua` - Image clipboard integration
   - `markdown-preview.lua` - Live preview capabilities
 - **Language Servers**: Mason-managed LSPs for multiple languages
-- **Tmux Integration**: `vim-tmux-navigator.lua` for seamless pane navigation
 
 ### Korean Language Features
 - **Multi-language spelling**: English, Korean, and Spanish spell checking

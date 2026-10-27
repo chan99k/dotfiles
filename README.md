@@ -8,7 +8,7 @@ This repository contains my personal macOS dotfiles configuration using GNU Stow
 - **Window Management**: AeroSpace, Yabai, Rectangle, Hammerspoon
 - **Custom Status Bar**: SketchyBar with modular plugins
 - **Shell Configuration**: ZSH with Oh-My-Zsh and Powerlevel10k
-- **Development Tools**: Git, tmux, Vim/Neovim, various CLI tools
+- **Development Tools**: Git, Vim/Neovim, various CLI tools
 - **Input Customization**: Karabiner-Elements with language switching
 
 ## Quick Setup

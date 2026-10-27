@@ -372,22 +372,6 @@ vim.keymap.set(
 --   end
 -- end, { desc = "[P]Execute Go file in pane on the right" })
 
--- Toggle a tmux pane on the right in bash, in the same directory as the current file
--- Opening it in bash because it's faster, I don't have to run my .zshrc file,
--- which pulls from my repo and a lot of other stuff
-vim.keymap.set("n", "<leader>f.", function()
-  local file_dir = vim.fn.expand("%:p:h") -- Get the directory of the current file
-  local pane_width = 60
-  local right_pane_id =
-    vim.fn.system("tmux list-panes -F '#{pane_id} #{pane_width}' | awk '$2 == " .. pane_width .. " {print $1}'")
-  if right_pane_id ~= "" then
-    -- If the right pane exists, close it
-    vim.fn.system("tmux kill-pane -t " .. right_pane_id)
-  else
-    -- If the right pane doesn't exist, open it
-    vim.fn.system("tmux split-window -h -l " .. pane_width .. " 'cd " .. file_dir .. " && bash'")
-  end
-end, { desc = "[P]Open (toggle) current dir in right tmux pane" })
 
 -- -- Open a tmux pane on the right in bash, in the same directory as the current file
 -- -- Opening it in bash because it's faster, I don't have to run my .zshrc file,

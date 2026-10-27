@@ -53,7 +53,6 @@ alias listening-port='sudo lsof -PiTCP -sTCP:LISTEN'
 alias pid-by-port='sudo lsof -i TCP:'
 
 alias brewu='brew upgrade; brew cleanup'
-alias ta='tmux attach'
 set -o vi
 
 alias vi='nvim'
@@ -219,10 +218,10 @@ FUNCNEST=100
 
 # Add to ~/.zshrc or ~/.bashrc
 alias cl='claude'
-alias cld='claude --dangerously-skip-permissions --teammate-mode tmux'
+alias cld='claude --dangerously-skip-permissions'
 # Headless mode aliases
-alias cc-commit='claude --dangerously-skip-permissions --teammate-mode tmux -p "/commit" --allowedTools "Bash,Read,Grep"'
-alias cc-push='claude --dangerously-skip-permissions --teammate-mode tmux -p "/commit --push" --allowedTools "Bash,Read,Grep"'
+alias cc-commit='claude --dangerously-skip-permissions -p "/commit" --allowedTools "Bash,Read,Grep"'
+alias cc-push='claude --dangerously-skip-permissions -p "/commit --push" --allowedTools "Bash,Read,Grep"'
 alias plugins-cc='npx claude-code-templates@latest --plugins'
 alias chats-cc='npx claude-code-templates@latest --chats'
 alias clean-mac='npx mac-cleaner-cli'

@@ -43,7 +43,7 @@ sequenceDiagram
     participant U as 사용자
     participant MU as morning-update
     participant C as Claude Code
-    participant DWL as daily-work-logger
+    participant DWL as daily-check-in
     participant IT as inbox-triage
     participant PS as project-status
 
@@ -53,8 +53,8 @@ sequenceDiagram
     MU->>MU: Node.js LTS 업데이트
     MU->>MU: Gemini CLI 업데이트
 
-    U->>C: tmux 세션에서 claude 실행
-    U->>DWL: /daily-work-logger
+    U->>C: herdr pane 에서 claude 실행
+    U->>DWL: /daily-check-in
     DWL->>DWL: 어제 날짜 계산
     par 병렬 서브 에이전트 실행
         DWL->>DWL: SubAgent 1: Vault 문서 분석
@@ -96,7 +96,7 @@ sequenceDiagram
 
 | 이름 | 트리거 | 설명 |
 |------|--------|------|
-| daily-work-logger | "어제 작업 정리", "daily log", "업무 내역 정리" | 어제 작업 내역을 Daily Note에 자동 반영 (5개 서브 에이전트 병렬) |
+| daily-check-in | "어제 작업 브리핑", "오늘 할일 추천", "데일리 체크인" | 리멤버 브리핑, 슬랙 체크인, Claude Code 업그레이드와 herdr 세션 재시작 |
 | learning-tracker | "학습 정리", "TIL", "오늘 배운 것", "learning" | Claude 세션에서 학습 내용 추출하여 TIL 문서 생성 |
 | usage-pattern-analyzer | "사용 패턴", "usage pattern" | Claude 도구 사용 패턴 분석 및 최적화 제안 |
 | work-tracker | "작업 추적", "work tracker" | 작업 시간 및 활동 추적 |
@@ -286,7 +286,6 @@ rm /tmp/commit_msg.txt
 
 | Alias | 명령어 | 설명 |
 |-------|--------|------|
-| `tmux-clean` | `~/.tmux/scripts/tmux-clean.sh` | tmux 세션 정리 |
 | `masking` | `sed "s/=.*/=****/"` | 환경 변수 값 마스킹 |
 | `yt-dlp` | `~/.local/bin/yt-dlp-safe` | 보안 wrapper (--exec, --netrc-cmd 차단) |
 
