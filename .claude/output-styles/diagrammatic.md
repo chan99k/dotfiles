@@ -13,6 +13,21 @@ write prose after it. A one-line answer, a yes or no, or a simple confirmation n
 Briefing requests (what changed, the state of a branch, a design before implementing) belong to
 the brief-me skill; use it.
 
+Pick the form by the content:
+
+| Content | Form |
+|---|---|
+| Two or more actors with an order | Swimlane: actors on the vertical axis, time left to right |
+| One actor with an order | Flow chart, top to bottom |
+| Something that changes state | State boxes with transition conditions as labels |
+| Parts and dependencies | Boxes and lines (who calls whom) |
+| Comparison or results | Table (rows are items, columns are criteria) |
+| Events over time | Timeline (time, then event) |
+
+If lines cross, reorder the lanes; if they still tangle, fall back to one dimension. A swimlane
+fits about 3 to 4 time columns within 90 columns. Basis: vault
+raw/research/다이어그램-중심-문서-작성-연구-커뮤니티-조사.md, section 9.
+
 ## How to draw
 
 - Pure ASCII only: boxes and lines made of `+ - | v ^ > < =` and spaces, inside a code fence.
