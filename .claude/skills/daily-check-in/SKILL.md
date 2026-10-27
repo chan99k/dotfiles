@@ -1,14 +1,14 @@
 ---
-name: daily-work-logger
+name: daily-check-in
 description: |
   Use when starting the day or a work session and you want a briefing of
   recent work plus recommended tasks for today. Reads the .remember system
   (today-*.done.md / now.md / recent.md) and MEMORY.md NEXT entry-points.
   Triggers: "어제 작업 브리핑", "오늘 할일 추천", "데일리 로그", "morning briefing",
-  "daily standup", running /daily-work-logger.
+  "daily standup", "데일리 체크인", running /daily-check-in.
 ---
 
-# Daily Work Logger
+# Daily Check-in
 
 ## Overview
 
@@ -43,10 +43,10 @@ webhook을 만들 필요가 없다**. 봇 토큰은 `chat.postMessage` API로 �
 - **토큰 출처**: `~/.hermes/.env`의 `SLACK_BOT_TOKEN`(xoxb) — 변수로만 읽고 **절대
   로그·대화창·커밋에 노출하지 않는다**. 보여줄 땐 끝 4자리만.
 - **채널 라우팅 (주제별 전용 채널)**: 소스(주제)마다 **전용 채널**로 보낸다. 매핑은
-  `~/.config/daily-work-logger/channels/{key}` 파일에 채널 ID를 한 줄로 둔다.
+  `~/.config/daily-check-in/channels/{key}` 파일에 채널 ID를 한 줄로 둔다.
   `{key}` = 소스 식별자(허브=`hub`, 프로젝트=`.remember` 상위 디렉터리명).
   - **폴백**: `{key}` 매핑 파일이 없으면 **기본 채널**로 보낸다. 기본 채널은
-    `~/.config/daily-work-logger/slack-channel`(있으면) → `~/.hermes/.env`의
+    `~/.config/daily-check-in/slack-channel`(있으면) → `~/.hermes/.env`의
     `SLACK_HOME_CHANNEL` → `#hermes`(`C0B83FWAC13`) 순으로 해석한다.
   - **봇 초대 필수**: 봇(maia)은 자신이 멤버인 채널에만 쓸 수 있다. 새 전용 채널마다
     `/invite @maia` 하지 않으면 `not_in_channel`로 실패한다(전송 실패는 graceful, 대화창 출력은 정상).
@@ -98,6 +98,24 @@ echo "활성 프로젝트:"; echo "$ACTIVE_RDS"
 > 반대로 며칠 쉰 프로젝트도 보려면 넓힌다. manifest 파일은 두지 않는다(유지보수 부담).
 
 ## Procedure
+
+### 0. Claude Code 업그레이드와 세션 재시작 (herdr 안일 때)
+
+brew 설치본은 머신에 하나라 업그레이드는 한 번이면 되지만, 이미 떠 있는 세션은 옛 바이너리로
+계속 돈다. 체크인 시작 때 아래 스크립트를 한 번 돌려 업그레이드하고, 옛 바이너리로 떠 있는
+herdr pane 의 claude 를 `/exit` 후 같은 세션 ID 로 `claude --resume` 한다.
+
+```bash
+~/.claude/skills/daily-check-in/scripts/claude-upgrade-restart.sh
+# 미리보기만: --dry-run   업그레이드 생략: --no-upgrade   한 pane 만: --only <pane_id>
+```
+
+- `working`/`blocked` pane 과 이 스크립트를 돌린 pane(현재 세션)은 건드리지 않는다. 현재 세션은
+  사용자가 직접 다시 연다고 결과에 적는다
+- herdr 가 없으면 조용히 건너뛴다
+- "종료 확인 실패" 가 나온 pane 은 `herdr pane read <pane> --lines 25` 로 화면을 본다. 피드백 초안
+  확인(Enter=전송, Esc=폐기)처럼 사용자 몫의 선택이 뜬 경우 키를 대신 누르지 않고 브리핑에 적는다
+- 결과 줄(재시작 N, 건너뜀 N)을 브리핑의 허브 섹션에 한 줄로 남긴다
 
 ### 1. 소스별 "어제" 파일 결정 (가장 최근 기록된 날, 세션별 복수 파일)
 
@@ -432,7 +450,7 @@ HERMES_ENV="$HOME/.hermes/.env"
 [ -f "$HERMES_ENV" ] || { echo "(Hermes 미설치 — 슬랙 전송 건너뜀, 대화창 출력은 정상)"; return 2>/dev/null; }
 set -a; . "$HERMES_ENV"; set +a            # SLACK_BOT_TOKEN, SLACK_HOME_CHANNEL 로드
 
-CFG="$HOME/.config/daily-work-logger"
+CFG="$HOME/.config/daily-check-in"
 CHANNELS="$CFG/channels"                    # channels/{key} = 그 소스 전용 채널 ID (한 줄)
 DEFAULT_CHANNEL=$([ -s "$CFG/slack-channel" ] && head -1 "$CFG/slack-channel" || echo "${SLACK_HOME_CHANNEL:-C0B83FWAC13}")
 API="https://slack.com/api/chat.postMessage"
