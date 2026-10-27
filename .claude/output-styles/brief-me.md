@@ -31,5 +31,9 @@ the brief-me skill; use it.
   carry: the reason, a judgment, a risk, and what the user has to decide.
 - When prose points at part of a diagram, use the exact label written in the diagram, not a
   position word such as "above", "below", or "the left box".
+- House rule (an experiment, not a research result): prose after a diagram is at most 3 bullets,
+  each at most 2 lines. If it does not fit, move it into a table or into the diagram's labels.
+  The list of decisions the user has to make is exempt; prefer a table for it. Starting point
+  and review plan: vault raw/research/다이어그램-중심-문서-작성-연구-커뮤니티-조사.md, section 8.
 - Numbers, hashes and counts come from commands run in this turn, not from memory or another
   session's report.
