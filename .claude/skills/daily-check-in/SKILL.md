@@ -202,14 +202,17 @@ for f in "$V"/*.md; do
   [ -e "$f" ] || continue
   [ "$(basename "$f")" = "승격-대장.md" ] && continue
   # loci 는 처리한 원본에 "승격됨" 또는 "검토됨"(보류) 마커를 단다. frontmatter 가
-  # 있으면 그 닫는 --- 다음 첫 비어있지 않은 줄에, 없으면 1행에 둔다(check-required.mjs
-  # 가 --- 를 1행에 요구하므로 frontmatter 위에는 마커를 못 둔다). 그 줄에 둘 다 없으면 미검토
-  FIRST_LINE=$(awk '
-    NR==1 { if ($0=="---") { infm=1; next } else { print; exit } }
-    infm==1 { if ($0=="---") { infm=0 }; next }
-    { if ($0 ~ /^[ \t]*$/) next; print; exit }
-  ' "$f")
-  echo "$FIRST_LINE" | grep -q '승격됨\|검토됨' || UNREVIEWED=$((UNREVIEWED + 1))
+  # 있으면 그 닫는 --- 다음 본문 첫 15줄 안에 "> 승격됨" 또는 "> 검토됨" 줄로 둔다
+  # (check-required.mjs 가 --- 를 1행에 요구하므로 frontmatter 위에는 못 둔다). 이관 노트는
+  # "> zVault 에서 이관" 인용이 먼저 와서 마커가 7~12번째 줄에 있다. 첫 줄만 보면 놓친다
+  # (261106 실측: 이관 노트 13건을 미검토로 오판해 17건으로 셌다, 실제 4건)
+  awk '
+    NR==1 && $0=="---" { infm=1; next }
+    infm==1 { if ($0=="---") infm=0; next }
+    { c++ }
+    c<=15 && /^> *(승격됨|검토됨)/ { found=1 }
+    END { exit !found }
+  ' "$f" || UNREVIEWED=$((UNREVIEWED + 1))
 done
 echo "research 미검토: $UNREVIEWED (loci 기준 13)"
 ```
